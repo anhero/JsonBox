@@ -48,6 +48,11 @@ namespace JsonBox {
 		valuePointer.stringValue = NULL;
 	}
 	
+	Value::Value(std::ifstream& file) : type(Type::NULL_VALUE) {
+		valuePointer.stringValue = NULL;
+		loadFromFile(file);
+	}
+	
 	Value::Value(const std::string& newString) : type(Type::NULL_VALUE) {
 		valuePointer.stringValue = NULL;
 		setString(newString);
@@ -240,6 +245,32 @@ namespace JsonBox {
 	
 	void Value::setBoolean(bool newBoolean) {
 		setValue(ValueDataPointer(&newBoolean), Type::BOOLEAN);
+	}
+	
+	void Value::loadFromFile(std::ifstream& file) {
+		if(file.is_open()) {
+			std::cout << "Trying to read from a file. Not implemented yet." << std::endl;
+		}
+	}
+	
+	void Value::loadFromFile(const std::string& filePath) {
+		std::ifstream file;
+		file.open(filePath.c_str());
+		loadFromFile(file);
+		file.close();
+	}
+	
+	void Value::writeToFile(std::ofstream& file) const {
+		if(file.is_open()) {
+			file << *this;
+		}
+	}
+	
+	void Value::writeToFile(const std::string& filePath) const {
+		std::ofstream file;
+		file.open(filePath.c_str());
+		writeToFile(file);
+		file.close();
 	}
 	
 	Value::ValueDataPointer::ValueDataPointer(): stringValue(NULL) {

@@ -11,7 +11,10 @@ int main (int argc, const char * argv[]) {
 	o.setValue("hahaha", JsonBox::Value(true));
 	o.setValue("adamo", JsonBox::Value(129.09));
 	JsonBox::Value v(o);
-	std::cout << v << std::endl;
+	v.writeToFile("/Users/alabranche/lol2.txt");
+	JsonBox::Value v2;
+	v2.loadFromFile("/Users/alabranche/lol2.txt");
+	std::cout << v2 << std::endl;
     return 0;
 }
 

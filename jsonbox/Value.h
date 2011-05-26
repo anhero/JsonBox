@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 #include "Type.h"
 
@@ -17,6 +18,7 @@ namespace JsonBox {
 		static std::string escapeCharacters(const std::string& str);
 		
 		Value();
+		Value(std::ifstream& file);
 		Value(const std::string& newString);
 		Value(const char* newString);
 		Value(int newInt);
@@ -55,6 +57,10 @@ namespace JsonBox {
 		bool getBoolean() const;
 		void setBoolean(bool newBoolean);
 		
+		void loadFromFile(std::ifstream& file);
+		void loadFromFile(const std::string& filePath);
+		void writeToFile(std::ofstream& file) const;
+		void writeToFile(const std::string& filePath) const;
 	private:
 		union ValueDataPointer {
 			std::string* stringValue;
