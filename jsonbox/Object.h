@@ -2,6 +2,7 @@
 #define JB_OBJECT_H
 
 #include <string>
+#include <map>
 
 #include "Value.h"
 

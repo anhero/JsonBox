@@ -7,7 +7,6 @@
 #include "Value.h"
 
 namespace JsonBox {
-	typedef std::vector<Value> Array;
 }
 
 #endif

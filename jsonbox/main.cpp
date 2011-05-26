@@ -1,18 +1,10 @@
-//
-//  main.cpp
-//  jsonbox
-//
-//  Created by Adam Labranche on 11-05-24.
-//  Copyright 2011 Anhero Inc. All rights reserved.
-//
-
 #include <iostream>
+#include <string>
 
-int main (int argc, const char * argv[])
-{
+#include "Value.h"
+#include "Object.h"
 
-	// insert code here...
-	std::cout << "Hello, World!\n";
+int main (int argc, const char * argv[]) {
     return 0;
 }
 
