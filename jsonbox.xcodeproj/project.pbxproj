@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		24342409138C9F3B00F93C5A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342408138C9F3B00F93C5A /* main.cpp */; };
-		24342417138C9F5200F93C5A /* Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342410138C9F5200F93C5A /* Array.cpp */; };
 		24342418138C9F5200F93C5A /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342412138C9F5200F93C5A /* Object.cpp */; };
 		24342419138C9F5200F93C5A /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342415138C9F5200F93C5A /* Value.cpp */; };
 /* End PBXBuildFile section */
@@ -29,8 +28,6 @@
 		24342404138C9F3B00F93C5A /* jsonbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonbox; sourceTree = BUILT_PRODUCTS_DIR; };
 		24342408138C9F3B00F93C5A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2434240A138C9F3B00F93C5A /* jsonbox.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = jsonbox.1; sourceTree = "<group>"; };
-		24342410138C9F5200F93C5A /* Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cpp; sourceTree = "<group>"; };
-		24342411138C9F5200F93C5A /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		24342412138C9F5200F93C5A /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		24342413138C9F5200F93C5A /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		24342414138C9F5200F93C5A /* Type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Type.h; sourceTree = "<group>"; };
@@ -68,8 +65,6 @@
 		24342407138C9F3B00F93C5A /* jsonbox */ = {
 			isa = PBXGroup;
 			children = (
-				24342410138C9F5200F93C5A /* Array.cpp */,
-				24342411138C9F5200F93C5A /* Array.h */,
 				24342412138C9F5200F93C5A /* Object.cpp */,
 				24342413138C9F5200F93C5A /* Object.h */,
 				24342414138C9F5200F93C5A /* Type.h */,
@@ -132,7 +127,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				24342409138C9F3B00F93C5A /* main.cpp in Sources */,
-				24342417138C9F5200F93C5A /* Array.cpp in Sources */,
 				24342418138C9F5200F93C5A /* Object.cpp in Sources */,
 				24342419138C9F5200F93C5A /* Value.cpp in Sources */,
 			);
@@ -214,6 +208,7 @@
 				2434240F138C9F3B00F93C5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
