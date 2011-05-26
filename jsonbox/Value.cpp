@@ -11,31 +11,37 @@ namespace JsonBox {
 	const Object Value::EMPTY_OBJECT = Object();
 	const Array Value::EMPTY_ARRAY = Array();
 	
-	Value::ValueDataPointer::ValueDataPointer(): stringValue(NULL) {
-	}
-	
-	Value::ValueDataPointer::ValueDataPointer(const std::string* newConstStringValue) :
-	constStringValue(newConstStringValue) {
-	}
-
-	Value::ValueDataPointer::ValueDataPointer(const int* newConstIntValue) :
-	constIntValue(newConstIntValue) {
-	}
-	
-	Value::ValueDataPointer::ValueDataPointer(const double* newConstDoubleValue) :
-	constDoubleValue(newConstDoubleValue) {
-	}
-	
-	Value::ValueDataPointer::ValueDataPointer(const Object* newConstObjectValue) :
-	constObjectValue(newConstObjectValue) {
-	}
-	
-	Value::ValueDataPointer::ValueDataPointer(const Array* newConstArrayValue) :
-	constArrayValue(newConstArrayValue) {
-	}
-	
-	Value::ValueDataPointer::ValueDataPointer(const bool* newConstBoolValue) :
-	constBoolValue(newConstBoolValue) {
+	std::string Value::escapeCharacters(const std::string& str) {
+		std::string result = str;
+		for(size_t i = 0; i < result.length(); ++i) {
+			if(result[i] == '"') {
+				result.replace(i, 2, "\\\"");
+				++i;
+			} else if(result[i] == '\\') {
+				result.replace(i, 2, "\\\\");
+				++i;
+			} else if(result[i] == '/') {
+				result.replace(i, 2, "\\/");
+				++i;
+			} else if(result[i] == '\b') {
+				result.replace(i, 2, "\\b");
+				++i;
+			} else if(result[i] == '\f') {
+				result.replace(i, 2, "\\f");
+				++i;
+			} else if(result[i] == '\n') {
+				result.replace(i, 2, "\\n");
+				++i;
+			} else if(result[i] == '\r') {
+				result.replace(i, 2, "\\r");
+				++i;
+			} else if(result[i] == '\t') {
+				result.replace(i, 2, "\\t");
+				++i;
+			}
+			// TODO: Should we output unicode characters? (PLEASE NO)
+		}
+		return result;
 	}
 	
 	Value::Value() : type(Type::NULL_VALUE) {
@@ -236,6 +242,33 @@ namespace JsonBox {
 		setValue(ValueDataPointer(&newBoolean), Type::BOOLEAN);
 	}
 	
+	Value::ValueDataPointer::ValueDataPointer(): stringValue(NULL) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const std::string* newConstStringValue) :
+	constStringValue(newConstStringValue) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const int* newConstIntValue) :
+	constIntValue(newConstIntValue) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const double* newConstDoubleValue) :
+	constDoubleValue(newConstDoubleValue) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const Object* newConstObjectValue) :
+	constObjectValue(newConstObjectValue) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const Array* newConstArrayValue) :
+	constArrayValue(newConstArrayValue) {
+	}
+	
+	Value::ValueDataPointer::ValueDataPointer(const bool* newConstBoolValue) :
+	constBoolValue(newConstBoolValue) {
+	}
+	
 	void Value::setValue(ValueDataPointer newValuePointer,
 						 Type::Enum newType) {
 		if (type != Type::NULL_VALUE && type != newType) {
@@ -359,5 +392,46 @@ namespace JsonBox {
 					break;
 			}
 		}
+	}
+	
+	std::ostream& operator<<(std::ostream& output, const Value& v) {
+		switch (v.type) {
+			case Type::STRING:
+				output << '"' << Value::escapeCharacters(v.getString()) << '"';
+				break;
+			case Type::INTEGER:
+				output << v.getInt();
+				break;
+			case Type::DOUBLE:
+				output << v.getDouble();
+				break;
+			case Type::OBJECT:
+				output << v.getObject();
+				break;
+			case Type::ARRAY:
+				output << v.getArray();
+				break;
+			case Type::BOOLEAN:
+				output << ((v.getBoolean()) ? ("true") : ("false"));
+				break;
+			case Type::NULL_VALUE:
+				output << "null";
+				break;
+			default:
+				break;
+		}
+		return output;
+	}
+	
+	std::ostream& operator<<(std::ostream& output, const Array& a) {
+		output << '[';
+		for(Array::const_iterator i = a.begin(); i != a.end(); ++i) {
+			if(i != a.begin()) {
+				output << ", ";
+			}
+			output << *i;
+		}
+		output << ']';
+		return output;
 	}
 }

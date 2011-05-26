@@ -3,25 +3,24 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "Value.h"
 
 namespace JsonBox {
 	class Object {
+		friend std::ostream& operator<<(std::ostream& output, const Object& o);
 	public:
-		Object(const std::string& newName = std::string(),
-			   const Value& newValue = Value());
+		Object();
 		Object(const Object& src);
 		Object& operator=(const Object& src);
 		
-		const std::string& getName() const;
-		void setName(const std::string& newName);
+		Value* getValue(const std::string& name);
+		void setValue(const std::string& name, const Value& value);
 		
-		Value& getValue();
-		void setValue(const Value& newValue);
+		bool containsValue(const std::string& name) const;
 	private:
-		std::string name;
-		Value value;
+		std::map<std::string, Value> values;
 	};
 }
 
