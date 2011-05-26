@@ -1,8 +1,7 @@
 #include "Value.h"
 
 #include <cassert>
-
-#include "Object.h"
+#include <stack>
 
 namespace JsonBox {
 	
@@ -463,6 +462,19 @@ namespace JsonBox {
 			output << *i;
 		}
 		output << ']';
+		return output;
+	}
+	
+	std::ostream& operator<<(std::ostream& output, const Object& o) {
+		output << '{';
+		for(std::map<std::string, Value>::const_iterator i = o.begin();
+			i != o.end(); ++i) {
+			if(i != o.begin()) {
+				output << ", ";
+			}
+			output << '"' << Value::escapeCharacters(i->first) << "\" : " << i->second;
+		}
+		output << '}';
 		return output;
 	}
 }

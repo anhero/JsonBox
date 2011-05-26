@@ -5,13 +5,14 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <map>
 
 #include "Type.h"
 
 namespace JsonBox {
-	class Object;
 	class Value;
 	typedef std::vector<Value> Array;
+	typedef std::map<std::string, Value> Object;
 	class Value {
 		friend std::ostream& operator<<(std::ostream& output, const Value& v);
 	public:
@@ -97,6 +98,7 @@ namespace JsonBox {
 					  Type::Enum newType);
 	};
 	std::ostream& operator<<(std::ostream& output, const Array& a);
+	std::ostream& operator<<(std::ostream& output, const Object& o);
 }
 
 #endif
