@@ -1,3 +1,6 @@
+/**
+ * @file
+ */
 #ifndef JB_VALUE_H
 #define JB_VALUE_H
 
@@ -13,12 +16,27 @@ namespace JsonBox {
 	class Value;
 	typedef std::vector<Value> Array;
 	typedef std::map<std::string, Value> Object;
+	/**
+	 * Represents a json value. Can be a string, an integer, a floating point
+	 * number, an object, an array, a boolean value or a null value. Objects and
+	 * arrays are typedefs of a map and a vector.
+	 */
 	class Value {
 		friend std::ostream& operator<<(std::ostream& output, const Value& v);
 	public:
+		/**
+		 * Replaces characters with its json equivalent for escape characters.
+		 * @param str String to get its version of with the characters escaped.
+		 */
 		static std::string escapeCharacters(const std::string& str);
 		
+		/**
+		 * Default constructor. Makes the value null.
+		 */
 		Value();
+		/**
+		 * Loads the value from a file.
+		 */
 		Value(std::ifstream& file);
 		Value(const std::string& newString);
 		Value(const char* newString);
@@ -97,6 +115,7 @@ namespace JsonBox {
 		void setValue(ValueDataPointer newValuePointer,
 					  Type::Enum newType);
 	};
+	
 	std::ostream& operator<<(std::ostream& output, const Array& a);
 	std::ostream& operator<<(std::ostream& output, const Object& o);
 }

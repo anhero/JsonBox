@@ -38,7 +38,6 @@ namespace JsonBox {
 				result.replace(i, 2, "\\t");
 				++i;
 			}
-			// TODO: Should we output unicode characters? (PLEASE NO)
 		}
 		return result;
 	}
@@ -249,6 +248,15 @@ namespace JsonBox {
 	void Value::loadFromFile(std::ifstream& file) {
 		if(file.is_open()) {
 			std::cout << "Trying to read from a file. Not implemented yet." << std::endl;
+			char currentCharacter;
+			std::stack<Value*> parsingStack;
+			while(!file.eof()) {
+				// We read the next character.
+				file.get(currentCharacter);
+				// We make sure the character isn't part of a unicode character.
+				if(!(currentCharacter | 0x80)) {
+				}
+			}
 		}
 	}
 	
