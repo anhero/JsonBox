@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 240C02551391417B00A19C2B /* UTFConvert.cpp */; };
 		24342409138C9F3B00F93C5A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342408138C9F3B00F93C5A /* main.cpp */; };
 		24342419138C9F5200F93C5A /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342415138C9F5200F93C5A /* Value.cpp */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		240C02531391416600A19C2B /* RBString32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBString32.h; sourceTree = "<group>"; };
+		240C02551391417B00A19C2B /* UTFConvert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UTFConvert.cpp; sourceTree = "<group>"; };
+		240C02561391417B00A19C2B /* UTFConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UTFConvert.h; sourceTree = "<group>"; };
 		24342404138C9F3B00F93C5A /* jsonbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonbox; sourceTree = BUILT_PRODUCTS_DIR; };
 		24342408138C9F3B00F93C5A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2434240A138C9F3B00F93C5A /* jsonbox.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = jsonbox.1; sourceTree = "<group>"; };
@@ -66,6 +70,9 @@
 				24342415138C9F5200F93C5A /* Value.cpp */,
 				24342416138C9F5200F93C5A /* Value.h */,
 				24342408138C9F3B00F93C5A /* main.cpp */,
+				240C02531391416600A19C2B /* RBString32.h */,
+				240C02551391417B00A19C2B /* UTFConvert.cpp */,
+				240C02561391417B00A19C2B /* UTFConvert.h */,
 				2434240A138C9F3B00F93C5A /* jsonbox.1 */,
 			);
 			path = jsonbox;
@@ -123,6 +130,7 @@
 			files = (
 				24342409138C9F3B00F93C5A /* main.cpp in Sources */,
 				24342419138C9F5200F93C5A /* Value.cpp in Sources */,
+				240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

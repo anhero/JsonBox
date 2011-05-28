@@ -10,7 +10,8 @@ namespace JsonBox {
 			OBJECT,
 			ARRAY,
 			BOOLEAN,
-			NULL_VALUE
+			NULL_VALUE,
+			UNKNOWN
 		};
 	}
 }

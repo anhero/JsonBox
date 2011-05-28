@@ -37,7 +37,7 @@ namespace JsonBox {
 		/**
 		 * Loads the value from a file.
 		 */
-		Value(std::ifstream& file);
+		Value(std::istream& input);
 		Value(const std::string& newString);
 		Value(const char* newString);
 		Value(int newInt);
@@ -76,9 +76,11 @@ namespace JsonBox {
 		bool getBoolean() const;
 		void setBoolean(bool newBoolean);
 		
-		void loadFromFile(std::ifstream& file);
+		void setNull();
+		
+		void loadFromStream(std::istream& input);
 		void loadFromFile(const std::string& filePath);
-		void writeToFile(std::ofstream& file) const;
+		void writeToStream(std::ostream& output) const;
 		void writeToFile(const std::string& filePath) const;
 	private:
 		union ValueDataPointer {
@@ -112,6 +114,13 @@ namespace JsonBox {
 		static const bool EMPTY_BOOL = false;
 		ValueDataPointer valuePointer;
 		Type::Enum type;
+		static bool isHexDigit(char digit);
+		static bool isWhiteSpace(char whiteSpace);
+		static void readString(std::istream& input, std::string& result);
+		static void readObject(std::istream& input, Object& result);
+		static void readArray(std::istream& input, Array& result);
+		static void readNumber(std::istream& input, Value& result);
+		static void readToNonWhiteSpace(std::istream& input, char& currentCharacter);
 		void setValue(ValueDataPointer newValuePointer,
 					  Type::Enum newType);
 	};

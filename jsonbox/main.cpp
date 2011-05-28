@@ -12,7 +12,7 @@ int main (int argc, const char * argv[]) {
 	JsonBox::Value v(o);
 	v.writeToFile("/Users/alabranche/lol2.txt");
 	JsonBox::Value v2;
-	v2.loadFromFile("/Users/alabranche/lol2.txt");
+	v2.loadFromFile("/Users/alabranche/test.txt");
 	std::cout << v2 << std::endl;
     return 0;
 }
