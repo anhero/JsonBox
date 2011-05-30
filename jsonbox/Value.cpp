@@ -5,6 +5,7 @@
 #include <sstream>
 #include <list>
 
+#include "Grammar.h"
 #include "UTFConvert.h"
 
 namespace JsonBox {
@@ -17,30 +18,31 @@ namespace JsonBox {
 	std::string Value::escapeCharacters(const std::string& str) {
 		std::string result = str;
 
+		// For each character in the string.
 		for(size_t i = 0; i < result.length(); ++i) {
-			if(result[i] == '"') {
-				result.replace(i, 2, "\\\"");
+			if(result[i] == Strings::Std::QUOTATION_MARK) {
+				result.replace(i, 2, Strings::Json::QUOTATION_MARK);
 				++i;
-			} else if(result[i] == '\\') {
-				result.replace(i, 2, "\\\\");
+			} else if(result[i] == Strings::Std::REVERSE_SOLIDUS) {
+				result.replace(i, 2, Strings::Json::REVERSE_SOLIDUS);
 				++i;
-			} else if(result[i] == '/') {
-				result.replace(i, 2, "\\/");
+			} else if(result[i] == Strings::Std::SOLIDUS) {
+				result.replace(i, 2, Strings::Json::SOLIDUS);
 				++i;
-			} else if(result[i] == '\b') {
-				result.replace(i, 2, "\\b");
+			} else if(result[i] == Strings::Std::BACKSPACE) {
+				result.replace(i, 2, Strings::Json::BACKSPACE);
 				++i;
-			} else if(result[i] == '\f') {
-				result.replace(i, 2, "\\f");
+			} else if(result[i] == Strings::Std::FORM_FEED) {
+				result.replace(i, 2, Strings::Json::FORM_FEED);
 				++i;
-			} else if(result[i] == '\n') {
-				result.replace(i, 2, "\\n");
+			} else if(result[i] == Strings::Std::LINE_FEED) {
+				result.replace(i, 2, Strings::Json::LINE_FEED);
 				++i;
-			} else if(result[i] == '\r') {
-				result.replace(i, 2, "\\r");
+			} else if(result[i] == Strings::Std::CARRIAGE_RETURN) {
+				result.replace(i, 2, Strings::Json::CARRIAGE_RETURN);
 				++i;
-			} else if(result[i] == '\t') {
-				result.replace(i, 2, "\\t");
+			} else if(result[i] == Strings::Std::TAB) {
+				result.replace(i, 2, Strings::Json::TAB);
 				++i;
 			}
 		}
@@ -58,11 +60,6 @@ namespace JsonBox {
 	}
 
 	Value::Value(const std::string& newString) : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
-		setString(newString);
-	}
-
-	Value::Value(const char* newString) : type(Type::NULL_VALUE) {
 		valuePointer.stringValue = NULL;
 		setString(newString);
 	}
@@ -98,51 +95,41 @@ namespace JsonBox {
 	}
 
 	Value::~Value() {
-		switch(type) {
-		case Type::STRING:
+		if(valuePointer.stringValue) {
+			switch(type) {
+			case Type::STRING:
 
-			if(valuePointer.stringValue) {
 				delete valuePointer.stringValue;
-			}
 
-			break;
-		case Type::INTEGER:
+				break;
+			case Type::INTEGER:
 
-			if(valuePointer.intValue) {
 				delete valuePointer.intValue;
-			}
 
-			break;
-		case Type::DOUBLE:
+				break;
+			case Type::DOUBLE:
 
-			if(valuePointer.doubleValue) {
 				delete valuePointer.doubleValue;
-			}
 
-			break;
-		case Type::OBJECT:
+				break;
+			case Type::OBJECT:
 
-			if(valuePointer.objectValue) {
 				delete valuePointer.objectValue;
-			}
 
-			break;
-		case Type::ARRAY:
+				break;
+			case Type::ARRAY:
 
-			if(valuePointer.arrayValue) {
 				delete valuePointer.arrayValue;
-			}
 
-			break;
-		case Type::BOOLEAN:
+				break;
+			case Type::BOOLEAN:
 
-			if(valuePointer.boolValue) {
 				delete valuePointer.boolValue;
-			}
 
-			break;
-		default:
-			break;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -283,43 +270,44 @@ namespace JsonBox {
 			input.putback(encoding[1]);
 			input.putback(encoding[0]);
 
+			// Boolean value used to stop reading characters after the value
+			// is done loading.
 			bool noErrors = true;
 
 			while(noErrors && !input.eof()) {
 				input.get(currentCharacter);
 
-				if(currentCharacter == '"') {
+				if(currentCharacter == Structural::BEGIN_END_STRING) {
+					// The value to be parsed is a string.
 					setString("");
 					readString(input, *valuePointer.stringValue);
 					noErrors = false;
-					std::cout << "string read: " << getString() << std::endl;
-				} else if(currentCharacter == '{') {
+				} else if(currentCharacter == Structural::BEGIN_OBJECT) {
+					// The value to be parsed is an object.
 					setObject(Object());
 					readObject(input, *valuePointer.objectValue);
 					noErrors = false;
-					std::cout << "object read: " << getObject() << std::endl;
-				} else if(currentCharacter == '[') {
+				} else if(currentCharacter == Structural::BEGIN_ARRAY) {
+					// The value to be parsed is an array.
 					setArray(Array());
 					readArray(input, *valuePointer.arrayValue);
 					noErrors = false;
-					std::cout << "array read: " << getArray() << std::endl;
-				} else if(currentCharacter == 'n') {
+				} else if(currentCharacter == Literals::NULL_STRING[0]) {
 					// We try to read the literal 'null'.
 					if(!input.eof()) {
 						input.get(currentCharacter);
 
-						if(currentCharacter == 'u') {
+						if(currentCharacter == Literals::NULL_STRING[1]) {
 							if(!input.eof()) {
 								input.get(currentCharacter);
 
-								if(currentCharacter == 'l') {
+								if(currentCharacter == Literals::NULL_STRING[2]) {
 									if(!input.eof()) {
 										input.get(currentCharacter);
 
-										if(currentCharacter == 'l') {
+										if(currentCharacter == Literals::NULL_STRING[3]) {
 											setNull();
 											noErrors = false;
-											std::cout << "null read: " << *this << std::endl;
 										} else {
 											std::cout << "invalid characters found" << std::endl;
 										}
@@ -338,46 +326,52 @@ namespace JsonBox {
 					} else {
 						std::cout << "json input ends incorrectly" << std::endl;
 					}
-				} else if(currentCharacter == '-' || (currentCharacter >= '0' && currentCharacter <= '9')) {
+				} else if(currentCharacter == Numbers::MINUS ||
+				          (currentCharacter >= Numbers::DIGITS[0] && currentCharacter <= Numbers::DIGITS[9])) {
 					// Numbers can't start with zeroes.
 					input.putback(currentCharacter);
 					readNumber(input, *this);
 					noErrors = false;
-					std::cout << "number read: " << *this << std::endl;
-				} else if(currentCharacter == 't') {
+				} else if(currentCharacter == Literals::TRUE_STRING[0]) {
 					// We try to read the boolean literal 'true'.
 					if(!input.eof()) {
 						input.get(currentCharacter);
-						if(currentCharacter == 'r') {
+
+						if(currentCharacter == Literals::TRUE_STRING[1]) {
 							if(!input.eof()) {
 								input.get(currentCharacter);
-								if(currentCharacter == 'u') {
+
+								if(currentCharacter == Literals::TRUE_STRING[2]) {
 									if(!input.eof()) {
 										input.get(currentCharacter);
-										if(currentCharacter == 'e') {
+
+										if(currentCharacter == Literals::TRUE_STRING[3]) {
 											setBoolean(true);
 											noErrors = false;
-											std::cout << "Boolean read: " << *this << std::endl;
 										}
 									}
 								}
 							}
 						}
 					}
-				} else if(currentCharacter == 'f') {
+				} else if(currentCharacter == Literals::FALSE_STRING[0]) {
 					// We try to read the boolean literal 'false'.
 					if(!input.eof()) {
 						input.get(currentCharacter);
-						if(currentCharacter == 'a') {
+
+						if(currentCharacter == Literals::FALSE_STRING[1]) {
 							if(!input.eof()) {
 								input.get(currentCharacter);
-								if(currentCharacter == 'l') {
+
+								if(currentCharacter == Literals::FALSE_STRING[2]) {
 									if(!input.eof()) {
 										input.get(currentCharacter);
-										if(currentCharacter == 's') {
+
+										if(currentCharacter == Literals::FALSE_STRING[3]) {
 											if(!input.eof()) {
 												input.get(currentCharacter);
-												if(currentCharacter == 'e') {
+
+												if(currentCharacter == Literals::FALSE_STRING[4]) {
 													setBoolean(false);
 													noErrors = false;
 													std::cout << "Boolean read: " << *this << std::endl;
@@ -454,13 +448,15 @@ namespace JsonBox {
 	}
 
 	bool Value::isHexDigit(char digit) {
-		return (digit >= '0' && digit <= '9') || (digit >= 'a' && digit <= 'f') ||
-		       (digit >= 'A' && digit <= 'F');
+		return (digit >= Numbers::DIGITS[0] && digit <= Numbers::DIGITS[9]) || (digit >= Numbers::DIGITS[0xa] && digit <= Numbers::DIGITS[0xf]) ||
+		       (digit >= Numbers::DIGITS[0xf0] && digit <= Numbers::DIGITS[0xf5]);
 	}
 
 	bool Value::isWhiteSpace(char whiteSpace) {
-		return whiteSpace == ' ' || whiteSpace == '\t' || whiteSpace == '\n' ||
-		       whiteSpace == '\r';
+		return whiteSpace == Whitespace::SPACE ||
+		       whiteSpace == Whitespace::HORIZONTAL_TAB ||
+		       whiteSpace == Whitespace::NEW_LINE ||
+		       whiteSpace == Whitespace::CARRIAGE_RETURN;
 	}
 
 	void Value::readString(std::istream& input, std::string& result) {
@@ -478,38 +474,39 @@ namespace JsonBox {
 		while(noErrors && !input.eof()) {
 			input.get(currentCharacter);
 
-			if(currentCharacter & 0x80) {
+			if(currentCharacter & 0x80) { // 0x80 --> 10000000
+				// The character is part of an utf8 character.
 				constructing << currentCharacter;
-			} else if(currentCharacter == '\\') {
+			} else if(currentCharacter == Strings::Json::Escape::BEGIN_ESCAPE) {
 				if(!input.eof()) {
 					input.get(tmpCharacter);
 
 					switch(tmpCharacter) {
-					case '"':
-						constructing << '"';
+					case Strings::Json::Escape::QUOTATION_MARK:
+						constructing << Strings::Std::QUOTATION_MARK;
 						break;
-					case '\\':
-						constructing << '\\';
+					case Strings::Json::Escape::REVERSE_SOLIDUS:
+						constructing << Strings::Std::REVERSE_SOLIDUS;
 						break;
-					case '/':
-						constructing << '/';
+					case Strings::Json::Escape::SOLIDUS:
+						constructing << Strings::Std::SOLIDUS;
 						break;
-					case 'b':
-						constructing << '\b';
+					case Strings::Json::Escape::BACKSPACE:
+						constructing << Strings::Std::BACKSPACE;
 						break;
-					case 'f':
-						constructing << '\f';
+					case Strings::Json::Escape::FORM_FEED:
+						constructing << Strings::Std::FORM_FEED;
 						break;
-					case 'n':
-						constructing << '\n';
+					case Strings::Json::Escape::LINE_FEED:
+						constructing << Strings::Std::LINE_FEED;
 						break;
-					case 'r':
-						constructing << '\r';
+					case Strings::Json::Escape::CARRIAGE_RETURN:
+						constructing << Strings::Std::CARRIAGE_RETURN;
 						break;
-					case 't':
-						constructing << '\t';
+					case Strings::Json::Escape::TAB:
+						constructing << Strings::Std::TAB;
 						break;
-					case 'u':
+					case Strings::Json::Escape::BEGIN_UNICODE:
 						// TODO: Check for utf16 surrogate pairs.
 						tmpCounter = 0;
 						tmpStr.clear();
@@ -562,7 +559,7 @@ namespace JsonBox {
 		while(noErrors && !input.eof()) {
 			input.get(currentCharacter);
 
-			if(currentCharacter == '"') {
+			if(currentCharacter == Structural::BEGIN_END_STRING) {
 				// We read the object's member's name.
 				readString(input, tmpString);
 				currentCharacter = input.peek();
@@ -572,7 +569,7 @@ namespace JsonBox {
 				if(!input.eof()) {
 
 					// We make sure it's the right character.
-					if(currentCharacter == ':') {
+					if(currentCharacter == Structural::NAME_SEPARATOR) {
 						// We read until the value starts.
 						readToNonWhiteSpace(input, currentCharacter);
 
@@ -582,12 +579,12 @@ namespace JsonBox {
 							input.putback(currentCharacter);
 							result[tmpString].loadFromStream(input);
 
-							while(!input.eof() && currentCharacter != ',' &&
-							        currentCharacter != '}') {
+							while(!input.eof() && currentCharacter != Structural::VALUE_SEPARATOR &&
+							        currentCharacter != Structural::END_OBJECT) {
 								input.get(currentCharacter);
 							}
 
-							if(currentCharacter == '}') {
+							if(currentCharacter == Structural::END_OBJECT) {
 								// We are done reading the object.
 								noErrors = false;
 							}
@@ -604,32 +601,34 @@ namespace JsonBox {
 		bool notDone = true;
 		char currentChar;
 		std::list<Value> constructing;
-		
+
 		while(notDone && !input.eof()) {
 			input.get(currentChar);
-			
+
 			if(!isWhiteSpace(currentChar)) {
 				input.putback(currentChar);
 				constructing.push_back(Value());
 				constructing.back().loadFromStream(input);
-				
+
 				while(!input.eof() && currentChar != ',' &&
-					  currentChar != ']') {
+				        currentChar != Structural::END_ARRAY) {
 					input.get(currentChar);
 				}
-				
-				if(currentChar == ']') {
+
+				if(currentChar == Structural::END_ARRAY) {
 					notDone = false;
 				}
 			}
 		}
+
 		result.resize(constructing.size());
 		Array::iterator i2 = result.begin();
+
 		for(std::list<Value>::iterator i = constructing.begin();
-			i != constructing.end() && i2 != result.end(); ++i) {
-			
+		        i != constructing.end() && i2 != result.end(); ++i) {
+
 			*i2 = *i;
-			
+
 			++i2;
 		}
 	}
@@ -638,18 +637,21 @@ namespace JsonBox {
 		bool notDone = true, inFraction = false, inExponent = false;
 		char currentCharacter;
 		std::stringstream constructing;
-		if(!input.eof() && input.peek() == '0') {
+
+		if(!input.eof() && input.peek() == Numbers::DIGITS[0]) {
 			// We make sure there isn't more than one zero.
 			input.get(currentCharacter);
-			
+
 			if(input.peek() == '0') {
 				notDone = false;
 			} else {
 				input.putback(currentCharacter);
 			}
 		}
+
 		while(notDone && !input.eof()) {
 			input.get(currentCharacter);
+
 			if(currentCharacter == '-') {
 				if(constructing.str().empty()) {
 					constructing << currentCharacter;
@@ -667,6 +669,7 @@ namespace JsonBox {
 				if(!inExponent) {
 					inExponent = true;
 					constructing << currentCharacter;
+
 					if(!input.eof() && (input.peek() == '-' || input.peek() == '+')) {
 						input.get(currentCharacter);
 						constructing << currentCharacter;
@@ -677,6 +680,7 @@ namespace JsonBox {
 				notDone = false;
 			}
 		}
+
 		if(inFraction || inExponent) {
 			double doubleResult;
 			constructing >> doubleResult;

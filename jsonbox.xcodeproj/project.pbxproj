@@ -34,6 +34,7 @@
 		24342414138C9F5200F93C5A /* Type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Type.h; sourceTree = "<group>"; };
 		24342415138C9F5200F93C5A /* Value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Value.cpp; sourceTree = "<group>"; };
 		24342416138C9F5200F93C5A /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Value.h; sourceTree = "<group>"; };
+		243FFB29139346A400FCC958 /* Grammar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grammar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +69,7 @@
 			children = (
 				24342414138C9F5200F93C5A /* Type.h */,
 				24342415138C9F5200F93C5A /* Value.cpp */,
+				243FFB29139346A400FCC958 /* Grammar.h */,
 				24342416138C9F5200F93C5A /* Value.h */,
 				24342408138C9F3B00F93C5A /* main.cpp */,
 				240C02531391416600A19C2B /* RBString32.h */,

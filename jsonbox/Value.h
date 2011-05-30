@@ -26,6 +26,8 @@ namespace JsonBox {
 	public:
 		/**
 		 * Replaces characters with its json equivalent for escape characters.
+		 * So for example, if in the string there is the newline character '\n',
+		 * it will be replaced by the two characters '\' and 'n'.
 		 * @param str String to get its version of with the characters escaped.
 		 */
 		static std::string escapeCharacters(const std::string& str);
@@ -34,14 +36,33 @@ namespace JsonBox {
 		 * Default constructor. Makes the value null.
 		 */
 		Value();
+		
 		/**
-		 * Loads the value from a file.
+		 * Loads the value from an input stream. If there is more than one value
+		 * in the input stream, they are ignored. Only the first value is read.
+		 * @param input Input stream to load the value from. Can also be an
+		 * input file stream.
 		 */
 		Value(std::istream& input);
+		
+		/**
+		 * Constructs the value from a string.
+		 * @param newString String used as the value.
+		 */
 		Value(const std::string& newString);
-		Value(const char* newString);
+		
+		/**
+		 * Constructs the value from an integer.
+		 * @param newInt Integer used as the value.
+		 */
 		Value(int newInt);
+		
+		/**
+		 * Constructs the value from a double.
+		 * @param newDouble Double used as the value.
+		 */
 		Value(double newDouble);
+		
 		Value(const Object& newObject);
 		Value(const Array& newArray);
 		Value(bool newBoolean);
