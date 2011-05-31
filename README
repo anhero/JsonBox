@@ -1,0 +1,19 @@
+This is a JSON C++ library. It can write and read JSON files with ease and speed. It uses code from our RedBox engine (https://bitbucket.org/anhero/redbox) and will soon be integrated in it.
+
+This library is aimed at mostly internal use for the RedBox engine. It's not designed be used to write easy-to-read JSON files. It follows the JSON standards (except it doesn't read UTF-16 and UTF-32, only UTF-8)
+
+As of version 0.1
+
+Things it does:
+ * Parse standard UTF-8 JSON files.
+ * Write standard JSON files in UTF-8.
+ * Use streams for JSON input and output.
+ * JSON arrays and objects are actually typdefs of standard STL containers.
+
+Things it doesn't do: 
+ * Read UTF-16 or UTF-32 JSON files.
+ * Indent or help with any readability in JSON output.
+ * Keep the order of the members in objects (it's not required by the JSON specification, so screw it.)
+ * Parse Unicode characters in strings that are described with two consecutive \u escape sequences, it will interpret it as 2 unicode characters.
+ 
+Oh and this library isn't what I would call typesafe. It's typesafe when you use it from the outside, but internally, it isn't. I can see the library going crazy if it's used in a multi-threaded program, it wasn't designed for multi-threading.
