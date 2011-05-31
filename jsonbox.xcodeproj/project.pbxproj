@@ -10,6 +10,8 @@
 		240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 240C02551391417B00A19C2B /* UTFConvert.cpp */; };
 		24342409138C9F3B00F93C5A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342408138C9F3B00F93C5A /* main.cpp */; };
 		24342419138C9F5200F93C5A /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342415138C9F5200F93C5A /* Value.cpp */; };
+		2456E9D713955CDF0078E12A /* Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2456E9D313955CDF0078E12A /* Array.cpp */; };
+		2456E9D813955CDF0078E12A /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2456E9D513955CDF0078E12A /* Object.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +37,10 @@
 		24342415138C9F5200F93C5A /* Value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Value.cpp; sourceTree = "<group>"; };
 		24342416138C9F5200F93C5A /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Value.h; sourceTree = "<group>"; };
 		243FFB29139346A400FCC958 /* Grammar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grammar.h; sourceTree = "<group>"; };
+		2456E9D313955CDF0078E12A /* Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cpp; sourceTree = "<group>"; };
+		2456E9D413955CDF0078E12A /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
+		2456E9D513955CDF0078E12A /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
+		2456E9D613955CDF0078E12A /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +73,10 @@
 		24342407138C9F3B00F93C5A /* jsonbox */ = {
 			isa = PBXGroup;
 			children = (
+				2456E9D313955CDF0078E12A /* Array.cpp */,
+				2456E9D413955CDF0078E12A /* Array.h */,
+				2456E9D513955CDF0078E12A /* Object.cpp */,
+				2456E9D613955CDF0078E12A /* Object.h */,
 				24342414138C9F5200F93C5A /* Type.h */,
 				24342415138C9F5200F93C5A /* Value.cpp */,
 				243FFB29139346A400FCC958 /* Grammar.h */,
@@ -133,6 +143,8 @@
 				24342409138C9F3B00F93C5A /* main.cpp in Sources */,
 				24342419138C9F5200F93C5A /* Value.cpp in Sources */,
 				240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */,
+				2456E9D713955CDF0078E12A /* Array.cpp in Sources */,
+				2456E9D813955CDF0078E12A /* Object.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

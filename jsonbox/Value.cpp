@@ -15,36 +15,60 @@ namespace JsonBox {
 	const Object Value::EMPTY_OBJECT = Object();
 	const Array Value::EMPTY_ARRAY = Array();
 
-	std::string Value::escapeCharacters(const std::string& str) {
+	std::string Value::escapeMinimumCharacters(const std::string& str) {
 		std::string result = str;
 
 		// For each character in the string.
-		for(size_t i = 0; i < result.length(); ++i) {
-			if(result[i] == Strings::Std::QUOTATION_MARK) {
-				result.replace(i, 2, Strings::Json::QUOTATION_MARK);
+		for(size_t i = 0; i < result.size(); ++i) {
+			if(result[i] >= '\0' && result[i] <= '\x1f') {
+				result.replace(i, 1, Value::escapeToUnicode(result[i]));
+				i += 5;
+			} else if(result[i] == Strings::Std::QUOTATION_MARK) {
+				result.replace(i, 1, Strings::Json::QUOTATION_MARK);
 				++i;
 			} else if(result[i] == Strings::Std::REVERSE_SOLIDUS) {
-				result.replace(i, 2, Strings::Json::REVERSE_SOLIDUS);
-				++i;
-			} else if(result[i] == Strings::Std::SOLIDUS) {
-				result.replace(i, 2, Strings::Json::SOLIDUS);
-				++i;
-			} else if(result[i] == Strings::Std::BACKSPACE) {
-				result.replace(i, 2, Strings::Json::BACKSPACE);
-				++i;
-			} else if(result[i] == Strings::Std::FORM_FEED) {
-				result.replace(i, 2, Strings::Json::FORM_FEED);
-				++i;
-			} else if(result[i] == Strings::Std::LINE_FEED) {
-				result.replace(i, 2, Strings::Json::LINE_FEED);
-				++i;
-			} else if(result[i] == Strings::Std::CARRIAGE_RETURN) {
-				result.replace(i, 2, Strings::Json::CARRIAGE_RETURN);
-				++i;
-			} else if(result[i] == Strings::Std::TAB) {
-				result.replace(i, 2, Strings::Json::TAB);
+				result.replace(i, 1, Strings::Json::REVERSE_SOLIDUS);
 				++i;
 			}
+		}
+
+		return result;
+	}
+
+	std::string Value::escapeAllCharacters(const std::string& str) {
+		std::string result = str;
+
+		// For each character in the string.
+		for(size_t i = 0; i < result.size(); ++i) {
+			if(result[i] >= '\0' && result[i] <= '\x1f') {
+				result.replace(i, 1, Value::escapeToUnicode(result[i]));
+				i += 5;
+			} else if(result[i] == Strings::Std::QUOTATION_MARK) {
+				result.replace(i, i, Strings::Json::QUOTATION_MARK);
+				++i;
+			} else if(result[i] == Strings::Std::REVERSE_SOLIDUS) {
+				result.replace(i, 1, Strings::Json::REVERSE_SOLIDUS);
+				++i;
+			} else if(result[i] == Strings::Std::SOLIDUS) {
+				result.replace(i, 1, Strings::Json::SOLIDUS);
+				++i;
+			} else if(result[i] == Strings::Std::BACKSPACE) {
+				result.replace(i, 1, Strings::Json::BACKSPACE);
+				++i;
+			} else if(result[i] == Strings::Std::FORM_FEED) {
+				result.replace(i, 1, Strings::Json::FORM_FEED);
+				++i;
+			} else if(result[i] == Strings::Std::LINE_FEED) {
+				result.replace(i, 1, Strings::Json::LINE_FEED);
+				++i;
+			} else if(result[i] == Strings::Std::CARRIAGE_RETURN) {
+				result.replace(i, 1, Strings::Json::CARRIAGE_RETURN);
+				++i;
+			} else if(result[i] == Strings::Std::TAB) {
+				result.replace(i, 1, Strings::Json::TAB);
+				++i;
+			}
+
 		}
 
 		return result;
@@ -374,7 +398,7 @@ namespace JsonBox {
 												if(currentCharacter == Literals::FALSE_STRING[4]) {
 													setBoolean(false);
 													noErrors = false;
-													std::cout << "Boolean read: " << *this << std::endl;
+													//std::cout << "Boolean read: " << *this << std::endl;
 												}
 											}
 										}
@@ -404,16 +428,18 @@ namespace JsonBox {
 		}
 	}
 
-	void Value::writeToStream(std::ostream& output) const {
-		output << *this;
+	void Value::writeToStream(std::ostream& output, bool indent,
+	                          bool escapeAll) const {
+		this->output(output, indent, escapeAll);
 	}
 
-	void Value::writeToFile(const std::string& filePath) const {
+	void Value::writeToFile(const std::string& filePath, bool indent,
+	                        bool escapeAll) const {
 		std::ofstream file;
 		file.open(filePath.c_str());
 
 		if(file.is_open()) {
-			writeToStream(file);
+			writeToStream(file, indent, escapeAll);
 			file.close();
 		} else {
 			std::cout << "Failed to open file to write the json into: " << filePath << std::endl;
@@ -698,6 +724,22 @@ namespace JsonBox {
 		} while(!input.eof() && isWhiteSpace(currentCharacter));
 	}
 
+	void Value::outputNbTabs(std::ostream& output, unsigned int nbTabs) {
+		for(unsigned int i = 0; i < nbTabs; ++i) {
+			output << '\t';
+		}
+	}
+
+	std::string Value::escapeToUnicode(char charToEscape) {
+		std::stringstream result;
+
+		if(charToEscape >= '\0' && charToEscape <= '\x1f') {
+			result << "\\u00" << std::hex << static_cast<int>(charToEscape);
+		}
+
+		return result.str();
+	}
+
 	void Value::setValue(ValueDataPointer newValuePointer,
 	                     Type::Enum newType) {
 		if(newType != Type::UNKNOWN) {
@@ -840,25 +882,38 @@ namespace JsonBox {
 		}
 	}
 
-	std::ostream& operator<<(std::ostream& output, const Value& v) {
-		switch(v.type) {
+	void Value::output(std::ostream& output, bool indent,
+	                   bool escapeAll) const {
+		unsigned int level = 0;
+		this->output(output, level, indent, escapeAll);
+	}
+
+	void Value::output(std::ostream& output, unsigned int& level, bool indent,
+	                   bool escapeAll) const {
+		switch(type) {
 		case Type::STRING:
-			output << '"' << Value::escapeCharacters(v.getString()) << '"';
+
+			if(escapeAll) {
+				output << '"' << Value::escapeAllCharacters(getString()) << '"';
+			} else {
+				output << '"' << Value::escapeMinimumCharacters(getString()) << '"';
+			}
+
 			break;
 		case Type::INTEGER:
-			output << v.getInt();
+			output << getInt();
 			break;
 		case Type::DOUBLE:
-			output << v.getDouble();
+			output << getDouble();
 			break;
 		case Type::OBJECT:
-			output << v.getObject();
+			getObject().output(output, level, indent, escapeAll);
 			break;
 		case Type::ARRAY:
-			output << v.getArray();
+			getArray().output(output, level, indent, escapeAll);
 			break;
 		case Type::BOOLEAN:
-			output << ((v.getBoolean()) ? ("true") : ("false"));
+			output << ((getBoolean()) ? ("true") : ("false"));
 			break;
 		case Type::NULL_VALUE:
 			output << "null";
@@ -867,37 +922,10 @@ namespace JsonBox {
 			break;
 		}
 
-		return output;
 	}
 
-	std::ostream& operator<<(std::ostream& output, const Array& a) {
-		output << '[';
-
-		for(Array::const_iterator i = a.begin(); i != a.end(); ++i) {
-			if(i != a.begin()) {
-				output << ", ";
-			}
-
-			output << *i;
-		}
-
-		output << ']';
-		return output;
-	}
-
-	std::ostream& operator<<(std::ostream& output, const Object& o) {
-		output << '{';
-
-		for(std::map<std::string, Value>::const_iterator i = o.begin();
-		        i != o.end(); ++i) {
-			if(i != o.begin()) {
-				output << ", ";
-			}
-
-			output << '"' << Value::escapeCharacters(i->first) << "\" : " << i->second;
-		}
-
-		output << '}';
+	std::ostream& operator<<(std::ostream& output, const Value& v) {
+		v.output(output);
 		return output;
 	}
 }

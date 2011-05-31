@@ -11,6 +11,8 @@
 #include <map>
 
 #include "Type.h"
+#include "Array.h"
+#include "Object.h"
 
 namespace JsonBox {
 	class Value;
@@ -19,7 +21,7 @@ namespace JsonBox {
 	 * values. So it can be used the same way as a standard STL deque.
 	 * @see JsonBox::Value
 	 */
-	typedef std::deque<Value> Array;
+	//typedef std::deque<Value> Array;
 	
 	/**
 	 * Represents a JSON object. It's a typedef of a map with a string as its
@@ -27,7 +29,7 @@ namespace JsonBox {
 	 * be used the same way as a standard STL map of string and Value.
 	 * @see JsonBox::Value
 	 */
-	typedef std::map<std::string, Value> Object;
+	//typedef std::map<std::string, Value> Object;
 	
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
@@ -38,7 +40,8 @@ namespace JsonBox {
 	 * @see JsonBox::Object
 	 */
 	class Value {
-		
+		friend class Array;
+		friend class Object;
 		/**
 		 * Output operator overload. Outputs the value as valid JSON. Does not
 		 * do any indentation.
@@ -48,13 +51,14 @@ namespace JsonBox {
 		 */
 		friend std::ostream& operator<<(std::ostream& output, const Value& v);
 	public:
+		static std::string escapeMinimumCharacters(const std::string& str);
 		/**
 		 * Replaces characters with its json equivalent for escape characters.
 		 * So for example, if in the string there is the newline character '\n',
 		 * it will be replaced by the two characters '\' and 'n'.
 		 * @param str String to get its version of with the characters escaped.
 		 */
-		static std::string escapeCharacters(const std::string& str);
+		static std::string escapeAllCharacters(const std::string& str);
 		
 		/**
 		 * Default constructor. Makes the value null.
@@ -283,16 +287,26 @@ namespace JsonBox {
 		 * Writes the value to an output stream in valid JSON. Uses the
 		 * overloaded output operator.
 		 * @param output Output stream to write the value to.
+		 * @param indent Specifies if the output is to have nice indentation
+		 * or not.
+		 * @param escapeAll Specifies if all the JSON escapable characters
+		 * should be escaped or not.
 		 * @see JsonBox::Value::operator<<
+		 * @see JsonBox::Value::escapeAllCharacters
+		 * @see JsonBox::Value::escapeMinimumCharacters
 		 */
-		void writeToStream(std::ostream& output) const;
+		void writeToStream(std::ostream& output, bool indent = true,
+						   bool escapeAll = true) const;
 		
 		/**
 		 * Writes the value to a JSON file. Uses writeToStream(...).
 		 * @param filePath Path to the file to write.
+		 * @param indent
+		 * @param escapeAll
 		 * @see JsonBox::Value::writeToStream
 		 */
-		void writeToFile(const std::string& filePath) const;
+		void writeToFile(const std::string& filePath, bool indent = true,
+						 bool escapeAll = true) const;
 	private:
 		/**
 		 * Union used to contain the pointer to the value's data.
@@ -459,12 +473,22 @@ namespace JsonBox {
 		 */
 		static void readToNonWhiteSpace(std::istream& input,
 										char& currentCharacter);
+
+		static void outputNbTabs(std::ostream& output, unsigned int nbTabs);
 		
+		static std::string escapeToUnicode(char charToEscape);
+
 		/**
 		 * Sets the value's pointer and type.
 		 */
 		void setValue(ValueDataPointer newValuePointer,
 					  Type::Enum newType);
+		
+		void output(std::ostream& output, bool indent = true,
+					bool escapeAll = true) const;
+		
+		void output(std::ostream& output, unsigned int& level,
+					bool indent = true, bool escapeAll = true) const;
 	};
 	
 	/**
@@ -474,7 +498,7 @@ namespace JsonBox {
 	 * @param a Array to output into the stream.
 	 * @return Output stream filled with the JSON code.
 	 */
-	std::ostream& operator<<(std::ostream& output, const Array& a);
+	//std::ostream& operator<<(std::ostream& output, const Array& a);
 	
 	/**
 	 * Output operator overload for the JSON object. Outputs in standard JSON
@@ -483,7 +507,7 @@ namespace JsonBox {
 	 * @param o Object to output into the stream.
 	 * @return Output stream filled with the JSON code.
 	 */
-	std::ostream& operator<<(std::ostream& output, const Object& o);
+	//std::ostream& operator<<(std::ostream& output, const Object& o);
 }
 
 #endif
