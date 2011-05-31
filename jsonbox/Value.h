@@ -5,7 +5,7 @@
 #define JB_VALUE_H
 
 #include <string>
-#include <vector>
+#include <deque>
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -15,11 +15,11 @@
 namespace JsonBox {
 	class Value;
 	/**
-	 * Represents an array of values in JSON. It's a typedef of a vector of
-	 * values. So it can be used the same way as a standard STL vector.
+	 * Represents an array of values in JSON. It's a typedef of a deque of
+	 * values. So it can be used the same way as a standard STL deque.
 	 * @see JsonBox::Value
 	 */
-	typedef std::vector<Value> Array;
+	typedef std::deque<Value> Array;
 	
 	/**
 	 * Represents a JSON object. It's a typedef of a map with a string as its
@@ -33,7 +33,7 @@ namespace JsonBox {
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
 	 * simply, it acts a lot like a variant. Objects and arrays are typedefs of
-	 * a map and a vector.
+	 * a map and a deque.
 	 * @see JsonBox::Array
 	 * @see JsonBox::Object
 	 */
