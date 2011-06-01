@@ -6,6 +6,12 @@
 
 namespace JsonBox {
 	class Value;
+	/**
+	 * Represents an array of values in JSON. It's a deque with added methods.
+	 * So it can be used the same way as a standard STL deque, but can be more
+	 * easily output in a stream.
+	 * @see JsonBox::Value
+	 */
 	class Array : public std::deque<Value> {
 		friend class Value;
 		/**

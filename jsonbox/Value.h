@@ -17,21 +17,6 @@
 namespace JsonBox {
 	class Value;
 	/**
-	 * Represents an array of values in JSON. It's a typedef of a deque of
-	 * values. So it can be used the same way as a standard STL deque.
-	 * @see JsonBox::Value
-	 */
-	//typedef std::deque<Value> Array;
-	
-	/**
-	 * Represents a JSON object. It's a typedef of a map with a string as its
-	 * key's type and a Value as its value's type. So the JSON object type can
-	 * be used the same way as a standard STL map of string and Value.
-	 * @see JsonBox::Value
-	 */
-	//typedef std::map<std::string, Value> Object;
-	
-	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
 	 * simply, it acts a lot like a variant. Objects and arrays are classes that
