@@ -40,13 +40,13 @@ namespace JsonBox {
 	public:
 		
 		/**
-		 * Replaces characters with their JSON equivalent. Escapes quotation
-		 * marks, reverse solidi to their "\"" and "\\" equivalents. Also
-		 * replaces all ascii characters from 0x0 to 0x1f to their unicode
-		 * escape equivalent, so the character "\x1e" would become "\u001e".
+		 * Replaces characters with their JSON equivalent. The only difference
+		 * from escapeAllCharacters is that the solidi won't be escaped in this
+		 * method.
 		 * @param str String to have its characters escaped.
 		 * @return Copy of the recieved string, but with the concerned
 		 * characters escaped.
+		 * @see JsonBox::Value::escapeAllCharacters(const std::string& str)
 		 */
 		static std::string escapeMinimumCharacters(const std::string& str);
 		
@@ -57,6 +57,7 @@ namespace JsonBox {
 		 * @param str String make a copy and have its characters escaped.
 		 * @return Copy of the recieved string, but with the concerned
 		 * characters escaped.
+		 * @see JsonBox::Value::escapeMinimumCharacters(const std::string& str)
 		 */
 		static std::string escapeAllCharacters(const std::string& str);
 		

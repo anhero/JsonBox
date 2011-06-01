@@ -21,12 +21,22 @@ namespace JsonBox {
 
 		// For each character in the string.
 		for(std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
-			if(*i >= '\0' && *i <= '\x1f') {
-				result << Value::escapeToUnicode(*i);
-			} else if(*i == Strings::Std::QUOTATION_MARK) {
+			if(*i == Strings::Std::QUOTATION_MARK) {
 				result << Strings::Json::QUOTATION_MARK;
 			} else if(*i == Strings::Std::REVERSE_SOLIDUS) {
 				result << Strings::Json::REVERSE_SOLIDUS;
+			} else if(*i == Strings::Std::BACKSPACE) {
+				result << Strings::Json::BACKSPACE;
+			} else if(*i == Strings::Std::FORM_FEED) {
+				result << Strings::Json::FORM_FEED;
+			} else if(*i == Strings::Std::LINE_FEED) {
+				result << Strings::Json::LINE_FEED;
+			} else if(*i == Strings::Std::CARRIAGE_RETURN) {
+				result << Strings::Json::CARRIAGE_RETURN;
+			} else if(*i == Strings::Std::TAB) {
+				result << Strings::Json::TAB;
+			} else if(*i >= '\0' && *i <= '\x1f') {
+				result << Value::escapeToUnicode(*i);
 			} else {
 				result << *i;
 			}
@@ -40,9 +50,7 @@ namespace JsonBox {
 
 		// For each character in the string.
 		for(std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
-			if(*i >= '\0' && *i <= '\x1f') {
-				result << Value::escapeToUnicode(*i);
-			} else if(*i == Strings::Std::QUOTATION_MARK) {
+			if(*i == Strings::Std::QUOTATION_MARK) {
 				result << Strings::Json::QUOTATION_MARK;
 			} else if(*i == Strings::Std::REVERSE_SOLIDUS) {
 				result << Strings::Json::REVERSE_SOLIDUS;
@@ -58,6 +66,8 @@ namespace JsonBox {
 				result << Strings::Json::CARRIAGE_RETURN;
 			} else if(*i == Strings::Std::TAB) {
 				result << Strings::Json::TAB;
+			} else if(*i >= '\0' && *i <= '\x1f') {
+				result << Value::escapeToUnicode(*i);
 			} else {
 				result << *i;
 			}
@@ -291,107 +301,108 @@ namespace JsonBox {
 			// is done loading.
 			bool noErrors = true;
 
-			while(noErrors && !input.eof()) {
+			while(noErrors && input.good()) {
 				input.get(currentCharacter);
 
-				if(currentCharacter == Structural::BEGIN_END_STRING) {
-					// The value to be parsed is a string.
-					setString("");
-					readString(input, *valuePointer.stringValue);
-					noErrors = false;
-				} else if(currentCharacter == Structural::BEGIN_OBJECT) {
-					// The value to be parsed is an object.
-					setObject(Object());
-					readObject(input, *valuePointer.objectValue);
-					noErrors = false;
-				} else if(currentCharacter == Structural::BEGIN_ARRAY) {
-					// The value to be parsed is an array.
-					setArray(Array());
-					readArray(input, *valuePointer.arrayValue);
-					noErrors = false;
-				} else if(currentCharacter == Literals::NULL_STRING[0]) {
-					// We try to read the literal 'null'.
-					if(!input.eof()) {
-						input.get(currentCharacter);
-
-						if(currentCharacter == Literals::NULL_STRING[1]) {
-							if(!input.eof()) {
-								input.get(currentCharacter);
-
-								if(currentCharacter == Literals::NULL_STRING[2]) {
-									if(!input.eof()) {
-										input.get(currentCharacter);
-
-										if(currentCharacter == Literals::NULL_STRING[3]) {
-											setNull();
-											noErrors = false;
+				if(input.good()) {
+					if(currentCharacter == Structural::BEGIN_END_STRING) {
+						// The value to be parsed is a string.
+						setString("");
+						readString(input, *valuePointer.stringValue);
+						noErrors = false;
+					} else if(currentCharacter == Structural::BEGIN_OBJECT) {
+						// The value to be parsed is an object.
+						setObject(Object());
+						readObject(input, *valuePointer.objectValue);
+						noErrors = false;
+					} else if(currentCharacter == Structural::BEGIN_ARRAY) {
+						// The value to be parsed is an array.
+						setArray(Array());
+						readArray(input, *valuePointer.arrayValue);
+						noErrors = false;
+					} else if(currentCharacter == Literals::NULL_STRING[0]) {
+						// We try to read the literal 'null'.
+						if(!input.eof()) {
+							input.get(currentCharacter);
+							
+							if(currentCharacter == Literals::NULL_STRING[1]) {
+								if(!input.eof()) {
+									input.get(currentCharacter);
+									
+									if(currentCharacter == Literals::NULL_STRING[2]) {
+										if(!input.eof()) {
+											input.get(currentCharacter);
+											
+											if(currentCharacter == Literals::NULL_STRING[3]) {
+												setNull();
+												noErrors = false;
+											} else {
+												std::cout << "invalid characters found" << std::endl;
+											}
 										} else {
-											std::cout << "invalid characters found" << std::endl;
+											std::cout << "json input ends incorrectly" << std::endl;
 										}
 									} else {
-										std::cout << "json input ends incorrectly" << std::endl;
+										std::cout << "invalid characters found" << std::endl;
 									}
 								} else {
-									std::cout << "invalid characters found" << std::endl;
+									std::cout << "json input ends incorrectly" << std::endl;
 								}
 							} else {
-								std::cout << "json input ends incorrectly" << std::endl;
+								std::cout << "invalid characters found" << std::endl;
 							}
 						} else {
-							std::cout << "invalid characters found" << std::endl;
+							std::cout << "json input ends incorrectly" << std::endl;
 						}
-					} else {
-						std::cout << "json input ends incorrectly" << std::endl;
-					}
-				} else if(currentCharacter == Numbers::MINUS ||
-				          (currentCharacter >= Numbers::DIGITS[0] && currentCharacter <= Numbers::DIGITS[9])) {
-					// Numbers can't start with zeroes.
-					input.putback(currentCharacter);
-					readNumber(input, *this);
-					noErrors = false;
-				} else if(currentCharacter == Literals::TRUE_STRING[0]) {
-					// We try to read the boolean literal 'true'.
-					if(!input.eof()) {
-						input.get(currentCharacter);
-
-						if(currentCharacter == Literals::TRUE_STRING[1]) {
-							if(!input.eof()) {
-								input.get(currentCharacter);
-
-								if(currentCharacter == Literals::TRUE_STRING[2]) {
-									if(!input.eof()) {
-										input.get(currentCharacter);
-
-										if(currentCharacter == Literals::TRUE_STRING[3]) {
-											setBoolean(true);
-											noErrors = false;
+					} else if(currentCharacter == Numbers::MINUS ||
+							  (currentCharacter >= Numbers::DIGITS[0] && currentCharacter <= Numbers::DIGITS[9])) {
+						// Numbers can't start with zeroes.
+						input.putback(currentCharacter);
+						readNumber(input, *this);
+						noErrors = false;
+					} else if(currentCharacter == Literals::TRUE_STRING[0]) {
+						// We try to read the boolean literal 'true'.
+						if(!input.eof()) {
+							input.get(currentCharacter);
+							
+							if(currentCharacter == Literals::TRUE_STRING[1]) {
+								if(!input.eof()) {
+									input.get(currentCharacter);
+									
+									if(currentCharacter == Literals::TRUE_STRING[2]) {
+										if(!input.eof()) {
+											input.get(currentCharacter);
+											
+											if(currentCharacter == Literals::TRUE_STRING[3]) {
+												setBoolean(true);
+												noErrors = false;
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-				} else if(currentCharacter == Literals::FALSE_STRING[0]) {
-					// We try to read the boolean literal 'false'.
-					if(!input.eof()) {
-						input.get(currentCharacter);
-
-						if(currentCharacter == Literals::FALSE_STRING[1]) {
-							if(!input.eof()) {
-								input.get(currentCharacter);
-
-								if(currentCharacter == Literals::FALSE_STRING[2]) {
-									if(!input.eof()) {
-										input.get(currentCharacter);
-
-										if(currentCharacter == Literals::FALSE_STRING[3]) {
-											if(!input.eof()) {
-												input.get(currentCharacter);
-
-												if(currentCharacter == Literals::FALSE_STRING[4]) {
-													setBoolean(false);
-													noErrors = false;
-													//std::cout << "Boolean read: " << *this << std::endl;
+					} else if(currentCharacter == Literals::FALSE_STRING[0]) {
+						// We try to read the boolean literal 'false'.
+						if(!input.eof()) {
+							input.get(currentCharacter);
+							
+							if(currentCharacter == Literals::FALSE_STRING[1]) {
+								if(!input.eof()) {
+									input.get(currentCharacter);
+									
+									if(currentCharacter == Literals::FALSE_STRING[2]) {
+										if(!input.eof()) {
+											input.get(currentCharacter);
+											
+											if(currentCharacter == Literals::FALSE_STRING[3]) {
+												if(!input.eof()) {
+													input.get(currentCharacter);
+													
+													if(currentCharacter == Literals::FALSE_STRING[4]) {
+														setBoolean(false);
+														noErrors = false;
+													}
 												}
 											}
 										}
@@ -399,9 +410,9 @@ namespace JsonBox {
 								}
 							}
 						}
+					} else if(!isWhiteSpace(currentCharacter)) {
+						std::cout << "Invalid character found: '" << currentCharacter << "'" << std::endl;
 					}
-				} else if(!isWhiteSpace(currentCharacter)) {
-					std::cout << "Invalid character found: '" << currentCharacter << "'" << std::endl;
 				}
 			}
 		} else {
@@ -467,8 +478,8 @@ namespace JsonBox {
 	}
 
 	bool Value::isHexDigit(char digit) {
-		return (digit >= Numbers::DIGITS[0] && digit <= Numbers::DIGITS[9]) || (digit >= Numbers::DIGITS[0xa] && digit <= Numbers::DIGITS[0xf]) ||
-		       (digit >= Numbers::DIGITS[0xf0] && digit <= Numbers::DIGITS[0xf5]);
+		return (digit >= Numbers::DIGITS[0] && digit <= Numbers::DIGITS[9]) || (digit >= Numbers::DIGITS[10] && digit <= Numbers::DIGITS[15]) ||
+		       (digit >= Numbers::DIGITS[16] && digit <= Numbers::DIGITS[21]);
 	}
 
 	bool Value::isWhiteSpace(char whiteSpace) {
@@ -492,80 +503,81 @@ namespace JsonBox {
 		// end of the input stream.
 		while(noErrors && !input.eof()) {
 			input.get(currentCharacter);
-
-			if(currentCharacter & 0x80) { // 0x80 --> 10000000
-				// The character is part of an utf8 character.
-				constructing << currentCharacter;
-			} else if(currentCharacter == Strings::Json::Escape::BEGIN_ESCAPE) {
-				if(!input.eof()) {
-					input.get(tmpCharacter);
-
-					switch(tmpCharacter) {
-					case Strings::Json::Escape::QUOTATION_MARK:
-						constructing << Strings::Std::QUOTATION_MARK;
-						break;
-					case Strings::Json::Escape::REVERSE_SOLIDUS:
-						constructing << Strings::Std::REVERSE_SOLIDUS;
-						break;
-					case Strings::Json::Escape::SOLIDUS:
-						constructing << Strings::Std::SOLIDUS;
-						break;
-					case Strings::Json::Escape::BACKSPACE:
-						constructing << Strings::Std::BACKSPACE;
-						break;
-					case Strings::Json::Escape::FORM_FEED:
-						constructing << Strings::Std::FORM_FEED;
-						break;
-					case Strings::Json::Escape::LINE_FEED:
-						constructing << Strings::Std::LINE_FEED;
-						break;
-					case Strings::Json::Escape::CARRIAGE_RETURN:
-						constructing << Strings::Std::CARRIAGE_RETURN;
-						break;
-					case Strings::Json::Escape::TAB:
-						constructing << Strings::Std::TAB;
-						break;
-					case Strings::Json::Escape::BEGIN_UNICODE:
-						// TODO: Check for utf16 surrogate pairs.
-						tmpCounter = 0;
-						tmpStr.clear();
-						tmpStr = "    ";
-						noUnicodeError = true;
-
-						while(tmpCounter < 4 && !input.eof()) {
-							input.get(tmpCharacter);
-
-							if(isHexDigit(tmpCharacter)) {
-								tmpStr[tmpCounter] = tmpCharacter;
-							} else {
-								noUnicodeError = false;
-								std::cout << "Invalid \\u character, skipping it." << std::endl;
-							}
-
-							++tmpCounter;
+			
+			if(input.good()) {
+				if(currentCharacter & 0x80) { // 0x80 --> 10000000
+					// The character is part of an utf8 character.
+					constructing << currentCharacter;
+				} else if(currentCharacter == Strings::Json::Escape::BEGIN_ESCAPE) {
+					if(!input.eof()) {
+						input.get(tmpCharacter);
+						
+						switch(tmpCharacter) {
+							case Strings::Json::Escape::QUOTATION_MARK:
+								constructing << Strings::Std::QUOTATION_MARK;
+								break;
+							case Strings::Json::Escape::REVERSE_SOLIDUS:
+								constructing << Strings::Std::REVERSE_SOLIDUS;
+								break;
+							case Strings::Json::Escape::SOLIDUS:
+								constructing << Strings::Std::SOLIDUS;
+								break;
+							case Strings::Json::Escape::BACKSPACE:
+								constructing << Strings::Std::BACKSPACE;
+								break;
+							case Strings::Json::Escape::FORM_FEED:
+								constructing << Strings::Std::FORM_FEED;
+								break;
+							case Strings::Json::Escape::LINE_FEED:
+								constructing << Strings::Std::LINE_FEED;
+								break;
+							case Strings::Json::Escape::CARRIAGE_RETURN:
+								constructing << Strings::Std::CARRIAGE_RETURN;
+								break;
+							case Strings::Json::Escape::TAB:
+								constructing << Strings::Std::TAB;
+								break;
+							case Strings::Json::Escape::BEGIN_UNICODE:
+								// TODO: Check for utf16 surrogate pairs.
+								tmpCounter = 0;
+								tmpStr.clear();
+								tmpStr = "    ";
+								noUnicodeError = true;
+								
+								while(tmpCounter < 4 && !input.eof()) {
+									input.get(tmpCharacter);
+									
+									if(isHexDigit(tmpCharacter)) {
+										tmpStr[tmpCounter] = tmpCharacter;
+									} else {
+										noUnicodeError = false;
+										std::cout << "Invalid \\u character, skipping it." << std::endl;
+									}
+									
+									++tmpCounter;
+								}
+								
+								if(noUnicodeError) {
+									tmpSs.str("");
+									tmpSs << std::hex << tmpStr;
+									tmpSs >> tmpInt;
+									tmpStr32.clear();
+									tmpStr32.push_back(tmpInt);
+									tmpStr = RedBox::UTFConvert::encodeToUTF8(tmpStr32);
+									constructing << tmpStr;
+								}
+								
+								break;
+							default:
+								break;
 						}
-
-						if(noUnicodeError) {
-							tmpSs.str("");
-							tmpSs << std::hex << tmpStr;
-							tmpSs >> tmpInt;
-							tmpStr32.clear();
-							tmpStr32.push_back(tmpInt);
-							tmpStr = RedBox::UTFConvert::encodeToUTF8(tmpStr32);
-							constructing << tmpStr;
-						}
-
-						break;
-					default:
-						break;
 					}
+				} else if(currentCharacter == '"') {
+					result = constructing.str();
+					noErrors = false;
+				} else {
+					constructing << currentCharacter;
 				}
-			} else if(currentCharacter == '"') {
-				result = constructing.str();
-				//std::cout << constructing.str() << std::endl;
-				noErrors = false;
-			} else {
-				constructing << currentCharacter;
 			}
 		}
 	}
@@ -578,40 +590,44 @@ namespace JsonBox {
 		while(noErrors && !input.eof()) {
 			input.get(currentCharacter);
 
-			if(currentCharacter == Structural::BEGIN_END_STRING) {
-				// We read the object's member's name.
-				readString(input, tmpString);
-				currentCharacter = input.peek();
-				// We read white spaces until the next non white space.
-				readToNonWhiteSpace(input, currentCharacter);
-
-				if(!input.eof()) {
-
-					// We make sure it's the right character.
-					if(currentCharacter == Structural::NAME_SEPARATOR) {
-						// We read until the value starts.
-						readToNonWhiteSpace(input, currentCharacter);
-
-						if(!input.eof()) {
-							// We put the character back and we load the value
-							// from the stream.
-							input.putback(currentCharacter);
-							result[tmpString].loadFromStream(input);
-
-							while(!input.eof() && currentCharacter != Structural::VALUE_SEPARATOR &&
-							        currentCharacter != Structural::END_OBJECT) {
-								input.get(currentCharacter);
-							}
-
-							if(currentCharacter == Structural::END_OBJECT) {
-								// We are done reading the object.
-								noErrors = false;
+			if(input.good()) {
+				if(currentCharacter == Structural::BEGIN_END_STRING) {
+					// We read the object's member's name.
+					readString(input, tmpString);
+					currentCharacter = input.peek();
+					// We read white spaces until the next non white space.
+					readToNonWhiteSpace(input, currentCharacter);
+					
+					if(!input.eof()) {
+						
+						// We make sure it's the right character.
+						if(currentCharacter == Structural::NAME_SEPARATOR) {
+							// We read until the value starts.
+							readToNonWhiteSpace(input, currentCharacter);
+							
+							if(!input.eof()) {
+								// We put the character back and we load the value
+								// from the stream.
+								input.putback(currentCharacter);
+								result[tmpString].loadFromStream(input);
+								
+								while(!input.eof() && currentCharacter != Structural::VALUE_SEPARATOR &&
+									  currentCharacter != Structural::END_OBJECT) {
+									input.get(currentCharacter);
+								}
+								
+								if(currentCharacter == Structural::END_OBJECT) {
+									// We are done reading the object.
+									noErrors = false;
+								}
 							}
 						}
 					}
+				} else if(currentCharacter == Structural::END_OBJECT) {
+					noErrors = false;
+				} else if(!isWhiteSpace(currentCharacter)) {
+					std::cout << "Expected '\"', got '" << currentCharacter << "', ignoring it." << std::endl;
 				}
-			} else if(!isWhiteSpace(currentCharacter)) {
-				std::cout << "Expected '\"', got '" << currentCharacter << "', ignoring it." << std::endl;
 			}
 		}
 	}
@@ -619,36 +635,31 @@ namespace JsonBox {
 	void Value::readArray(std::istream& input, Array& result) {
 		bool notDone = true;
 		char currentChar;
-		std::list<Value> constructing;
-
 		while(notDone && !input.eof()) {
 			input.get(currentChar);
 
-			if(!isWhiteSpace(currentChar)) {
-				input.putback(currentChar);
-				constructing.push_back(Value());
-				constructing.back().loadFromStream(input);
-
-				while(!input.eof() && currentChar != ',' &&
-				        currentChar != Structural::END_ARRAY) {
-					input.get(currentChar);
-				}
-
+			if(input.good()) {
 				if(currentChar == Structural::END_ARRAY) {
 					notDone = false;
+				} else if(!isWhiteSpace(currentChar)) {
+					input.putback(currentChar);
+					result.push_back(Value());
+					result.back().type = Type::UNKNOWN;
+					result.back().loadFromStream(input);
+					if(result.back().type == Type::UNKNOWN) {
+						result.pop_back();
+					}
+					
+					while(!input.eof() && currentChar != ',' &&
+						  currentChar != Structural::END_ARRAY) {
+						input.get(currentChar);
+					}
+					
+					if(currentChar == Structural::END_ARRAY) {
+						notDone = false;
+					}
 				}
 			}
-		}
-
-		result.resize(constructing.size());
-		Array::iterator i2 = result.begin();
-
-		for(std::list<Value>::iterator i = constructing.begin();
-		        i != constructing.end() && i2 != result.end(); ++i) {
-
-			*i2 = *i;
-
-			++i2;
 		}
 	}
 
