@@ -43,7 +43,7 @@ namespace JsonBox {
 		 * Replaces characters with their JSON equivalent. Escapes quotation
 		 * marks, reverse solidi to their "\"" and "\\" equivalents. Also
 		 * replaces all ascii characters from 0x0 to 0x1f to their unicode
-		 * escape equivalent, so the character '\x1e' would become "\u001e".
+		 * escape equivalent, so the character "\x1e" would become "\u001e".
 		 * @param str String to have its characters escaped.
 		 * @return Copy of the recieved string, but with the concerned
 		 * characters escaped.
@@ -268,7 +268,7 @@ namespace JsonBox {
 		 * Loads a Value from a stream containing valid JSON in UTF-8. Does not
 		 * read the stream if it is in UTF-32 or UTF-16. All the json escape
 		 * sequences in string values are converted to their char equivalent,
-		 * including unicode characters. Unicode characters that use two \u
+		 * including unicode characters. Unicode characters that use two "\u"
 		 * sequences are interpreted as two unicode characters, so it doesn't
 		 * support perfect parsing.
 		 * @param input Input stream to read from. Can be a file stream.
@@ -291,7 +291,7 @@ namespace JsonBox {
 		 * not.
 		 * @param escapeAll Specifies if all the JSON escapable characters
 		 * should be escaped or not.
-		 * @see JsonBox::Value::operator<<
+		 * @see JsonBox::Value::operator<<(std::ostream& output, const Value& v)
 		 * @see JsonBox::Value::escapeAllCharacters
 		 * @see JsonBox::Value::escapeMinimumCharacters
 		 */
@@ -508,8 +508,8 @@ namespace JsonBox {
 		 * not. False is to output the JSON in compact format.
 		 * @param escapeAll Specifies if the strings must escape all characters
 		 * or only the minimum.
-		 * @see JsonBox::Value::escapeAllCharacters
-		 * @see JsonBox::Value::escapeMinimumCharacters
+		 * @see JsonBox::Value::escapeAllCharacters(const std::string str)
+		 * @see JsonBox::Value::escapeMinimumCharacters(const std::string str)
 		 * @see JsonBox::Value::output(std::ostream& output, unsigned int& level, bool indent, bool escapeAll)
 		 */
 		void output(std::ostream& output, bool indent = true,
