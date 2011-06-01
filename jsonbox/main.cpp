@@ -14,7 +14,7 @@ int main (int argc, const char * argv[]) {
 	JsonBox::Value v2;
 	v2.loadFromFile("/Users/alabranche/test.txt");
 	//std::cout << v2 << std::endl;
-	v2.writeToStream(std::cout, true, false);
+	v2.writeToStream(std::cout, true, true);
     return 0;
 }
 

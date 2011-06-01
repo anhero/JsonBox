@@ -34,8 +34,10 @@ namespace JsonBox {
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
-	 * simply, it acts a lot like a variant. Objects and arrays are typedefs of
-	 * a map and a deque.
+	 * simply, it acts a lot like a variant. Objects and arrays are classes that
+	 * inherit from a map and a deque.
+	 * The user doesn't have to worry about character escaping in strings,
+	 * the i/o algorithms take care of that for the user.
 	 * @see JsonBox::Array
 	 * @see JsonBox::Object
 	 */
@@ -51,12 +53,25 @@ namespace JsonBox {
 		 */
 		friend std::ostream& operator<<(std::ostream& output, const Value& v);
 	public:
-		static std::string escapeMinimumCharacters(const std::string& str);
+		
 		/**
-		 * Replaces characters with its json equivalent for escape characters.
+		 * Replaces characters with their JSON equivalent. Escapes quotation
+		 * marks, reverse solidi to their "\"" and "\\" equivalents. Also
+		 * replaces all ascii characters from 0x0 to 0x1f to their unicode
+		 * escape equivalent, so the character '\x1e' would become "\u001e".
+		 * @param str String to have its characters escaped.
+		 * @return Copy of the recieved string, but with the concerned
+		 * characters escaped.
+		 */
+		static std::string escapeMinimumCharacters(const std::string& str);
+		
+		/**
+		 * Replaces characters with its JSON equivalent for escape characters.
 		 * So for example, if in the string there is the newline character '\n',
 		 * it will be replaced by the two characters '\' and 'n'.
-		 * @param str String to get its version of with the characters escaped.
+		 * @param str String make a copy and have its characters escaped.
+		 * @return Copy of the recieved string, but with the concerned
+		 * characters escaped.
 		 */
 		static std::string escapeAllCharacters(const std::string& str);
 		
@@ -287,8 +302,8 @@ namespace JsonBox {
 		 * Writes the value to an output stream in valid JSON. Uses the
 		 * overloaded output operator.
 		 * @param output Output stream to write the value to.
-		 * @param indent Specifies if the output is to have nice indentation
-		 * or not.
+		 * @param indent Specifies if the output is to have nice indentation or
+		 * not.
 		 * @param escapeAll Specifies if all the JSON escapable characters
 		 * should be escaped or not.
 		 * @see JsonBox::Value::operator<<
@@ -301,8 +316,10 @@ namespace JsonBox {
 		/**
 		 * Writes the value to a JSON file. Uses writeToStream(...).
 		 * @param filePath Path to the file to write.
-		 * @param indent
-		 * @param escapeAll
+		 * @param indent Specifies if the output is to have nice indentation or
+		 * not.
+		 * @param escapeAll Specifies if all the JSON escapable characters
+		 * should be escaped or not.
 		 * @see JsonBox::Value::writeToStream
 		 */
 		void writeToFile(const std::string& filePath, bool indent = true,
@@ -333,37 +350,37 @@ namespace JsonBox {
 			
 			/**
 			 * Parameterized constructor.
-			 * param newConstStringValue Pointer to set to the string pointer.
+			 * @param newConstStringValue Pointer to set to the string pointer.
 			 */
 			ValueDataPointer(const std::string* newConstStringValue);
 
 			/**
 			 * Parameterized constructor.
-			 * param newConstIntValue Pointer to set to the int pointer.
+			 * @param newConstIntValue Pointer to set to the int pointer.
 			 */
 			ValueDataPointer(const int* newConstIntValue);
 
 			/**
 			 * Parameterized constructor.
-			 * param newConstDoubleValue Pointer to set to the double pointer.
+			 * @param newConstDoubleValue Pointer to set to the double pointer.
 			 */
 			ValueDataPointer(const double* newConstDoubleValue);
 
 			/**
 			 * Parameterized constructor.
-			 * param newConstObjectValue Pointer to set to the object pointer.
+			 * @param newConstObjectValue Pointer to set to the object pointer.
 			 */
 			ValueDataPointer(const Object* newConstObjectValue);
 
 			/**
 			 * Parameterized constructor.
-			 * param newConstArrayValue Pointer to set to the array pointer.
+			 * @param newConstArrayValue Pointer to set to the array pointer.
 			 */
 			ValueDataPointer(const Array* newConstArrayValue);
 
 			/**
 			 * Parameterized constructor.
-			 * param newConstBoolValue Pointer to set to the bool pointer.
+			 * @param newConstBoolValue Pointer to set to the bool pointer.
 			 */
 			ValueDataPointer(const bool* newConstBoolValue);
 		};
@@ -474,40 +491,62 @@ namespace JsonBox {
 		static void readToNonWhiteSpace(std::istream& input,
 										char& currentCharacter);
 
+		/**
+		 * Writes a specific number of tabs in the output stream given.
+		 * @param output Stream in which the tab characters are to be written.
+		 * @param nbTabs Number of tabs to write in the stream.
+		 */
 		static void outputNbTabs(std::ostream& output, unsigned int nbTabs);
 		
+		/**
+		 * Escapes a character to its unicode equivalent. This function only
+		 * takes characters from '/0' to '/x1f'.
+		 * @param charToEscape Character to escape, must be between '\0' and
+		 * '\x1f'.
+		 * @return String with the character escaped in the format "\u00xx".
+		 * "xx" being the hexadecimal ASCII code of the character escaped.
+		 */
 		static std::string escapeToUnicode(char charToEscape);
 
 		/**
 		 * Sets the value's pointer and type.
+		 * @param newValuePointer Pointer to the data the value must to contain.
+		 * @param newType Value's new type.
 		 */
 		void setValue(ValueDataPointer newValuePointer,
 					  Type::Enum newType);
 		
+		/**
+		 * Outputs the value in JSON format.
+		 * @param output Output stream used to output the value in JSON format.
+		 * @param indent Specifies if the JSON being output must be indented or
+		 * not. False is to output the JSON in compact format.
+		 * @param escapeAll Specifies if the strings must escape all characters
+		 * or only the minimum.
+		 * @see JsonBox::Value::escapeAllCharacters
+		 * @see JsonBox::Value::escapeMinimumCharacters
+		 * @see JsonBox::Value::output(std::ostream& output, unsigned int& level, bool indent, bool escapeAll)
+		 */
 		void output(std::ostream& output, bool indent = true,
 					bool escapeAll = true) const;
 		
+		/**
+		 * Outputs the value in JSON format. This is the internal recursive
+		 * version.
+		 * @param output Output stream used to output the value in JSON format.
+		 * @param level Indentation level. It's used only if the indent
+		 * parameter is set to true.
+		 * @param indent Specifies if the JSON being output must be indented or
+		 * not. False is to output the JSON in compact format.
+		 * @param escapeAll Specifies if the strings must escape all characters
+		 * or only the minimum.
+		 * @see JsonBox::Value::escapeAllCharacters(const std::string str)
+		 * @see JsonBox::Value::escapeMinimumCharacters(const std::string str)
+		 * @see JsonBox::Value::output(std::ostream& output, bool indent, bool escapeAll)
+		 */
 		void output(std::ostream& output, unsigned int& level,
 					bool indent = true, bool escapeAll = true) const;
 	};
-	
-	/**
-	 * Output operator overload for the JSON array. Outputs in standard JSON
-	 * format.
-	 * @param output Output stream in which to write the array's JSON.
-	 * @param a Array to output into the stream.
-	 * @return Output stream filled with the JSON code.
-	 */
-	//std::ostream& operator<<(std::ostream& output, const Array& a);
-	
-	/**
-	 * Output operator overload for the JSON object. Outputs in standard JSON
-	 * format.
-	 * @param output Output stream in which to write the object's JSON.
-	 * @param o Object to output into the stream.
-	 * @return Output stream filled with the JSON code.
-	 */
-	//std::ostream& operator<<(std::ostream& output, const Object& o);
 }
 
 #endif

@@ -4,6 +4,7 @@
 #include <stack>
 #include <sstream>
 #include <list>
+#include <iomanip>
 
 #include "Grammar.h"
 #include "UTFConvert.h"
@@ -16,62 +17,54 @@ namespace JsonBox {
 	const Array Value::EMPTY_ARRAY = Array();
 
 	std::string Value::escapeMinimumCharacters(const std::string& str) {
-		std::string result = str;
+		std::stringstream result;
 
 		// For each character in the string.
-		for(size_t i = 0; i < result.size(); ++i) {
-			if(result[i] >= '\0' && result[i] <= '\x1f') {
-				result.replace(i, 1, Value::escapeToUnicode(result[i]));
-				i += 5;
-			} else if(result[i] == Strings::Std::QUOTATION_MARK) {
-				result.replace(i, 1, Strings::Json::QUOTATION_MARK);
-				++i;
-			} else if(result[i] == Strings::Std::REVERSE_SOLIDUS) {
-				result.replace(i, 1, Strings::Json::REVERSE_SOLIDUS);
-				++i;
+		for(std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
+			if(*i >= '\0' && *i <= '\x1f') {
+				result << Value::escapeToUnicode(*i);
+			} else if(*i == Strings::Std::QUOTATION_MARK) {
+				result << Strings::Json::QUOTATION_MARK;
+			} else if(*i == Strings::Std::REVERSE_SOLIDUS) {
+				result << Strings::Json::REVERSE_SOLIDUS;
+			} else {
+				result << *i;
 			}
 		}
 
-		return result;
+		return result.str();
 	}
 
 	std::string Value::escapeAllCharacters(const std::string& str) {
-		std::string result = str;
+		std::stringstream result;
 
 		// For each character in the string.
-		for(size_t i = 0; i < result.size(); ++i) {
-			if(result[i] >= '\0' && result[i] <= '\x1f') {
-				result.replace(i, 1, Value::escapeToUnicode(result[i]));
-				i += 5;
-			} else if(result[i] == Strings::Std::QUOTATION_MARK) {
-				result.replace(i, i, Strings::Json::QUOTATION_MARK);
-				++i;
-			} else if(result[i] == Strings::Std::REVERSE_SOLIDUS) {
-				result.replace(i, 1, Strings::Json::REVERSE_SOLIDUS);
-				++i;
-			} else if(result[i] == Strings::Std::SOLIDUS) {
-				result.replace(i, 1, Strings::Json::SOLIDUS);
-				++i;
-			} else if(result[i] == Strings::Std::BACKSPACE) {
-				result.replace(i, 1, Strings::Json::BACKSPACE);
-				++i;
-			} else if(result[i] == Strings::Std::FORM_FEED) {
-				result.replace(i, 1, Strings::Json::FORM_FEED);
-				++i;
-			} else if(result[i] == Strings::Std::LINE_FEED) {
-				result.replace(i, 1, Strings::Json::LINE_FEED);
-				++i;
-			} else if(result[i] == Strings::Std::CARRIAGE_RETURN) {
-				result.replace(i, 1, Strings::Json::CARRIAGE_RETURN);
-				++i;
-			} else if(result[i] == Strings::Std::TAB) {
-				result.replace(i, 1, Strings::Json::TAB);
-				++i;
+		for(std::string::const_iterator i = str.begin(); i != str.end(); ++i) {
+			if(*i >= '\0' && *i <= '\x1f') {
+				result << Value::escapeToUnicode(*i);
+			} else if(*i == Strings::Std::QUOTATION_MARK) {
+				result << Strings::Json::QUOTATION_MARK;
+			} else if(*i == Strings::Std::REVERSE_SOLIDUS) {
+				result << Strings::Json::REVERSE_SOLIDUS;
+			} else if(*i == Strings::Std::SOLIDUS) {
+				result << Strings::Json::SOLIDUS;
+			} else if(*i == Strings::Std::BACKSPACE) {
+				result << Strings::Json::BACKSPACE;
+			} else if(*i == Strings::Std::FORM_FEED) {
+				result << Strings::Json::FORM_FEED;
+			} else if(*i == Strings::Std::LINE_FEED) {
+				result << Strings::Json::LINE_FEED;
+			} else if(*i == Strings::Std::CARRIAGE_RETURN) {
+				result << Strings::Json::CARRIAGE_RETURN;
+			} else if(*i == Strings::Std::TAB) {
+				result << Strings::Json::TAB;
+			} else {
+				result << *i;
 			}
 
 		}
 
-		return result;
+		return result.str();
 	}
 
 	Value::Value() : type(Type::NULL_VALUE) {
@@ -734,7 +727,8 @@ namespace JsonBox {
 		std::stringstream result;
 
 		if(charToEscape >= '\0' && charToEscape <= '\x1f') {
-			result << "\\u00" << std::hex << static_cast<int>(charToEscape);
+			result << "\\u00";
+			result << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(charToEscape);
 		}
 
 		return result.str();
