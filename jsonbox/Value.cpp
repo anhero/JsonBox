@@ -496,7 +496,7 @@ namespace JsonBox {
 		std::string tmpStr(4, ' ');
 		std::stringstream tmpSs;
 		int32_t tmpInt;
-		UtfBox::String32 tmpStr32;
+		String32 tmpStr32;
 		unsigned int tmpCounter;
 
 		// As long as there aren't any errors and that we haven't reached the
@@ -563,7 +563,7 @@ namespace JsonBox {
 									tmpSs >> tmpInt;
 									tmpStr32.clear();
 									tmpStr32.push_back(tmpInt);
-									tmpStr = UtfBox::Convert::encodeToUTF8(tmpStr32);
+									tmpStr = Convert::encodeToUTF8(tmpStr32);
 									constructing << tmpStr;
 								}
 								

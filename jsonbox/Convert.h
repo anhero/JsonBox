@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 
-namespace UtfBox {
+namespace JsonBox {
 	
 	typedef std::basic_string<int32_t> String32;
 	/**

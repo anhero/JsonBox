@@ -10,7 +10,7 @@
 #define         MASK5BYTES              0xF8 //11111000
 #define         MASK6BYTES              0xFC //11111100
 
-namespace UtfBox {
+namespace JsonBox {
 	std::string Convert::encodeToUTF8(const String32& utf32String) {
 		std::stringstream result;
 
