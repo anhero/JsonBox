@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 240C02551391417B00A19C2B /* UTFConvert.cpp */; };
 		24342409138C9F3B00F93C5A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342408138C9F3B00F93C5A /* main.cpp */; };
 		24342419138C9F5200F93C5A /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24342415138C9F5200F93C5A /* Value.cpp */; };
 		2456E9D713955CDF0078E12A /* Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2456E9D313955CDF0078E12A /* Array.cpp */; };
 		2456E9D813955CDF0078E12A /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2456E9D513955CDF0078E12A /* Object.cpp */; };
+		24DF979E139E702B009DA4DB /* Convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24DF979C139E702B009DA4DB /* Convert.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,9 +27,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		240C02531391416600A19C2B /* RBString32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBString32.h; sourceTree = "<group>"; };
-		240C02551391417B00A19C2B /* UTFConvert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UTFConvert.cpp; sourceTree = "<group>"; };
-		240C02561391417B00A19C2B /* UTFConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UTFConvert.h; sourceTree = "<group>"; };
 		24342404138C9F3B00F93C5A /* jsonbox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonbox; sourceTree = BUILT_PRODUCTS_DIR; };
 		24342408138C9F3B00F93C5A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2434240A138C9F3B00F93C5A /* jsonbox.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = jsonbox.1; sourceTree = "<group>"; };
@@ -41,6 +38,8 @@
 		2456E9D413955CDF0078E12A /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		2456E9D513955CDF0078E12A /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		2456E9D613955CDF0078E12A /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		24DF979C139E702B009DA4DB /* Convert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Convert.cpp; sourceTree = "<group>"; };
+		24DF979D139E702B009DA4DB /* Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Convert.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,9 +81,8 @@
 				243FFB29139346A400FCC958 /* Grammar.h */,
 				24342416138C9F5200F93C5A /* Value.h */,
 				24342408138C9F3B00F93C5A /* main.cpp */,
-				240C02531391416600A19C2B /* RBString32.h */,
-				240C02551391417B00A19C2B /* UTFConvert.cpp */,
-				240C02561391417B00A19C2B /* UTFConvert.h */,
+				24DF979C139E702B009DA4DB /* Convert.cpp */,
+				24DF979D139E702B009DA4DB /* Convert.h */,
 				2434240A138C9F3B00F93C5A /* jsonbox.1 */,
 			);
 			path = jsonbox;
@@ -142,9 +140,9 @@
 			files = (
 				24342409138C9F3B00F93C5A /* main.cpp in Sources */,
 				24342419138C9F5200F93C5A /* Value.cpp in Sources */,
-				240C02571391417B00A19C2B /* UTFConvert.cpp in Sources */,
 				2456E9D713955CDF0078E12A /* Array.cpp in Sources */,
 				2456E9D813955CDF0078E12A /* Object.cpp in Sources */,
+				24DF979E139E702B009DA4DB /* Convert.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 #include <iomanip>
 
 #include "Grammar.h"
-#include "UTFConvert.h"
+#include "Convert.h"
 
 namespace JsonBox {
 
@@ -495,8 +495,8 @@ namespace JsonBox {
 		std::stringstream constructing;
 		std::string tmpStr(4, ' ');
 		std::stringstream tmpSs;
-		RB_Char32 tmpInt;
-		RB_String32 tmpStr32;
+		int32_t tmpInt;
+		UtfBox::String32 tmpStr32;
 		unsigned int tmpCounter;
 
 		// As long as there aren't any errors and that we haven't reached the
@@ -563,7 +563,7 @@ namespace JsonBox {
 									tmpSs >> tmpInt;
 									tmpStr32.clear();
 									tmpStr32.push_back(tmpInt);
-									tmpStr = RedBox::UTFConvert::encodeToUTF8(tmpStr32);
+									tmpStr = UtfBox::Convert::encodeToUTF8(tmpStr32);
 									constructing << tmpStr;
 								}
 								
