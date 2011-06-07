@@ -5,10 +5,7 @@
 #define JB_VALUE_H
 
 #include <string>
-#include <deque>
 #include <iostream>
-#include <fstream>
-#include <map>
 
 #include "Type.h"
 #include "Array.h"

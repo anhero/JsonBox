@@ -1,6 +1,6 @@
-#include "Object.h"
+#include <JsonBox/Object.h>
 
-#include "Value.h"
+#include <JsonBox/Value.h>
 
 namespace JsonBox {
 	void Object::output(std::ostream& output, bool indent,

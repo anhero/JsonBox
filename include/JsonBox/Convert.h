@@ -1,8 +1,8 @@
 /**
  * @file
  */
-#ifndef RB_CONVERTER_H
-#define RB_CONVERTER_H
+#ifndef JB_CONVERTER_H
+#define JB_CONVERTER_H
 
 
 #include <string>
