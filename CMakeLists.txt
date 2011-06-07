@@ -17,3 +17,9 @@ add_library(
 	STATIC
 	${source_files}
 )
+
+add_executable(
+	test1
+	examples/main.cpp
+	${source_files}
+)
