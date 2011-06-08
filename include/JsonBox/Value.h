@@ -263,6 +263,12 @@ namespace JsonBox {
 		void setNull();
 		
 		/**
+		 * Loads the current value from a string containing the JSON to parse.
+		 * @param json String containing the JSON to parse.
+		 */
+		void loadFromString(const std::string& json);
+		
+		/**
 		 * Loads a Value from a stream containing valid JSON in UTF-8. Does not
 		 * read the stream if it is in UTF-32 or UTF-16. All the json escape
 		 * sequences in string values are converted to their char equivalent,

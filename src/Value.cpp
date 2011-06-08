@@ -285,6 +285,11 @@ namespace JsonBox {
 		setValue(tmp, Type::NULL_VALUE);
 	}
 
+	void Value::loadFromString(std::string const& json) {
+		std::stringstream jsonStream(json);
+		loadFromStream(jsonStream);
+	}
+	
 	void Value::loadFromStream(std::istream& input) {
 		char currentCharacter;
 
