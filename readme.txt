@@ -19,4 +19,11 @@ Things it doesn't do:
  
 This library isn't what I would call typesafe. It's "typesafe" when you use it from the outside, but internally, it isn't. I can see the library going crazy if it's used in a multi-threaded program, it wasn't designed for multi-threading.
 
-The Value type is quite small because it uses a union of different pointer types and an enum to know which type of data the value points to with its union of pointers.
+The Value type has a small memory footprint because it uses a union of different pointer types and an enum to know which type of data the value points to with its union of pointers.
+
+HOW TO BUILD
+To build the library by itself, you can use cmake. The simple way is to use the command "cmake ./" while being in the directory containing the CMakeLists.txt.
+
+Or
+
+You can simply copy the include and source files in your project. The library only depends on the STL and nothing else special, so it should build on pretty much anything.
