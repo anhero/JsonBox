@@ -21,37 +21,37 @@ namespace JsonBox {
 			}
 			// 110xxxxx 10xxxxxx
 			else if(*i < 0x800) {
-				result << static_cast<char>(MASK2BYTES | *i >> 6);
-				result << static_cast<char>(MASK1BYTE | *i & MASKBITS);
+				result << static_cast<char>(MASK2BYTES | (*i >> 6));
+				result << static_cast<char>(MASK1BYTE | (*i & MASKBITS));
 			}
 			// 1110xxxx 10xxxxxx 10xxxxxx
 			else if(*i < 0x10000) {
-				result << static_cast<char>(MASK3BYTES | *i >> 12);
-				result << static_cast<char>(MASK1BYTE | *i >> 6 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i & MASKBITS);
+				result << static_cast<char>(MASK3BYTES | (*i >> 12));
+				result << static_cast<char>(MASK1BYTE | (*i >> 6 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i & MASKBITS));
 			}
 			// 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 			else if(*i < 0x200000) {
-				result << static_cast<char>(MASK4BYTES | *i >> 18);
-				result << static_cast<char>(MASK1BYTE | *i >> 12 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i >> 6 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i & MASKBITS);
+				result << static_cast<char>(MASK4BYTES | (*i >> 18));
+				result << static_cast<char>(MASK1BYTE | (*i >> 12 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i >> 6 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i & MASKBITS));
 			}
 			// 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
 			else if(*i < 0x4000000) {
-				result << static_cast<char>(MASK5BYTES | *i >> 24);
-				result << static_cast<char>(MASK1BYTE | *i >> 18 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i >> 12 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i >> 6 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i & MASKBITS);
+				result << static_cast<char>(MASK5BYTES | (*i >> 24));
+				result << static_cast<char>(MASK1BYTE | (*i >> 18 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i >> 12 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i >> 6 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i & MASKBITS));
 			}
 			// 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
 			else if(*i < 0x8000000) {
-				result << static_cast<char>(MASK6BYTES | *i >> 30);
-				result << static_cast<char>(MASK1BYTE | *i >> 18 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i >> 12 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i >> 6 & MASKBITS);
-				result << static_cast<char>(MASK1BYTE | *i & MASKBITS);
+				result << static_cast<char>(MASK6BYTES | (*i >> 30));
+				result << static_cast<char>(MASK1BYTE | (*i >> 18 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i >> 12 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i >> 6 & MASKBITS));
+				result << static_cast<char>(MASK1BYTE | (*i & MASKBITS));
 			}
 		}
 
