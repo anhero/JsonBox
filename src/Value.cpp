@@ -91,6 +91,11 @@ namespace JsonBox {
 		valuePointer.stringValue = NULL;
 		setString(newString);
 	}
+	
+	Value::Value(const char* newCString) : type(Type::NULL_VALUE) {
+		valuePointer.stringValue = NULL;
+		setString(std::string(newCString));
+	}
 
 	Value::Value(int newInt) : type(Type::NULL_VALUE) {
 		valuePointer.intValue = NULL;

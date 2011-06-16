@@ -78,6 +78,12 @@ namespace JsonBox {
 		Value(const std::string& newString);
 		
 		/**
+		 * Constructs the value from a C-style string.
+		 * @param newCString C-style string used as the value.
+		 */
+		Value(const char* newCString);
+		
+		/**
 		 * Constructs the value from an integer.
 		 * @param newInt Integer used as the value.
 		 */
