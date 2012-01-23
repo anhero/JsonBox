@@ -57,7 +57,17 @@ namespace JsonBox {
 		 * @see JsonBox::Value::escapeMinimumCharacters(const std::string& str)
 		 */
 		static std::string escapeAllCharacters(const std::string& str);
-		
+
+		/**
+		 * Escapes a character to its unicode equivalent. This function only
+		 * takes characters from '/0' to '/x1f'.
+		 * @param charToEscape Character to escape, must be between '\0' and
+		 * '\x1f'.
+		 * @return String with the character escaped in the format "\u00xx".
+		 * "xx" being the hexadecimal ASCII code of the character escaped.
+		 */
+		static const std::string escapeToUnicode(char charToEscape);
+
 		/**
 		 * Default constructor. Makes the value null.
 		 */
@@ -492,16 +502,6 @@ namespace JsonBox {
 		 * @param nbTabs Number of tabs to write in the stream.
 		 */
 		static void outputNbTabs(std::ostream& output, unsigned int nbTabs);
-		
-		/**
-		 * Escapes a character to its unicode equivalent. This function only
-		 * takes characters from '/0' to '/x1f'.
-		 * @param charToEscape Character to escape, must be between '\0' and
-		 * '\x1f'.
-		 * @return String with the character escaped in the format "\u00xx".
-		 * "xx" being the hexadecimal ASCII code of the character escaped.
-		 */
-		static std::string escapeToUnicode(char charToEscape);
 
 		/**
 		 * Sets the value's pointer and type.

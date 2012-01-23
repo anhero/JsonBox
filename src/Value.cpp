@@ -78,6 +78,18 @@ namespace JsonBox {
 		return result.str();
 	}
 
+
+	const std::string Value::escapeToUnicode(char charToEscape) {
+		std::stringstream result;
+
+		if(charToEscape >= '\0' && charToEscape <= '\x1f') {
+			result << "\\u00";
+			result << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(charToEscape);
+		}
+
+		return result.str();
+	}
+
 	Value::Value() : type(Type::NULL_VALUE) {
 		valuePointer.stringValue = NULL;
 	}
@@ -743,17 +755,6 @@ namespace JsonBox {
 		for(unsigned int i = 0; i < nbTabs; ++i) {
 			output << '\t';
 		}
-	}
-
-	std::string Value::escapeToUnicode(char charToEscape) {
-		std::stringstream result;
-
-		if(charToEscape >= '\0' && charToEscape <= '\x1f') {
-			result << "\\u00";
-			result << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(charToEscape);
-		}
-
-		return result.str();
 	}
 
 	void Value::setValue(ValueDataPointer newValuePointer,

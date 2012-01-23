@@ -6,6 +6,7 @@
 namespace JsonBox {
 	/**
 	 * Adds a level of indentation to a streambuf.
+	 * @see JsonBox::OutputFilter
 	 */
 	class Indenter {
 	public:
