@@ -2,49 +2,32 @@
 
 #include <JsonBox/Value.h>
 #include <JsonBox/Grammar.h>
+#include <JsonBox/OutputFilter.h>
+#include <JsonBox/Indenter.h>
 
 namespace JsonBox {
-	
-	void Array::output(std::ostream& output, bool indent,
-					   bool escapeAll) const {
-		unsigned int level = 0;
-		this->output(output, level, indent, escapeAll);
-	}
-	
-	void Array::output(std::ostream &output, unsigned int &level,
-					   bool indent, bool escapeAll) const {
-		output << '[';
-		
-		if(indent) {
-			output << std::endl;
-			++level;
-		}
-		
-		for(Array::const_iterator i = begin(); i != end(); ++i) {
-			
-			if(i != begin()) {
-				output << ",";
-				if(indent) {
-					output << std::endl;
+	std::ostream &operator<<(std::ostream &output, const Array &a) {
+		if (a.empty()) {
+			output << Structural::BEGIN_ARRAY << Structural::END_ARRAY;
+
+		} else {
+			output << Structural::BEGIN_ARRAY << std::endl;
+			OutputFilter<Indenter> indent(output.rdbuf());
+			output.rdbuf(&indent);
+
+			for (Array::const_iterator i = a.begin(); i != a.end(); ++i) {
+				if (i != a.begin()) {
+					output << Structural::VALUE_SEPARATOR << std::endl;
 				}
+
+				output << *i;
 			}
-			
-			if(indent) {
-				Value::outputNbTabs(output, level);
-			}
-			i->output(output, level, indent, escapeAll);
+
+			output.rdbuf(indent.getDestination());
+
+			output << std::endl << Structural::END_ARRAY;
 		}
-		
-		if(indent) {
-			--level;
-			output << std::endl;
-			Value::outputNbTabs(output, level);
-		}
-		output << ']';
-	}
-	
-	std::ostream& operator<<(std::ostream& output, const Array& a) {
-		a.output(output);
+
 		return output;
 	}
 }

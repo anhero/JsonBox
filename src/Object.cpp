@@ -1,58 +1,36 @@
 #include <JsonBox/Object.h>
 
 #include <JsonBox/Value.h>
+#include <JsonBox/Grammar.h>
+#include <JsonBox/OutputFilter.h>
+#include <JsonBox/Indenter.h>
 
 namespace JsonBox {
-	void Object::output(std::ostream& output, bool indent,
-						bool escapeAll) const {
-		unsigned int level = 0;
-		this->output(output, level, indent, escapeAll);
-	}
-	
-	void Object::output(std::ostream& output, unsigned int& level,
-						bool indent, bool escapeAll) const {
-		output << '{';
-		if(indent) {
-			output << std::endl;
-			++level;
-		}
-		
-		for(std::map<std::string, Value>::const_iterator i = begin();
-			i != end(); ++i) {
-			if(i != begin()) {
-				output << ",";
-				if(indent) {
-					output << std::endl;
+	std::ostream &operator<<(std::ostream &output, const Object &o) {
+		// If the object is empty, we simply write "{}".
+		if (o.empty()) {
+			output << Structural::BEGIN_OBJECT << Structural::END_OBJECT;
+
+		} else {
+			output << Structural::BEGIN_OBJECT << std::endl;
+			OutputFilter<Indenter> indent(output.rdbuf());
+			output.rdbuf(&indent);
+
+			// For each item in the object.
+			for (Object::const_iterator i = o.begin(); i != o.end(); ++i) {
+				if (i != o.begin()) {
+					output << Structural::VALUE_SEPARATOR << std::endl;
 				}
+
+				// We print the name of the attribute and its value.
+				output << Structural::BEGIN_END_STRING << Value::escapeMinimumCharacters(i->first) << Structural::BEGIN_END_STRING << Whitespace::SPACE << Structural::NAME_SEPARATOR << Whitespace::SPACE << i->second;
 			}
-			
-			if(indent) {
-				Value::outputNbTabs(output, level);
-				if(escapeAll) {
-					output << '"' << Value::escapeAllCharacters(i->first) << "\" : ";
-				} else {
-					output << '"' << Value::escapeMinimumCharacters(i->first) << "\" : ";
-				}
-			} else {
-				if(escapeAll) {
-					output << '"' << Value::escapeAllCharacters(i->first) << "\":";
-				} else {
-					output << '"' << Value::escapeMinimumCharacters(i->first) << "\":";
-				}
-			}
-			i->second.output(output, level, indent, escapeAll);
+
+			output.rdbuf(indent.getDestination());
+
+			output << std::endl << Structural::END_OBJECT;
 		}
-		
-		if(indent) {
-			--level;
-			output << std::endl;
-			Value::outputNbTabs(output, level);
-		}
-		output << '}';
-	}
-	
-	std::ostream& operator<<(std::ostream& output, const Object& o) {
-		o.output(output);
+
 		return output;
 	}
 }

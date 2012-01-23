@@ -29,7 +29,7 @@ namespace JsonBox {
 		}
 
 		// We determine if we start a backslash escape or not.
-		afterBackSlash = inString && !afterBackSlash && (tmpChar == '\\');
+		afterBackSlash = inString && !afterBackSlash && (tmpChar == Strings::Json::Escape::BEGIN_ESCAPE);
 		return (notEscaped) ? (destination.sputc(tmpChar)) : (0);
 	}
 }

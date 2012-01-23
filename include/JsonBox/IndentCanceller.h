@@ -24,6 +24,9 @@ namespace JsonBox {
 		 */
 		std::streambuf::int_type operator()(std::streambuf &destination,
 		                                    std::streambuf::int_type character);
+	private:
+		bool afterBackSlash;
+		bool inString;
 	};
 }
 
