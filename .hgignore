@@ -46,3 +46,6 @@ Release
 
 #SVN repo add to our project
 .svn
+
+#Misc
+*.autosave
