@@ -1,6 +1,8 @@
 #ifndef JB_OUTPUT_FILTER_H
 #define JB_OUTPUT_FILTER_H
 
+#include <cassert>
+
 #include <limits>
 #include <streambuf>
 
