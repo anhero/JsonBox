@@ -110,228 +110,264 @@ namespace JsonBox {
 		return result.str();
 	}
 
-	Value::Value() : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
+	Value::Value() : type(NULL_VALUE), data() {
 	}
 
-	Value::Value(std::istream &input) : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
+	Value::Value(std::istream &input) : type(NULL_VALUE), data() {
 		loadFromStream(input);
 	}
 
-	Value::Value(const std::string &newString) : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
-		setString(newString);
+	Value::Value(const std::string &newString) : type(STRING),
+		data(new std::string(newString)) {
 	}
 
-	Value::Value(const char *newCString) : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
-		setString(std::string(newCString));
+	Value::Value(const char *newCString) : type(STRING),
+		data(new std::string(newCString)) {
 	}
 
-	Value::Value(int newInt) : type(Type::NULL_VALUE) {
-		valuePointer.intValue = NULL;
-		setInt(newInt);
+	Value::Value(int newInt) : type(INTEGER), data(new int(newInt)) {
 	}
 
-	Value::Value(double newDouble) : type(Type::NULL_VALUE) {
-		valuePointer.doubleValue = NULL;
-		setDouble(newDouble);
+	Value::Value(double newDouble) : type(DOUBLE), data(new double(newDouble)) {
 	}
 
-	Value::Value(const Object &newObject) : type(Type::NULL_VALUE) {
-		valuePointer.objectValue = NULL;
-		setObject(newObject);
+	Value::Value(const Object &newObject) : type(OBJECT),
+		data(new Object(newObject)) {
 	}
 
-	Value::Value(const Array &newArray) : type(Type::NULL_VALUE) {
-		valuePointer.arrayValue = NULL;
-		setArray(newArray);
+	Value::Value(const Array &newArray) : type(ARRAY),
+		data(new Array(newArray)) {
 	}
 
-	Value::Value(bool newBoolean) : type(Type::NULL_VALUE) {
-		valuePointer.boolValue = NULL;
-		setBoolean(newBoolean);
+	Value::Value(bool newBoolean) : type(BOOLEAN), data(new bool(newBoolean)) {
 	}
 
-	Value::Value(const Value &src) : type(Type::NULL_VALUE) {
-		valuePointer.stringValue = NULL;
-		setValue(src.valuePointer, src.type);
+	Value::Value(const Value &src) : type(src.type), data() {
+		switch (type) {
+		case STRING:
+			data.stringValue = new std::string(*src.data.stringValue);
+			break;
+
+		case INTEGER:
+			data.intValue = new int(*src.data.intValue);
+			break;
+
+		case DOUBLE:
+			data.doubleValue = new double(*src.data.doubleValue);
+			break;
+
+		case OBJECT:
+			data.objectValue = new Object(*src.data.objectValue);
+			break;
+
+		case ARRAY:
+			data.arrayValue = new Array(*src.data.arrayValue);
+			break;
+
+		case BOOLEAN:
+			data.boolValue = new bool(*src.data.boolValue);
+			break;
+
+		default:
+			type = NULL_VALUE;
+			break;
+		}
 	}
 
 	Value::~Value() {
-		if (valuePointer.stringValue) {
-			switch (type) {
-			case Type::STRING:
-
-				delete valuePointer.stringValue;
-
-				break;
-
-			case Type::INTEGER:
-
-				delete valuePointer.intValue;
-
-				break;
-
-			case Type::DOUBLE:
-
-				delete valuePointer.doubleValue;
-
-				break;
-
-			case Type::OBJECT:
-
-				delete valuePointer.objectValue;
-
-				break;
-
-			case Type::ARRAY:
-
-				delete valuePointer.arrayValue;
-
-				break;
-
-			case Type::BOOLEAN:
-
-				delete valuePointer.boolValue;
-
-				break;
-
-			default:
-				break;
-			}
-		}
+		clear();
 	}
 
 	Value &Value::operator=(const Value &src) {
 		if (this != &src) {
-			setValue(src.valuePointer, src.type);
+			clear();
+			type = src.type;
+
+			switch (type) {
+			case STRING:
+				data.stringValue = new std::string(*src.data.stringValue);
+				break;
+
+			case INTEGER:
+				data.intValue = new int(*src.data.intValue);
+				break;
+
+			case DOUBLE:
+				data.doubleValue = new double(*src.data.doubleValue);
+				break;
+
+			case OBJECT:
+				data.objectValue = new Object(*src.data.objectValue);
+				break;
+
+			case ARRAY:
+				data.arrayValue = new Array(*src.data.arrayValue);
+				break;
+
+			case BOOLEAN:
+				data.boolValue = new bool(*src.data.boolValue);
+				break;
+
+			default:
+				type = NULL_VALUE;
+				data.stringValue = NULL;
+				break;
+			}
 		}
 
 		return *this;
 	}
 
-	Type::Enum Value::getType() const {
+	Value &Value::operator[](const Object::key_type &key) {
+		if (type != OBJECT) {
+			clear();
+			type = OBJECT;
+			data.objectValue = new Object();
+		}
+
+		return (*data.objectValue)[key];
+	}
+
+	Value &Value::operator[](const char *key) {
+		return operator[](std::string(key));
+	}
+
+	Value &Value::operator[](Array::size_type index) {
+		if (type != ARRAY) {
+			clear();
+			type = ARRAY;
+			data.arrayValue = new Array(index + 1);
+		}
+
+		return (*data.arrayValue)[index];
+	}
+
+	Value::Type Value::getType() const {
 		return type;
 	}
 
 	bool Value::isString() const {
-		return type == Type::STRING;
+		return type == STRING;
 	}
 
 	bool Value::isInteger() const {
-		return type == Type::INTEGER;
+		return type == INTEGER;
 	}
 
 	bool Value::isDouble() const {
-		return type == Type::DOUBLE;
+		return type == DOUBLE;
 	}
 
 	bool Value::isObject() const {
-		return type == Type::OBJECT;
+		return type == OBJECT;
 	}
 
 	bool Value::isArray() const {
-		return type == Type::ARRAY;
+		return type == ARRAY;
 	}
 
 	bool Value::isBoolean() const {
-		return type == Type::BOOLEAN;
+		return type == BOOLEAN;
 	}
 
 	bool Value::isNull() const {
-		return type == Type::NULL_VALUE;
+		return type == NULL_VALUE;
 	}
 
 	const std::string &Value::getString() const {
-		if (type == Type::STRING) {
-			assert(valuePointer.stringValue);
-			return *valuePointer.stringValue;
-
-		} else {
-			return EMPTY_STRING;
-		}
+		return (type == STRING) ? (*data.stringValue) : (EMPTY_STRING);
 	}
 
 	void Value::setString(std::string const &newString) {
-		setValue(ValueDataPointer(&newString), Type::STRING);
+		if (type == STRING) {
+			*data.stringValue = newString;
+
+		} else {
+			clear();
+			type = STRING;
+			data.stringValue = new std::string(newString);
+		}
 	}
 
 	int Value::getInt() const {
-		if (type == Type::INTEGER) {
-			assert(valuePointer.intValue);
-			return *valuePointer.intValue;
-
-		} else {
-			return EMPTY_INT;
-		}
+		return (type == INTEGER) ? (*data.intValue) : (EMPTY_INT);
 	}
 
 	void Value::setInt(int newInt) {
-		setValue(ValueDataPointer(&newInt), Type::INTEGER);
+		if (type == INTEGER) {
+			*data.intValue = newInt;
+
+		} else {
+			clear();
+			type = INTEGER;
+			data.intValue = new int(newInt);
+		}
 	}
 
 	double Value::getDouble() const {
-		if (type == Type::DOUBLE) {
-			assert(valuePointer.doubleValue);
-			return *valuePointer.doubleValue;
-
-		} else {
-			return EMPTY_DOUBLE;
-		}
+		return (type == DOUBLE) ? (*data.doubleValue) : (EMPTY_DOUBLE);
 	}
 
 	void Value::setDouble(double newDouble) {
-		setValue(ValueDataPointer(&newDouble), Type::DOUBLE);
+		if (type == DOUBLE) {
+			*data.doubleValue = newDouble;
+
+		} else {
+			clear();
+			type = DOUBLE;
+			data.doubleValue = new double(newDouble);
+		}
 	}
 
 	const Object &Value::getObject() const {
-		if (type == Type::OBJECT) {
-			assert(valuePointer.objectValue);
-			return *valuePointer.objectValue;
-
-		} else {
-			return EMPTY_OBJECT;
-		}
+		return (type == OBJECT) ? (*data.objectValue) : (EMPTY_OBJECT);
 	}
 
 	void Value::setObject(const Object &newObject) {
-		setValue(ValueDataPointer(&newObject), Type::OBJECT);
+		if (type == OBJECT) {
+			*data.objectValue = newObject;
+
+		} else {
+			clear();
+			type = OBJECT;
+			data.objectValue = new Object(newObject);
+		}
 	}
 
 	const Array &Value::getArray() const {
-		if (type == Type::ARRAY) {
-			assert(valuePointer.arrayValue);
-			return *valuePointer.arrayValue;
-
-		} else {
-			return EMPTY_ARRAY;
-		}
+		return (type == ARRAY) ? (*data.arrayValue) : (EMPTY_ARRAY);
 	}
 
 	void Value::setArray(const Array &newArray) {
-		setValue(ValueDataPointer(&newArray), Type::ARRAY);
-	}
-
-	bool Value::getBoolean() const {
-		if (type == Type::BOOLEAN) {
-			assert(valuePointer.boolValue);
-			return *valuePointer.boolValue;
+		if (type == ARRAY) {
+			*data.arrayValue = newArray;
 
 		} else {
-			return EMPTY_BOOL;
+			clear();
+			type = ARRAY;
+			data.arrayValue = new Array(newArray);
 		}
 	}
 
+	bool Value::getBoolean() const {
+		return (type == BOOLEAN) ? (*data.boolValue) : (EMPTY_BOOL);
+	}
+
 	void Value::setBoolean(bool newBoolean) {
-		setValue(ValueDataPointer(&newBoolean), Type::BOOLEAN);
+		if (type == BOOLEAN) {
+			*data.boolValue = newBoolean;
+
+		} else {
+			clear();
+			type = BOOLEAN;
+			data.boolValue = new bool(newBoolean);
+		}
 	}
 
 	void Value::setNull() {
-		ValueDataPointer tmp;
-		tmp.stringValue = NULL;
-		setValue(tmp, Type::NULL_VALUE);
+		clear();
+		type = NULL_VALUE;
+		data.stringValue = NULL;
 	}
 
 	void Value::loadFromString(std::string const &json) {
@@ -363,19 +399,19 @@ namespace JsonBox {
 					if (currentCharacter == Structural::BEGIN_END_STRING) {
 						// The value to be parsed is a string.
 						setString("");
-						readString(input, *valuePointer.stringValue);
+						readString(input, *data.stringValue);
 						noErrors = false;
 
 					} else if (currentCharacter == Structural::BEGIN_OBJECT) {
 						// The value to be parsed is an object.
 						setObject(Object());
-						readObject(input, *valuePointer.objectValue);
+						readObject(input, *data.objectValue);
 						noErrors = false;
 
 					} else if (currentCharacter == Structural::BEGIN_ARRAY) {
 						// The value to be parsed is an array.
 						setArray(Array());
-						readArray(input, *valuePointer.arrayValue);
+						readArray(input, *data.arrayValue);
 						noErrors = false;
 
 					} else if (currentCharacter == Literals::NULL_STRING[0]) {
@@ -524,28 +560,28 @@ namespace JsonBox {
 	Value::ValueDataPointer::ValueDataPointer(): stringValue(NULL) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const std::string *newConstStringValue) :
-		constStringValue(newConstStringValue) {
+	Value::ValueDataPointer::ValueDataPointer(std::string *newStringValue) :
+		stringValue(newStringValue) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const int *newConstIntValue) :
-		constIntValue(newConstIntValue) {
+	Value::ValueDataPointer::ValueDataPointer(int *newIntValue) :
+		intValue(newIntValue) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const double *newConstDoubleValue) :
-		constDoubleValue(newConstDoubleValue) {
+	Value::ValueDataPointer::ValueDataPointer(double *newDoubleValue) :
+		doubleValue(newDoubleValue) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const Object *newConstObjectValue) :
-		constObjectValue(newConstObjectValue) {
+	Value::ValueDataPointer::ValueDataPointer(Object *newObjectValue) :
+		objectValue(newObjectValue) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const Array *newConstArrayValue) :
-		constArrayValue(newConstArrayValue) {
+	Value::ValueDataPointer::ValueDataPointer(Array *newArrayValue) :
+		arrayValue(newArrayValue) {
 	}
 
-	Value::ValueDataPointer::ValueDataPointer(const bool *newConstBoolValue) :
-		constBoolValue(newConstBoolValue) {
+	Value::ValueDataPointer::ValueDataPointer(bool *newBoolValue) :
+		boolValue(newBoolValue) {
 	}
 
 	bool Value::isHexDigit(char digit) {
@@ -732,10 +768,10 @@ namespace JsonBox {
 				} else if (!isWhiteSpace(currentChar)) {
 					input.putback(currentChar);
 					result.push_back(Value());
-					result.back().type = Type::UNKNOWN;
+					result.back().type = UNKNOWN;
 					result.back().loadFromStream(input);
 
-					if (result.back().type == Type::UNKNOWN) {
+					if (result.back().type == UNKNOWN) {
 						result.pop_back();
 					}
 
@@ -824,171 +860,34 @@ namespace JsonBox {
 		} while (!input.eof() && isWhiteSpace(currentCharacter));
 	}
 
-	void Value::setValue(ValueDataPointer newValuePointer,
-	                     Type::Enum newType) {
-		if (newType != Type::UNKNOWN) {
-			if (type != Type::NULL_VALUE && type != newType) {
-				// The current type isn't null and the new type is different.
-				switch (type) {
-				case Type::STRING:
+	void Value::clear() {
+		switch (type) {
+		case STRING:
+			delete data.stringValue;
+			break;
 
-					if (valuePointer.stringValue) {
-						delete valuePointer.stringValue;
-						valuePointer.stringValue = NULL;
-					}
+		case INTEGER:
+			delete data.intValue;
+			break;
 
-					break;
+		case DOUBLE:
+			delete data.doubleValue;
+			break;
 
-				case Type::INTEGER:
+		case OBJECT:
+			delete data.objectValue;
+			break;
 
-					if (valuePointer.intValue) {
-						delete valuePointer.intValue;
-						valuePointer.intValue = NULL;
-					}
+		case ARRAY:
+			delete data.arrayValue;
+			break;
 
-					break;
+		case BOOLEAN:
+			delete data.boolValue;
+			break;
 
-				case Type::DOUBLE:
-
-					if (valuePointer.doubleValue) {
-						delete valuePointer.doubleValue;
-						valuePointer.doubleValue = NULL;
-					}
-
-					break;
-
-				case Type::OBJECT:
-
-					if (valuePointer.objectValue) {
-						delete valuePointer.objectValue;
-						valuePointer.objectValue = NULL;
-					}
-
-					break;
-
-				case Type::ARRAY:
-
-					if (valuePointer.arrayValue) {
-						delete valuePointer.arrayValue;
-						valuePointer.arrayValue = NULL;
-					}
-
-					break;
-
-				case Type::BOOLEAN:
-
-					if (valuePointer.boolValue) {
-						delete valuePointer.boolValue;
-						valuePointer.boolValue = NULL;
-					}
-
-					break;
-
-				default:
-					break;
-				}
-
-				type = newType;
-
-				switch (type) {
-				case Type::STRING:
-					valuePointer.stringValue = new std::string(*newValuePointer.constStringValue);
-					break;
-
-				case Type::INTEGER:
-					valuePointer.intValue = new int(*newValuePointer.constIntValue);
-					break;
-
-				case Type::DOUBLE:
-					valuePointer.doubleValue = new double(*newValuePointer.constDoubleValue);
-					break;
-
-				case Type::OBJECT:
-					valuePointer.objectValue = new Object(*newValuePointer.constObjectValue);
-					break;
-
-				case Type::ARRAY:
-					valuePointer.arrayValue = new Array(*newValuePointer.constArrayValue);
-					break;
-
-				case Type::BOOLEAN:
-					valuePointer.boolValue = new bool(*newValuePointer.constBoolValue);
-					break;
-
-				default:
-					break;
-				}
-
-			} else if (type == newType) {
-				// The new value is of the same type.
-				switch (type) {
-				case Type::STRING:
-					assert(valuePointer.stringValue && newValuePointer.constStringValue);
-					*valuePointer.stringValue = *newValuePointer.constStringValue;
-					break;
-
-				case Type::INTEGER:
-					assert(valuePointer.intValue && newValuePointer.constIntValue);
-					*valuePointer.intValue = *newValuePointer.constIntValue;
-					break;
-
-				case Type::DOUBLE:
-					assert(valuePointer.doubleValue && newValuePointer.constDoubleValue);
-					*valuePointer.doubleValue = *newValuePointer.doubleValue;
-					break;
-
-				case Type::OBJECT:
-					assert(valuePointer.objectValue && newValuePointer.constObjectValue);
-					*valuePointer.objectValue = *newValuePointer.constObjectValue;
-					break;
-
-				case Type::ARRAY:
-					assert(valuePointer.arrayValue && newValuePointer.constArrayValue);
-					*valuePointer.arrayValue = *newValuePointer.constArrayValue;
-					break;
-
-				case Type::BOOLEAN:
-					assert(valuePointer.boolValue && newValuePointer.constBoolValue);
-					*valuePointer.boolValue = *newValuePointer.constBoolValue;
-					break;
-
-				default:
-					break;
-				}
-
-			} else {
-				// The current type is null and the new type isn't
-				type = newType;
-
-				switch (type) {
-				case Type::STRING:
-					valuePointer.stringValue = new std::string(*newValuePointer.constStringValue);
-					break;
-
-				case Type::INTEGER:
-					valuePointer.intValue = new int(*newValuePointer.constIntValue);
-					break;
-
-				case Type::DOUBLE:
-					valuePointer.doubleValue = new double(*newValuePointer.constDoubleValue);
-					break;
-
-				case Type::OBJECT:
-					valuePointer.objectValue = new Object(*newValuePointer.constObjectValue);
-					break;
-
-				case Type::ARRAY:
-					valuePointer.arrayValue = new Array(*newValuePointer.constArrayValue);
-					break;
-
-				case Type::BOOLEAN:
-					valuePointer.boolValue = new bool(*newValuePointer.constBoolValue);
-					break;
-
-				default:
-					break;
-				}
-			}
+		default:
+			break;
 		}
 	}
 
@@ -1025,31 +924,31 @@ namespace JsonBox {
 
 	std::ostream &operator<<(std::ostream &output, const Value &v) {
 		switch (v.type) {
-		case Type::STRING:
+		case Value::STRING:
 			output << Structural::BEGIN_END_STRING << Value::escapeMinimumCharacters(v.getString()) << Structural::BEGIN_END_STRING;
 			break;
 
-		case Type::INTEGER:
+		case Value::INTEGER:
 			output << v.getInt();
 			break;
 
-		case Type::DOUBLE:
+		case Value::DOUBLE:
 			output << v.getDouble();
 			break;
 
-		case Type::OBJECT:
+		case Value::OBJECT:
 			output << v.getObject();
 			break;
 
-		case Type::ARRAY:
+		case Value::ARRAY:
 			output << v.getArray();
 			break;
 
-		case Type::BOOLEAN:
+		case Value::BOOLEAN:
 			output << (v.getBoolean() ? Literals::TRUE_STRING : Literals::FALSE_STRING);
 			break;
 
-		case Type::NULL_VALUE:
+		case Value::NULL_VALUE:
 			output << Literals::NULL_STRING;
 			break;
 

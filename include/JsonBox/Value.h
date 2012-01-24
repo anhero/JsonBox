@@ -7,7 +7,6 @@
 #include <string>
 #include <iostream>
 
-#include "Type.h"
 #include "Array.h"
 #include "Object.h"
 
@@ -32,6 +31,22 @@ namespace JsonBox {
 		 */
 		friend std::ostream &operator<<(std::ostream &output, const Value &v);
 	public:
+		/**
+		 * Represents the different types a value can be. A value can only be
+		 * one of these types at a time. The UNKNOWN type is only used
+		 * temporarily internally when loading values from an input stream or
+		 * file.
+		 */
+		enum Type {
+		    STRING,
+		    INTEGER,
+		    DOUBLE,
+		    OBJECT,
+		    ARRAY,
+		    BOOLEAN,
+			NULL_VALUE,
+			UNKNOWN
+		};
 
 		/**
 		 * Replaces characters with their JSON equivalent. The only difference
@@ -134,8 +149,41 @@ namespace JsonBox {
 
 		/**
 		 * Assignation operator overload.
+		 * @param src Value to copy.
+		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const Value &src);
+
+		/**
+		 * Bracket operator overload. If the value doesn't represent an object,
+		 * it is changed to do so and accesses the object's member value. If
+		 * the object's member doesn't exist, it is created.
+		 * @param key Key identifier of the object's value to get.
+		 * @return Reference to the object's member's value.
+		 */
+		Value &operator[](const Object::key_type &key);
+
+		/**
+		 * Bracket operator overload. If the value doesn't represent an object,
+		 * it is changed to do so and accesses the object's member value. If
+		 * the object's member doesn't exist, it is created.
+		 * @param key Key identifier of the object's value to get.
+		 * @return Reference to the object's member's value.
+		 */
+		Value &operator[](const char *key);
+
+		/**
+		 * Bracket operator overload. If the value doesn't represent an array,
+		 * it is changed to do so and accesses the array's value at the
+		 * specified index. To make sure the index value exists when it creates
+		 * the array, it initializes the array with empty values up to the
+		 * required index. If the value already represents an array and the
+		 * index is too high for the size of the array, undefined behavior
+		 * happens (no bounds checking is done).
+		 * @param index Index of the value to get.
+		 * @return Reference to the value at the received index in the array.
+		 */
+		Value &operator[](Array::size_type index);
 
 		/**
 		 * Gets the value's type.
@@ -143,7 +191,7 @@ namespace JsonBox {
 		 * NULL_VALUE if no type has been given to the value yet.
 		 * @see JsonBox::Type
 		 */
-		Type::Enum getType() const;
+		Type getType() const;
 
 		/**
 		 * Checks if the value is a string.
@@ -338,13 +386,6 @@ namespace JsonBox {
 			Array *arrayValue;
 			bool *boolValue;
 
-			const std::string *constStringValue;
-			const int *constIntValue;
-			const double *constDoubleValue;
-			const Object *constObjectValue;
-			const Array *constArrayValue;
-			const bool *constBoolValue;
-
 			/**
 			 * Default constructor. Puts the pointers at NULL.
 			 */
@@ -354,37 +395,37 @@ namespace JsonBox {
 			 * Parameterized constructor.
 			 * @param newConstStringValue Pointer to set to the string pointer.
 			 */
-			ValueDataPointer(const std::string *newConstStringValue);
+			ValueDataPointer(std::string *newStringValue);
 
 			/**
 			 * Parameterized constructor.
 			 * @param newConstIntValue Pointer to set to the int pointer.
 			 */
-			ValueDataPointer(const int *newConstIntValue);
+			ValueDataPointer(int *newIntValue);
 
 			/**
 			 * Parameterized constructor.
 			 * @param newConstDoubleValue Pointer to set to the double pointer.
 			 */
-			ValueDataPointer(const double *newConstDoubleValue);
+			ValueDataPointer(double *newDoubleValue);
 
 			/**
 			 * Parameterized constructor.
 			 * @param newConstObjectValue Pointer to set to the object pointer.
 			 */
-			ValueDataPointer(const Object *newConstObjectValue);
+			ValueDataPointer(Object *newObjectValue);
 
 			/**
 			 * Parameterized constructor.
 			 * @param newConstArrayValue Pointer to set to the array pointer.
 			 */
-			ValueDataPointer(const Array *newConstArrayValue);
+			ValueDataPointer(Array *newArrayValue);
 
 			/**
 			 * Parameterized constructor.
 			 * @param newConstBoolValue Pointer to set to the bool pointer.
 			 */
-			ValueDataPointer(const bool *newConstBoolValue);
+			ValueDataPointer(bool *newBoolValue);
 		};
 
 		/**
@@ -428,16 +469,6 @@ namespace JsonBox {
 		 * @see JsonBox::Value::getBoolean
 		 */
 		static const bool EMPTY_BOOL = false;
-
-		/**
-		 * Pointer to the Value's data.
-		 */
-		ValueDataPointer valuePointer;
-
-		/**
-		 * Type of data the value contains.
-		 */
-		Type::Enum type;
 
 		/**
 		 * Checks if the char given is a hex digit.
@@ -494,12 +525,9 @@ namespace JsonBox {
 		                                char &currentCharacter);
 
 		/**
-		 * Sets the value's pointer and type.
-		 * @param newValuePointer Pointer to the data the value must to contain.
-		 * @param newType Value's new type.
+		 * Frees up the dynamic memory allocated by the value.
 		 */
-		void setValue(ValueDataPointer newValuePointer,
-		              Type::Enum newType);
+		void clear();
 
 		/**
 		 * Outputs the value in JSON format.
@@ -514,6 +542,16 @@ namespace JsonBox {
 		 */
 		void output(std::ostream &output, bool indent = true,
 		            bool escapeAll = false) const;
+
+		/**
+		 * Type of data the value contains.
+		 */
+		Type type;
+
+		/**
+		 * Pointer to the Value's data.
+		 */
+		ValueDataPointer data;
 	};
 }
 
