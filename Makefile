@@ -11,8 +11,6 @@ ifeq (1,${DEBUG})
 	CFLAGS += -g
 endif
 
-CXX = c++
-AR  = ar
 SRC = $(wildcard src/*.cpp)
 OBJS = $(SRC:src/%.cpp=build/objs/%.o)
 
