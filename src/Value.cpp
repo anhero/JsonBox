@@ -12,6 +12,8 @@
 #include <JsonBox/OutputFilter.h>
 #include <JsonBox/IndentCanceller.h>
 #include <JsonBox/SolidusEscaper.h>
+#include <JsonBox/Array.h>
+#include <JsonBox/Object.h>
 
 namespace JsonBox {
 
@@ -216,6 +218,126 @@ namespace JsonBox {
 		}
 
 		return *this;
+	}
+	
+	bool Value::operator==(const Value &rhs) const {
+		if (type == rhs.type) {
+			switch (type) {
+				case STRING:
+					return *data.stringValue == *data.stringValue;
+					break;
+					
+				case INTEGER:
+					return *data.intValue == *data.intValue;
+					break;
+					
+				case DOUBLE:
+					return *data.doubleValue == *data.doubleValue;
+					break;
+					
+				case OBJECT:
+					return *data.objectValue == *data.objectValue;
+					break;
+					
+				case ARRAY:
+					return *data.arrayValue == *data.arrayValue;
+					break;
+					
+				case BOOLEAN:
+					return *data.boolValue	== *data.boolValue;
+					break;
+					
+				default:
+					return true;
+					break;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	bool Value::operator!=(const Value &rhs) const {
+		return !(*this == rhs);
+	}
+	
+	bool Value::operator<(const Value &rhs) const {
+		if (type == rhs.type) {
+			switch (type) {
+				case STRING:
+					return *data.stringValue < *data.stringValue;
+					break;
+					
+				case INTEGER:
+					return *data.intValue < *data.intValue;
+					break;
+					
+				case DOUBLE:
+					return *data.doubleValue < *data.doubleValue;
+					break;
+					
+				case OBJECT:
+					return *data.objectValue < *data.objectValue;
+					break;
+					
+				case ARRAY:
+					return *data.arrayValue < *data.arrayValue;
+					break;
+					
+				case BOOLEAN:
+					return *data.boolValue	< *data.boolValue;
+					break;
+					
+				default:
+					return false;
+					break;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	bool Value::operator<=(const Value &rhs) const {
+		return *this < rhs || *this == rhs;
+	}
+	
+	bool Value::operator>(const Value &rhs) const {
+		if (type == rhs.type) {
+			switch (type) {
+				case STRING:
+					return *data.stringValue > *data.stringValue;
+					break;
+					
+				case INTEGER:
+					return *data.intValue > *data.intValue;
+					break;
+					
+				case DOUBLE:
+					return *data.doubleValue > *data.doubleValue;
+					break;
+					
+				case OBJECT:
+					return *data.objectValue > *data.objectValue;
+					break;
+					
+				case ARRAY:
+					return *data.arrayValue > *data.arrayValue;
+					break;
+					
+				case BOOLEAN:
+					return *data.boolValue	> *data.boolValue;
+					break;
+					
+				default:
+					return false;
+					break;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	bool Value::operator>=(const Value &rhs) const {
+		return *this > rhs || *this == rhs;
 	}
 
 	Value &Value::operator[](const Object::key_type &key) {

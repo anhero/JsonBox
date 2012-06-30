@@ -7,10 +7,10 @@
 #include <string>
 #include <iostream>
 
-#include "Array.h"
-#include "Object.h"
-
 namespace JsonBox {
+	class Array;
+	class Object;
+
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
@@ -153,6 +153,59 @@ namespace JsonBox {
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const Value &src);
+		
+		/**
+		 * Checks if the current value is equal to the right hand side value.
+		 * @param rhs Right hand side value to check for equality with.
+		 * @return True if the contents of the two values are equal, false if
+		 * not.
+		 */
+		bool operator==(const Value &rhs) const;
+
+		/**
+		 * Checks if the current value is different from the right hand side
+		 * value.
+		 * @param rhs Right hand side value to check for not equality with.
+		 * @return True if the contents of the two values are different, false
+		 * if not.
+		 */
+		bool operator!=(const Value &rhs) const;
+		
+		/**
+		 * Checks if the contents of instance are lexicographically less than
+		 * the contents of the right hand side value.
+		 * @param rhs Right hand side value to check.
+		 * @return True if the contents of of the instance are lexicographically
+		 * less than the contents of the right hand side value.
+		 */
+		bool operator <(const Value &rhs) const;
+		
+		/**
+		 * Checks if the contents of instance are lexicographically less than or
+		 * equal the contents of the right hand side value.
+		 * @param rhs Right hand side value to check.
+		 * @return True if the contents of of the instance are lexicographically
+		 * less than or equal the contents of the right hand side value.
+		 */
+		bool operator <=(const Value &rhs) const;
+		
+		/**
+		 * Checks if the contents of instance are lexicographically greater than
+		 * the contents of the right hand side value.
+		 * @param rhs Right hand side value to check.
+		 * @return True if the contents of of the instance are lexicographically
+		 * greater than the contents of the right hand side value.
+		 */
+		bool operator >(const Value &rhs) const;
+		
+		/**
+		 * Checks if the contents of instance are lexicographically greater than
+		 * or equal the contents of the right hand side value.
+		 * @param rhs Right hand side value to check.
+		 * @return True if the contents of of the instance are lexicographically
+		 * greater than or equal the contents of the right hand side value.
+		 */
+		bool operator >=(const Value &rhs) const;
 
 		/**
 		 * Bracket operator overload. If the value doesn't represent an object,
@@ -161,7 +214,7 @@ namespace JsonBox {
 		 * @param key Key identifier of the object's value to get.
 		 * @return Reference to the object's member's value.
 		 */
-		Value &operator[](const Object::key_type &key);
+		Value &operator[](const std::string &key);
 
 		/**
 		 * Bracket operator overload. If the value doesn't represent an object,
@@ -183,7 +236,7 @@ namespace JsonBox {
 		 * @param index Index of the value to get.
 		 * @return Reference to the value at the received index in the array.
 		 */
-		Value &operator[](Array::size_type index);
+		Value &operator[](size_t index);
 
 		/**
 		 * Gets the value's type.
