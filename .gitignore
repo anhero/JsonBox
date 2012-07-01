@@ -1,5 +1,5 @@
 #Generated Doc
-glob:meta/documentation/generated/
+meta/documentation/generated/
 
 #Mac OSX file
 .DS_Store
