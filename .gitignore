@@ -31,6 +31,9 @@ Debug
 Release
 *.suo
 *.ncb
+*.opensdf
+*.sdf
+ipch
 
 *.user
 #*.csproj.user
