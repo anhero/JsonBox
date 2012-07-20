@@ -58,11 +58,10 @@ namespace JsonBox {
 		return result.str();
 	}
 
-
 	String32 Convert::decodeUTF8(const std::string& utf8String) {
-		std::basic_stringstream<int32_t> result;
+		String32 result;
 
-		int32_t tmpUnicodeChar;
+		String32::value_type tmpUnicodeChar;
 
 		for(std::string::const_iterator i = utf8String.begin() ; i < utf8String.end();) {
 
@@ -107,9 +106,9 @@ namespace JsonBox {
 				i += 1;
 			}
 
-			result << tmpUnicodeChar;
+			result.push_back(tmpUnicodeChar);
 		}
 
-		return result.str();
+		return result;
 	}
 }
