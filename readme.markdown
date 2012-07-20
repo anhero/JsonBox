@@ -1,7 +1,7 @@
 <!-- -*- markdown -*- -->
 This is a JSON C++ library. It can write and read JSON files with ease and speed. It uses code from our RedBox engine (https://github.com/anhero/JsonBox) and will soon be integrated in it.
 
-This library is aimed at mostly internal use for the RedBox engine. It's not designed be used to write easy-to-read JSON files. It follows the JSON standards (except it doesn't read UTF-16 and UTF-32, only UTF-8)
+This library is aimed at mostly internal use for the BaconBox engine. It's not designed be used to write easy-to-read JSON files. It follows the JSON standards (except it doesn't read UTF-16 and UTF-32, only UTF-8)
 
 Things it does:
  * Parse standard UTF-8 JSON files.
