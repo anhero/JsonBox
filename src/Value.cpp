@@ -219,123 +219,137 @@ namespace JsonBox {
 
 		return *this;
 	}
-	
+
 	bool Value::operator==(const Value &rhs) const {
-		if (type == rhs.type) {
-			switch (type) {
+		bool result = true;
+
+		if (this != &rhs) {
+			if (type == rhs.type) {
+				switch (type) {
 				case STRING:
-					return *data.stringValue == *data.stringValue;
+					result = (*data.stringValue == *data.stringValue);
 					break;
-					
+
 				case INTEGER:
-					return *data.intValue == *data.intValue;
+					result = (*data.intValue == *data.intValue);
 					break;
-					
+
 				case DOUBLE:
-					return *data.doubleValue == *data.doubleValue;
+					result = (*data.doubleValue == *data.doubleValue);
 					break;
-					
+
 				case OBJECT:
-					return *data.objectValue == *data.objectValue;
+					result = (*data.objectValue == *data.objectValue);
 					break;
-					
+
 				case ARRAY:
-					return *data.arrayValue == *data.arrayValue;
+					result = (*data.arrayValue == *data.arrayValue);
 					break;
-					
+
 				case BOOLEAN:
-					return *data.boolValue	== *data.boolValue;
+					result = (*data.boolValue == *data.boolValue);
 					break;
-					
+
 				default:
-					return true;
 					break;
+				}
+
+			} else {
+				result = false;
 			}
-		} else {
-			return false;
 		}
+
+		return result;
 	}
-	
+
 	bool Value::operator!=(const Value &rhs) const {
 		return !(*this == rhs);
 	}
-	
+
 	bool Value::operator<(const Value &rhs) const {
-		if (type == rhs.type) {
-			switch (type) {
+		bool result = false;
+
+		if (this != &rhs) {
+			if (type == rhs.type) {
+				switch (type) {
 				case STRING:
-					return *data.stringValue < *data.stringValue;
+					result = (*data.stringValue < *data.stringValue);
 					break;
-					
+
 				case INTEGER:
-					return *data.intValue < *data.intValue;
+					result = (*data.intValue < *data.intValue);
 					break;
-					
+
 				case DOUBLE:
-					return *data.doubleValue < *data.doubleValue;
+					result = (*data.doubleValue < *data.doubleValue);
 					break;
-					
+
 				case OBJECT:
-					return *data.objectValue < *data.objectValue;
+					result = (*data.objectValue < *data.objectValue);
 					break;
-					
+
 				case ARRAY:
-					return *data.arrayValue < *data.arrayValue;
+					result = (*data.arrayValue < *data.arrayValue);
 					break;
-					
+
 				case BOOLEAN:
-					return *data.boolValue	< *data.boolValue;
+					result = (*data.boolValue < *data.boolValue);
 					break;
-					
+
 				default:
-					return false;
 					break;
+				}
+
 			}
-		} else {
-			return false;
 		}
+
+		return result;
 	}
-	
+
 	bool Value::operator<=(const Value &rhs) const {
 		return *this < rhs || *this == rhs;
 	}
-	
+
 	bool Value::operator>(const Value &rhs) const {
-		if (type == rhs.type) {
-			switch (type) {
+		bool result = false;
+
+		if (this != &rhs) {
+			if (type == rhs.type) {
+				switch (type) {
 				case STRING:
-					return *data.stringValue > *data.stringValue;
+					result = (*data.stringValue > *data.stringValue);
 					break;
-					
+
 				case INTEGER:
-					return *data.intValue > *data.intValue;
+					result = (*data.intValue > *data.intValue);
 					break;
-					
+
 				case DOUBLE:
-					return *data.doubleValue > *data.doubleValue;
+					result = (*data.doubleValue > *data.doubleValue);
 					break;
-					
+
 				case OBJECT:
-					return *data.objectValue > *data.objectValue;
+					result = (*data.objectValue > *data.objectValue);
 					break;
-					
+
 				case ARRAY:
-					return *data.arrayValue > *data.arrayValue;
+					result = (*data.arrayValue > *data.arrayValue);
 					break;
-					
+
 				case BOOLEAN:
-					return *data.boolValue	> *data.boolValue;
+					result = (*data.boolValue	> *data.boolValue);
 					break;
-					
+
 				default:
-					return false;
 					break;
+				}
+
 			}
-		} else {
-			return false;
 		}
+
+		return result;
 	}
-	
+
 	bool Value::operator>=(const Value &rhs) const {
 		return *this > rhs || *this == rhs;
 	}
