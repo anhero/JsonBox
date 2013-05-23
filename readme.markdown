@@ -18,3 +18,5 @@ Things it does not do:
 
 The library wasn't designed with multi-threading in mind.
 
+The class reference can be found [here](http://anhero.github.com/JsonBox).
+
