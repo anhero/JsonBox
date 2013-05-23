@@ -374,8 +374,18 @@ namespace JsonBox {
 			type = ARRAY;
 			data.arrayValue = new Array(index + 1);
 		}
-
-		return (*data.arrayValue)[index];
+        
+        assert(index <= (*data.arrayValue).size());
+        
+        if(index == (*data.arrayValue).size())
+        {
+            (*data.arrayValue).push_back(Value());
+            return  (*data.arrayValue).back();
+        }
+        else
+        {
+            return (*data.arrayValue)[index];
+        }
 	}
 
 	Value::Type Value::getType() const {
