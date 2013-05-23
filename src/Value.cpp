@@ -811,6 +811,7 @@ namespace JsonBox {
 							}
 
 							if (noUnicodeError) {
+								tmpSs.clear();
 								tmpSs.str("");
 								tmpSs << std::hex << tmpStr;
 								tmpSs >> tmpInt;
