@@ -369,21 +369,17 @@ namespace JsonBox {
 	}
 
 	Value &Value::operator[](Array::size_type index) {
+		// We make sure it's an array.
 		if (type != ARRAY) {
 			clear();
 			type = ARRAY;
 			data.arrayValue = new Array(index + 1);
+		} else if (index >= (*data.arrayValue).size()) {
+			// We make sure the array is big enough.
+			data.arrayValue->resize(index + 1);
 		}
-
-		assert(index <= (*data.arrayValue).size());
-
-		if (index == (*data.arrayValue).size()) {
-			(*data.arrayValue).push_back(Value());
-			return (*data.arrayValue).back();
-
-		} else {
-			return (*data.arrayValue)[index];
-		}
+		
+		return (*data.arrayValue)[index];
 	}
 
 	Value::Type Value::getType() const {

@@ -231,8 +231,8 @@ namespace JsonBox {
 		 * specified index. To make sure the index value exists when it creates
 		 * the array, it initializes the array with empty values up to the
 		 * required index. If the value already represents an array and the
-		 * index is too high for the size of the array, undefined behavior
-		 * happens (no bounds checking is done).
+		 * index is too high for the size of the array, the array is resized
+		 * to be of size index + 1.
 		 * @param index Index of the value to get.
 		 * @return Reference to the value at the received index in the array.
 		 */
