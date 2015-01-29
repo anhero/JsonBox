@@ -230,27 +230,27 @@ namespace JsonBox {
 			if (type == rhs.type) {
 				switch (type) {
 				case STRING:
-					result = (*data.stringValue == *data.stringValue);
+					result = (*data.stringValue == rhs.getString());
 					break;
 
 				case INTEGER:
-					result = (*data.intValue == *data.intValue);
+					result = (*data.intValue == rhs.getInt());
 					break;
 
 				case DOUBLE:
-					result = (*data.doubleValue == *data.doubleValue);
+					result = (*data.doubleValue == rhs.getDouble());
 					break;
 
 				case OBJECT:
-					result = (*data.objectValue == *data.objectValue);
+					result = (*data.objectValue == rhs.getObject());
 					break;
 
 				case ARRAY:
-					result = (*data.arrayValue == *data.arrayValue);
+					result = (*data.arrayValue == rhs.getArray());
 					break;
 
 				case BOOLEAN:
-					result = (*data.boolValue == *data.boolValue);
+					result = (*data.boolValue == rhs.getBoolean());
 					break;
 
 				default:
@@ -276,27 +276,27 @@ namespace JsonBox {
 			if (type == rhs.type) {
 				switch (type) {
 				case STRING:
-					result = (*data.stringValue < *data.stringValue);
+					result = (*data.stringValue < rhs.getString());
 					break;
 
 				case INTEGER:
-					result = (*data.intValue < *data.intValue);
+					result = (*data.intValue < rhs.getInt());
 					break;
 
 				case DOUBLE:
-					result = (*data.doubleValue < *data.doubleValue);
+					result = (*data.doubleValue < rhs.getDouble());
 					break;
 
 				case OBJECT:
-					result = (*data.objectValue < *data.objectValue);
+					result = (*data.objectValue < rhs.getObject());
 					break;
 
 				case ARRAY:
-					result = (*data.arrayValue < *data.arrayValue);
+					result = (*data.arrayValue < rhs.getArray());
 					break;
 
 				case BOOLEAN:
-					result = (*data.boolValue < *data.boolValue);
+					result = (*data.boolValue < rhs.getBoolean());
 					break;
 
 				default:
@@ -314,43 +314,7 @@ namespace JsonBox {
 	}
 
 	bool Value::operator>(const Value &rhs) const {
-		bool result = false;
-
-		if (this != &rhs) {
-			if (type == rhs.type) {
-				switch (type) {
-				case STRING:
-					result = (*data.stringValue > *data.stringValue);
-					break;
-
-				case INTEGER:
-					result = (*data.intValue > *data.intValue);
-					break;
-
-				case DOUBLE:
-					result = (*data.doubleValue > *data.doubleValue);
-					break;
-
-				case OBJECT:
-					result = (*data.objectValue > *data.objectValue);
-					break;
-
-				case ARRAY:
-					result = (*data.arrayValue > *data.arrayValue);
-					break;
-
-				case BOOLEAN:
-					result = (*data.boolValue	> *data.boolValue);
-					break;
-
-				default:
-					break;
-				}
-
-			}
-		}
-
-		return result;
+		return !(*this <= rhs);
 	}
 
 	bool Value::operator>=(const Value &rhs) const {
