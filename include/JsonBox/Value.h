@@ -152,6 +152,55 @@ namespace JsonBox {
 		Value &operator=(const Value &src);
 		
 		/**
+		 * Assignation operator overload.
+		 * @param src String to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const std::string &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src String to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const char *src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Integer to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(int src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Double to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(double src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Object to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const Object &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Array to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const Array &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Boolean to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(bool src);
+		
+		/**
 		 * Checks if the current value is equal to the right hand side value.
 		 * @param rhs Right hand side value to check for equality with.
 		 * @return True if the contents of the two values are equal, false if

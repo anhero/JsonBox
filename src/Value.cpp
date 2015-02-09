@@ -222,6 +222,48 @@ namespace JsonBox {
 
 		return *this;
 	}
+	
+	Value &Value::operator=(const std::string &src) {
+		this->setString(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const char *src) {
+		this->setString(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(int src) {
+		this->setInt(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(double src) {
+		this->setDouble(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const Object &src) {
+		this->setObject(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const Array &src) {
+		this->setArray(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(bool src) {
+		this->setBoolean(src);
+		
+		return *this;
+	}
 
 	bool Value::operator==(const Value &rhs) const {
 		bool result = true;
