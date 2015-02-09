@@ -1125,7 +1125,12 @@ namespace JsonBox {
 			break;
 
 		case Value::DOUBLE:
-			output << v.getDouble();
+			{
+				std::streamsize precisionBackup = output.precision();
+				output.precision(17);
+				output << v.getDouble();
+				output.precision(precisionBackup);
+			}
 			break;
 
 		case Value::OBJECT:
