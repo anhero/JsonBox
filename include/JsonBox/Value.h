@@ -1,6 +1,3 @@
-/**
- * @file
- */
 #ifndef JB_VALUE_H
 #define JB_VALUE_H
 
@@ -155,6 +152,55 @@ namespace JsonBox {
 		Value &operator=(const Value &src);
 		
 		/**
+		 * Assignation operator overload.
+		 * @param src String to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const std::string &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src String to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const char *src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Integer to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(int src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Double to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(double src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Object to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const Object &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Array to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(const Array &src);
+		
+		/**
+		 * Assignation operator overload.
+		 * @param src Boolean to copy.
+		 * @return Reference to the modified value.
+		 */
+		Value &operator=(bool src);
+		
+		/**
 		 * Checks if the current value is equal to the right hand side value.
 		 * @param rhs Right hand side value to check for equality with.
 		 * @return True if the contents of the two values are equal, false if
@@ -231,8 +277,8 @@ namespace JsonBox {
 		 * specified index. To make sure the index value exists when it creates
 		 * the array, it initializes the array with empty values up to the
 		 * required index. If the value already represents an array and the
-		 * index is too high for the size of the array, undefined behavior
-		 * happens (no bounds checking is done).
+		 * index is too high for the size of the array, the array is resized
+		 * to be of size index + 1.
 		 * @param index Index of the value to get.
 		 * @return Reference to the value at the received index in the array.
 		 */
@@ -251,6 +297,14 @@ namespace JsonBox {
 		 * @return True if the value contains a string, false if not.
 		 */
 		bool isString() const;
+		
+		/**
+		 * Checks if the value can be a string.
+		 * @return True if the value is either a string, an integer, a boolean
+		 * or a null value.
+		 */
+		bool isStringable() const;
+		
 		/**
 		 * Checks if the value is an integer.
 		 * @return True if the value contains an integer, false if not.
@@ -262,6 +316,13 @@ namespace JsonBox {
 		 * @return True if the value contains a double, false if not.
 		 */
 		bool isDouble() const;
+		
+		/**
+		 * Checks if the value is either an integer or a double.
+		 * @return True if the value contains a double or an integer, false if
+		 * not.
+		 */
+		bool isNumeric() const;
 
 		/**
 		 * Checks if the value is an object.
@@ -293,6 +354,14 @@ namespace JsonBox {
 		 * contain a string.
 		 */
 		const std::string &getString() const;
+		
+		/**
+		 * Gets the value's string value or converts its numeric, boolean or
+		 * null value to a string.
+		 * @return Value's string value. If the value contains a numeric,
+		 * a boolean or a null value, it is converted to a string.
+		 */
+		const std::string getToString() const;
 
 		/**
 		 * Sets the value as a string.
@@ -303,24 +372,31 @@ namespace JsonBox {
 
 		/**
 		 * Gets the value's integer value.
-		 * @return Value's integer value, or 0 if the value doesn't contain an
-		 * integer.
+		 * @return Value's integer value, or 0 if the value doesn't contain a
+		 * numeric value.
 		 */
-		int getInt() const;
+		int getInteger() const;
 
 		/**
 		 * Sets the value as an integer.
 		 * @param newInt New integer value that the Value will contain. The
 		 * value's type is changed if necessary to contain the integer.
 		 */
-		void setInt(int newInt);
+		void setInteger(int newInt);
 
 		/**
 		 * Gets the value's double value.
 		 * @return Value's double value, or 0.0 if the value doesn't contain a
-		 * double.
+		 * numeric value.
 		 */
 		double getDouble() const;
+		
+		/**
+		 * Gets the value's float value.
+		 * @return Value's float value, or 0.0f if the value doesn't contain a
+		 * numeric value.
+		 */
+		float getFloat() const;
 
 		/**
 		 * Sets the value as a double.

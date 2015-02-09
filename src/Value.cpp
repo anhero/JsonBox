@@ -6,6 +6,7 @@
 #include <list>
 #include <iomanip>
 #include <fstream>
+#include <stdexcept>
 
 #include <JsonBox/Grammar.h>
 #include <JsonBox/Convert.h>
@@ -14,6 +15,8 @@
 #include <JsonBox/SolidusEscaper.h>
 #include <JsonBox/Array.h>
 #include <JsonBox/Object.h>
+#include <JsonBox/JsonParsingError.h>
+#include <JsonBox/JsonWritingError.h>
 
 namespace JsonBox {
 
@@ -219,6 +222,48 @@ namespace JsonBox {
 
 		return *this;
 	}
+	
+	Value &Value::operator=(const std::string &src) {
+		this->setString(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const char *src) {
+		this->setString(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(int src) {
+		this->setInteger(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(double src) {
+		this->setDouble(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const Object &src) {
+		this->setObject(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(const Array &src) {
+		this->setArray(src);
+		
+		return *this;
+	}
+	
+	Value &Value::operator=(bool src) {
+		this->setBoolean(src);
+		
+		return *this;
+	}
 
 	bool Value::operator==(const Value &rhs) const {
 		bool result = true;
@@ -227,27 +272,27 @@ namespace JsonBox {
 			if (type == rhs.type) {
 				switch (type) {
 				case STRING:
-					result = (*data.stringValue == *data.stringValue);
+					result = (*data.stringValue == rhs.getString());
 					break;
 
 				case INTEGER:
-					result = (*data.intValue == *data.intValue);
+					result = (*data.intValue == rhs.getInteger());
 					break;
 
 				case DOUBLE:
-					result = (*data.doubleValue == *data.doubleValue);
+					result = (*data.doubleValue == rhs.getDouble());
 					break;
 
 				case OBJECT:
-					result = (*data.objectValue == *data.objectValue);
+					result = (*data.objectValue == rhs.getObject());
 					break;
 
 				case ARRAY:
-					result = (*data.arrayValue == *data.arrayValue);
+					result = (*data.arrayValue == rhs.getArray());
 					break;
 
 				case BOOLEAN:
-					result = (*data.boolValue == *data.boolValue);
+					result = (*data.boolValue == rhs.getBoolean());
 					break;
 
 				default:
@@ -273,27 +318,27 @@ namespace JsonBox {
 			if (type == rhs.type) {
 				switch (type) {
 				case STRING:
-					result = (*data.stringValue < *data.stringValue);
+					result = (*data.stringValue < rhs.getString());
 					break;
 
 				case INTEGER:
-					result = (*data.intValue < *data.intValue);
+					result = (*data.intValue < rhs.getInteger());
 					break;
 
 				case DOUBLE:
-					result = (*data.doubleValue < *data.doubleValue);
+					result = (*data.doubleValue < rhs.getDouble());
 					break;
 
 				case OBJECT:
-					result = (*data.objectValue < *data.objectValue);
+					result = (*data.objectValue < rhs.getObject());
 					break;
 
 				case ARRAY:
-					result = (*data.arrayValue < *data.arrayValue);
+					result = (*data.arrayValue < rhs.getArray());
 					break;
 
 				case BOOLEAN:
-					result = (*data.boolValue < *data.boolValue);
+					result = (*data.boolValue < rhs.getBoolean());
 					break;
 
 				default:
@@ -311,43 +356,7 @@ namespace JsonBox {
 	}
 
 	bool Value::operator>(const Value &rhs) const {
-		bool result = false;
-
-		if (this != &rhs) {
-			if (type == rhs.type) {
-				switch (type) {
-				case STRING:
-					result = (*data.stringValue > *data.stringValue);
-					break;
-
-				case INTEGER:
-					result = (*data.intValue > *data.intValue);
-					break;
-
-				case DOUBLE:
-					result = (*data.doubleValue > *data.doubleValue);
-					break;
-
-				case OBJECT:
-					result = (*data.objectValue > *data.objectValue);
-					break;
-
-				case ARRAY:
-					result = (*data.arrayValue > *data.arrayValue);
-					break;
-
-				case BOOLEAN:
-					result = (*data.boolValue	> *data.boolValue);
-					break;
-
-				default:
-					break;
-				}
-
-			}
-		}
-
-		return result;
+		return !(*this <= rhs);
 	}
 
 	bool Value::operator>=(const Value &rhs) const {
@@ -369,23 +378,17 @@ namespace JsonBox {
 	}
 
 	Value &Value::operator[](Array::size_type index) {
+		// We make sure it's an array.
 		if (type != ARRAY) {
 			clear();
 			type = ARRAY;
 			data.arrayValue = new Array(index + 1);
+		} else if (index >= (*data.arrayValue).size()) {
+			// We make sure the array is big enough.
+			data.arrayValue->resize(index + 1);
 		}
-        
-        assert(index <= (*data.arrayValue).size());
-        
-        if(index == (*data.arrayValue).size())
-        {
-            (*data.arrayValue).push_back(Value());
-            return  (*data.arrayValue).back();
-        }
-        else
-        {
-            return (*data.arrayValue)[index];
-        }
+		
+		return (*data.arrayValue)[index];
 	}
 
 	Value::Type Value::getType() const {
@@ -396,12 +399,20 @@ namespace JsonBox {
 		return type == STRING;
 	}
 
+	bool Value::isStringable() const {
+		return type != ARRAY && type != OBJECT;
+	}
+
 	bool Value::isInteger() const {
 		return type == INTEGER;
 	}
 
 	bool Value::isDouble() const {
 		return type == DOUBLE;
+	}
+
+	bool Value::isNumeric() const {
+		return type == INTEGER || type == DOUBLE;
 	}
 
 	bool Value::isObject() const {
@@ -424,6 +435,36 @@ namespace JsonBox {
 		return (type == STRING) ? (*data.stringValue) : (EMPTY_STRING);
 	}
 
+	const std::string Value::getToString() const {
+		if (type == STRING) {
+			return  *data.stringValue;
+
+		} else {
+			switch (type) {
+			case INTEGER: {
+				std::stringstream ss;
+				ss << *data.intValue;
+				return ss.str();
+			}
+
+			case DOUBLE: {
+				std::stringstream ss;
+				ss << *data.doubleValue;
+				return ss.str();
+			}
+
+			case BOOLEAN:
+				return (*data.boolValue) ? (Literals::TRUE_STRING) : (Literals::FALSE_STRING);
+
+			case NULL_VALUE:
+				return Literals::NULL_STRING;
+
+			default:
+				return std::string();
+			}
+		}
+	}
+
 	void Value::setString(std::string const &newString) {
 		if (type == STRING) {
 			*data.stringValue = newString;
@@ -435,23 +476,27 @@ namespace JsonBox {
 		}
 	}
 
-	int Value::getInt() const {
-		return (type == INTEGER) ? (*data.intValue) : (EMPTY_INT);
+	int Value::getInteger() const {
+		return (type == INTEGER) ? (*data.intValue) : ((type == DOUBLE) ? (static_cast<int>(*data.doubleValue)) : (EMPTY_INT));
 	}
 
-	void Value::setInt(int newInt) {
+	void Value::setInteger(int newInteger) {
 		if (type == INTEGER) {
-			*data.intValue = newInt;
+			*data.intValue = newInteger;
 
 		} else {
 			clear();
 			type = INTEGER;
-			data.intValue = new int(newInt);
+			data.intValue = new int(newInteger);
 		}
 	}
 
 	double Value::getDouble() const {
-		return (type == DOUBLE) ? (*data.doubleValue) : (EMPTY_DOUBLE);
+		return (type == DOUBLE) ? (*data.doubleValue) : ((type == INTEGER) ? (static_cast<double>(*data.intValue)) : (EMPTY_DOUBLE));
+	}
+
+	float Value::getFloat() const {
+		return static_cast<float>(getDouble());
 	}
 
 	void Value::setDouble(double newDouble) {
@@ -536,9 +581,9 @@ namespace JsonBox {
 
 			// Boolean value used to stop reading characters after the value
 			// is done loading.
-			bool noErrors = true;
+			bool reading = true;
 
-			while (noErrors && input.good()) {
+			while (reading && input.good()) {
 				input.get(currentCharacter);
 
 				if (input.good()) {
@@ -546,19 +591,19 @@ namespace JsonBox {
 						// The value to be parsed is a string.
 						setString("");
 						readString(input, *data.stringValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Structural::BEGIN_OBJECT) {
 						// The value to be parsed is an object.
 						setObject(Object());
 						readObject(input, *data.objectValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Structural::BEGIN_ARRAY) {
 						// The value to be parsed is an array.
 						setArray(Array());
 						readArray(input, *data.arrayValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Literals::NULL_STRING[0]) {
 						// We try to read the literal 'null'.
@@ -575,30 +620,30 @@ namespace JsonBox {
 
 											if (currentCharacter == Literals::NULL_STRING[3]) {
 												setNull();
-												noErrors = false;
+												reading = false;
 
 											} else {
-												std::cout << "invalid characters found" << std::endl;
+												throw JsonParsingError("Invalid characters found.");
 											}
 
 										} else {
-											std::cout << "json input ends incorrectly" << std::endl;
+											throw JsonParsingError("JSON input ends incorrectly.");
 										}
 
 									} else {
-										std::cout << "invalid characters found" << std::endl;
+										throw JsonParsingError("Invalid characters found.");
 									}
 
 								} else {
-									std::cout << "json input ends incorrectly" << std::endl;
+									throw JsonParsingError("JSON ends incorrectly.");
 								}
 
 							} else {
-								std::cout << "invalid characters found" << std::endl;
+								throw JsonParsingError("Invalid characters found");
 							}
 
 						} else {
-							std::cout << "json input ends incorrectly" << std::endl;
+							throw JsonParsingError("JSON input ends incorrectly.");
 						}
 
 					} else if (currentCharacter == Numbers::MINUS ||
@@ -606,7 +651,7 @@ namespace JsonBox {
 						// Numbers can't start with zeroes.
 						input.putback(currentCharacter);
 						readNumber(input, *this);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Literals::TRUE_STRING[0]) {
 						// We try to read the boolean literal 'true'.
@@ -623,7 +668,7 @@ namespace JsonBox {
 
 											if (currentCharacter == Literals::TRUE_STRING[3]) {
 												setBoolean(true);
-												noErrors = false;
+												reading = false;
 											}
 										}
 									}
@@ -650,7 +695,7 @@ namespace JsonBox {
 
 													if (currentCharacter == Literals::FALSE_STRING[4]) {
 														setBoolean(false);
-														noErrors = false;
+														reading = false;
 													}
 												}
 											}
@@ -661,26 +706,26 @@ namespace JsonBox {
 						}
 
 					} else if (!isWhiteSpace(currentCharacter)) {
-						std::cout << "Invalid character found: '" << currentCharacter << "'" << std::endl;
+						throw JsonParsingError( std::string("Invalid character found: '").append(std::string(1, currentCharacter)).append("'"));
 					}
 				}
 			}
 
 		} else {
-			std::cout << "File is not in UTF-8, not parsing." << std::endl;
+			throw std::invalid_argument("JSON in input stream is not in UTF-8.");
 		}
 	}
 
 	void Value::loadFromFile(const std::string &filePath) {
 		std::ifstream file;
-		file.open(filePath.c_str());
+		file.open(filePath.c_str(), std::ios::binary | std::ios::in);
 
 		if (file.is_open()) {
 			loadFromStream(file);
 			file.close();
 
 		} else {
-			std::cout << "Failed to open file to load the json: " << filePath << std::endl;
+			throw std::invalid_argument(std::string("Failed to open the following JSON file: ").append(filePath));
 		}
 	}
 
@@ -699,7 +744,7 @@ namespace JsonBox {
 			file.close();
 
 		} else {
-			std::cout << "Failed to open file to write the json into: " << filePath << std::endl;
+			throw JsonWritingError(std::string("Failed to open the following file to write the JSON to: ").append(filePath));
 		}
 	}
 
@@ -813,8 +858,8 @@ namespace JsonBox {
 									tmpStr[tmpCounter] = tmpCharacter;
 
 								} else {
+									// Invalid \u character, skipping it.
 									noUnicodeError = false;
-									std::cout << "Invalid \\u character, skipping it." << std::endl;
 								}
 
 								++tmpCounter;
@@ -997,7 +1042,7 @@ namespace JsonBox {
 		} else {
 			int intResult;
 			constructing >> intResult;
-			result.setInt(intResult);
+			result.setInteger(intResult);
 		}
 	}
 
@@ -1076,11 +1121,16 @@ namespace JsonBox {
 			break;
 
 		case Value::INTEGER:
-			output << v.getInt();
+			output << v.getInteger();
 			break;
 
 		case Value::DOUBLE:
-			output << v.getDouble();
+			{
+				std::streamsize precisionBackup = output.precision();
+				output.precision(17);
+				output << v.getDouble();
+				output.precision(precisionBackup);
+			}
 			break;
 
 		case Value::OBJECT:

@@ -51,6 +51,12 @@
     <ClInclude Include="..\..\..\..\include\JsonBox\Value.h">
       <Filter>Header Files\JsonBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\JsonBox\JsonParsingError.h">
+      <Filter>Header Files\JsonBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\JsonBox\JsonWritingError.h">
+      <Filter>Header Files\JsonBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\Array.cpp">
@@ -75,6 +81,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\Value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\JsonParsingError.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\JsonWritingError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,3 @@
-/**
- * @file
- */
 #ifndef JB_CONVERTER_H
 #define JB_CONVERTER_H
 
