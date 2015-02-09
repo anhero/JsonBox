@@ -6,6 +6,7 @@
 #include <list>
 #include <iomanip>
 #include <fstream>
+#include <stdexcept>
 
 #include <JsonBox/Grammar.h>
 #include <JsonBox/Convert.h>
@@ -14,6 +15,8 @@
 #include <JsonBox/SolidusEscaper.h>
 #include <JsonBox/Array.h>
 #include <JsonBox/Object.h>
+#include <JsonBox/JsonParsingError.h>
+#include <JsonBox/JsonWritingError.h>
 
 namespace JsonBox {
 
@@ -572,9 +575,9 @@ namespace JsonBox {
 
 			// Boolean value used to stop reading characters after the value
 			// is done loading.
-			bool noErrors = true;
+			bool reading = true;
 
-			while (noErrors && input.good()) {
+			while (reading && input.good()) {
 				input.get(currentCharacter);
 
 				if (input.good()) {
@@ -582,19 +585,19 @@ namespace JsonBox {
 						// The value to be parsed is a string.
 						setString("");
 						readString(input, *data.stringValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Structural::BEGIN_OBJECT) {
 						// The value to be parsed is an object.
 						setObject(Object());
 						readObject(input, *data.objectValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Structural::BEGIN_ARRAY) {
 						// The value to be parsed is an array.
 						setArray(Array());
 						readArray(input, *data.arrayValue);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Literals::NULL_STRING[0]) {
 						// We try to read the literal 'null'.
@@ -611,30 +614,30 @@ namespace JsonBox {
 
 											if (currentCharacter == Literals::NULL_STRING[3]) {
 												setNull();
-												noErrors = false;
+												reading = false;
 
 											} else {
-												std::cout << "invalid characters found" << std::endl;
+												throw JsonParsingError("Invalid characters found.");
 											}
 
 										} else {
-											std::cout << "json input ends incorrectly" << std::endl;
+											throw JsonParsingError("JSON input ends incorrectly.");
 										}
 
 									} else {
-										std::cout << "invalid characters found" << std::endl;
+										throw JsonParsingError("Invalid characters found.");
 									}
 
 								} else {
-									std::cout << "json input ends incorrectly" << std::endl;
+									throw JsonParsingError("JSON ends incorrectly.");
 								}
 
 							} else {
-								std::cout << "invalid characters found" << std::endl;
+								throw JsonParsingError("Invalid characters found");
 							}
 
 						} else {
-							std::cout << "json input ends incorrectly" << std::endl;
+							throw JsonParsingError("JSON input ends incorrectly.");
 						}
 
 					} else if (currentCharacter == Numbers::MINUS ||
@@ -642,7 +645,7 @@ namespace JsonBox {
 						// Numbers can't start with zeroes.
 						input.putback(currentCharacter);
 						readNumber(input, *this);
-						noErrors = false;
+						reading = false;
 
 					} else if (currentCharacter == Literals::TRUE_STRING[0]) {
 						// We try to read the boolean literal 'true'.
@@ -659,7 +662,7 @@ namespace JsonBox {
 
 											if (currentCharacter == Literals::TRUE_STRING[3]) {
 												setBoolean(true);
-												noErrors = false;
+												reading = false;
 											}
 										}
 									}
@@ -686,7 +689,7 @@ namespace JsonBox {
 
 													if (currentCharacter == Literals::FALSE_STRING[4]) {
 														setBoolean(false);
-														noErrors = false;
+														reading = false;
 													}
 												}
 											}
@@ -697,13 +700,13 @@ namespace JsonBox {
 						}
 
 					} else if (!isWhiteSpace(currentCharacter)) {
-						std::cout << "Invalid character found: '" << currentCharacter << "'" << std::endl;
+						throw JsonParsingError( std::string("Invalid character found: '").append(std::string(1, currentCharacter)).append("'"));
 					}
 				}
 			}
 
 		} else {
-			std::cout << "File is not in UTF-8, not parsing." << std::endl;
+			throw std::invalid_argument("JSON in input stream is not in UTF-8.");
 		}
 	}
 
@@ -716,7 +719,7 @@ namespace JsonBox {
 			file.close();
 
 		} else {
-			std::cout << "Failed to open file to load the json: " << filePath << std::endl;
+			throw std::invalid_argument(std::string("Failed to open the following JSON file: ").append(filePath));
 		}
 	}
 
@@ -735,7 +738,7 @@ namespace JsonBox {
 			file.close();
 
 		} else {
-			std::cout << "Failed to open file to write the json into: " << filePath << std::endl;
+			throw JsonWritingError(std::string("Failed to open the following file to write the JSON to: ").append(filePath));
 		}
 	}
 
@@ -849,8 +852,8 @@ namespace JsonBox {
 									tmpStr[tmpCounter] = tmpCharacter;
 
 								} else {
+									// Invalid \u character, skipping it.
 									noUnicodeError = false;
-									std::cout << "Invalid \\u character, skipping it." << std::endl;
 								}
 
 								++tmpCounter;

@@ -26,6 +26,10 @@
 		249D3FAF176921CB002BED21 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 249D3F9C176921CB002BED21 /* Object.cpp */; };
 		249D3FB0176921CB002BED21 /* SolidusEscaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 249D3F9D176921CB002BED21 /* SolidusEscaper.cpp */; };
 		249D3FB1176921CB002BED21 /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 249D3F9E176921CB002BED21 /* Value.cpp */; };
+		660E27151845B5BD008EFFF2 /* JsonParsingError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 660E27131845B5BD008EFFF2 /* JsonParsingError.cpp */; };
+		660E27171845B67C008EFFF2 /* JsonParsingError.h in Headers */ = {isa = PBXBuildFile; fileRef = 660E27121845B501008EFFF2 /* JsonParsingError.h */; };
+		66E9B1F01846AE6100D0D704 /* JsonWritingError.h in Headers */ = {isa = PBXBuildFile; fileRef = 66E9B1EF1846AE6100D0D704 /* JsonWritingError.h */; };
+		66E9B1F21846AEDA00D0D704 /* JsonWritingError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66E9B1F11846AEDA00D0D704 /* JsonWritingError.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +53,10 @@
 		249D3F9C176921CB002BED21 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		249D3F9D176921CB002BED21 /* SolidusEscaper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SolidusEscaper.cpp; sourceTree = "<group>"; };
 		249D3F9E176921CB002BED21 /* Value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Value.cpp; sourceTree = "<group>"; };
+		660E27121845B501008EFFF2 /* JsonParsingError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JsonParsingError.h; sourceTree = "<group>"; };
+		660E27131845B5BD008EFFF2 /* JsonParsingError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonParsingError.cpp; sourceTree = "<group>"; };
+		66E9B1EF1846AE6100D0D704 /* JsonWritingError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonWritingError.h; sourceTree = "<group>"; };
+		66E9B1F11846AEDA00D0D704 /* JsonWritingError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonWritingError.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +110,8 @@
 				249D3F92176921CB002BED21 /* OutputFilter.h */,
 				249D3F93176921CB002BED21 /* SolidusEscaper.h */,
 				249D3F94176921CB002BED21 /* Value.h */,
+				660E27121845B501008EFFF2 /* JsonParsingError.h */,
+				66E9B1EF1846AE6100D0D704 /* JsonWritingError.h */,
 			);
 			path = JsonBox;
 			sourceTree = "<group>";
@@ -117,6 +127,8 @@
 				249D3F9C176921CB002BED21 /* Object.cpp */,
 				249D3F9D176921CB002BED21 /* SolidusEscaper.cpp */,
 				249D3F9E176921CB002BED21 /* Value.cpp */,
+				660E27131845B5BD008EFFF2 /* JsonParsingError.cpp */,
+				66E9B1F11846AEDA00D0D704 /* JsonWritingError.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -129,6 +141,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				660E27171845B67C008EFFF2 /* JsonParsingError.h in Headers */,
 				249D3F9F176921CB002BED21 /* Array.h in Headers */,
 				249D3FA0176921CB002BED21 /* Convert.h in Headers */,
 				249D3FA1176921CB002BED21 /* Escaper.h in Headers */,
@@ -138,6 +151,7 @@
 				249D3FA5176921CB002BED21 /* Object.h in Headers */,
 				249D3FA6176921CB002BED21 /* OutputFilter.h in Headers */,
 				249D3FA7176921CB002BED21 /* SolidusEscaper.h in Headers */,
+				66E9B1F01846AE6100D0D704 /* JsonWritingError.h in Headers */,
 				249D3FA8176921CB002BED21 /* Value.h in Headers */,
 				249D3FA9176921CB002BED21 /* JsonBox.h in Headers */,
 			);
@@ -195,12 +209,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				249D3FAA176921CB002BED21 /* Array.cpp in Sources */,
+				66E9B1F21846AEDA00D0D704 /* JsonWritingError.cpp in Sources */,
 				249D3FAB176921CB002BED21 /* Convert.cpp in Sources */,
 				249D3FAC176921CB002BED21 /* Escaper.cpp in Sources */,
 				249D3FAD176921CB002BED21 /* IndentCanceller.cpp in Sources */,
 				249D3FAE176921CB002BED21 /* Indenter.cpp in Sources */,
 				249D3FAF176921CB002BED21 /* Object.cpp in Sources */,
 				249D3FB0176921CB002BED21 /* SolidusEscaper.cpp in Sources */,
+				660E27151845B5BD008EFFF2 /* JsonParsingError.cpp in Sources */,
 				249D3FB1176921CB002BED21 /* Value.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

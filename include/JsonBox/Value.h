@@ -1,6 +1,3 @@
-/**
- * @file
- */
 #ifndef JB_VALUE_H
 #define JB_VALUE_H
 
