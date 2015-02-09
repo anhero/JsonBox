@@ -236,7 +236,7 @@ namespace JsonBox {
 	}
 	
 	Value &Value::operator=(int src) {
-		this->setInt(src);
+		this->setInteger(src);
 		
 		return *this;
 	}
@@ -276,7 +276,7 @@ namespace JsonBox {
 					break;
 
 				case INTEGER:
-					result = (*data.intValue == rhs.getInt());
+					result = (*data.intValue == rhs.getInteger());
 					break;
 
 				case DOUBLE:
@@ -322,7 +322,7 @@ namespace JsonBox {
 					break;
 
 				case INTEGER:
-					result = (*data.intValue < rhs.getInt());
+					result = (*data.intValue < rhs.getInteger());
 					break;
 
 				case DOUBLE:
@@ -476,18 +476,18 @@ namespace JsonBox {
 		}
 	}
 
-	int Value::getInt() const {
+	int Value::getInteger() const {
 		return (type == INTEGER) ? (*data.intValue) : ((type == DOUBLE) ? (static_cast<int>(*data.doubleValue)) : (EMPTY_INT));
 	}
 
-	void Value::setInt(int newInt) {
+	void Value::setInteger(int newInteger) {
 		if (type == INTEGER) {
-			*data.intValue = newInt;
+			*data.intValue = newInteger;
 
 		} else {
 			clear();
 			type = INTEGER;
-			data.intValue = new int(newInt);
+			data.intValue = new int(newInteger);
 		}
 	}
 
@@ -1042,7 +1042,7 @@ namespace JsonBox {
 		} else {
 			int intResult;
 			constructing >> intResult;
-			result.setInt(intResult);
+			result.setInteger(intResult);
 		}
 	}
 
@@ -1121,7 +1121,7 @@ namespace JsonBox {
 			break;
 
 		case Value::INTEGER:
-			output << v.getInt();
+			output << v.getInteger();
 			break;
 
 		case Value::DOUBLE:

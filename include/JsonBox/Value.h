@@ -375,14 +375,14 @@ namespace JsonBox {
 		 * @return Value's integer value, or 0 if the value doesn't contain a
 		 * numeric value.
 		 */
-		int getInt() const;
+		int getInteger() const;
 
 		/**
 		 * Sets the value as an integer.
 		 * @param newInt New integer value that the Value will contain. The
 		 * value's type is changed if necessary to contain the integer.
 		 */
-		void setInt(int newInt);
+		void setInteger(int newInt);
 
 		/**
 		 * Gets the value's double value.
