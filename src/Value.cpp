@@ -718,7 +718,7 @@ namespace JsonBox {
 
 	void Value::loadFromFile(const std::string &filePath) {
 		std::ifstream file;
-		file.open(filePath.c_str());
+		file.open(filePath.c_str(), std::ios::binary | std::ios::in);
 
 		if (file.is_open()) {
 			loadFromStream(file);
