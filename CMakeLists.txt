@@ -10,10 +10,15 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # setup static archive
 set(CMAKE_DEBUG_POSTFIX "_d")
-add_library(JsonBox STATIC ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+add_library(JsonBox ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
 
 # install
-install(TARGETS JsonBox ARCHIVE DESTINATION "lib" COMPONENT lib)
+install(TARGETS JsonBox
+  COMPONENT lib
+  ARCHIVE DESTINATION lib${LIB_SUFFIX}
+  LIBRARY DESTINATION lib${LIB_SUFFIX}
+  RUNTIME DESTINATION bin
+)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION "include" COMPONENT dev)
 
 # examples
