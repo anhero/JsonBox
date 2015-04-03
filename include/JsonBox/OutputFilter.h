@@ -80,22 +80,6 @@ namespace JsonBox {
 		}
 
 		/**
-		 * We don't need to do anything here. Calls the base class version.
-		 * @return 0 on success, -1 otherwise. The base class version returns 0.
-		 */
-		virtual int_type sync() {
-			return this->std::streambuf::sync();
-		}
-
-		/**
-		 * We don't need to do anything here. Calls the base class version.
-		 * @return Pointer to itself.
-		 */
-		virtual std::streambuf *setbuf(char *p, int len) {
-			return this->std::streambuf::setbuf(p, len);
-		}
-
-		/**
 		 * Gets the inserter's instance.
 		 * @return Reference to the inserter.
 		 */
