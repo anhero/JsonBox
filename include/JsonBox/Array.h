@@ -7,13 +7,15 @@
 #include "Value.h"
 
 namespace JsonBox {
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Array &a);
+
 	/**
 	 * Represents an array of values in JSON. It's a vector with added methods.
 	 * So it can be used the same way as a standard STL vector, but can be more
 	 * easily output in a stream.
 	 * @see JsonBox::Value
 	 */
-	class Array {
+	class JSONBOX_EXPORT Array {
 	public:
 		typedef std::vector<Value> container;
 		typedef container::value_type value_type;
