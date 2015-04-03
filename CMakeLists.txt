@@ -2,9 +2,33 @@ cmake_minimum_required(VERSION 2.6)
 
 project(JsonBox)
 
-# glob all sources
-file(GLOB_RECURSE JSONBOX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src" "src/*.cpp")
-file(GLOB_RECURSE JSONBOX_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include" "include/*.h")
+set(JSONBOX_SOURCES
+  src/JsonWritingError.cpp
+  src/Value.cpp
+  src/Array.cpp
+  src/SolidusEscaper.cpp
+  src/Escaper.cpp
+  src/Indenter.cpp
+  src/IndentCanceller.cpp
+  src/JsonParsingError.cpp
+  src/Convert.cpp
+  src/Object.cpp
+)
+set(JSONBOX_HEADERS
+  include/JsonBox/Array.h
+  include/JsonBox/Convert.h
+  include/JsonBox/Escaper.h
+  include/JsonBox/Grammar.h
+  include/JsonBox/IndentCanceller.h
+  include/JsonBox/Indenter.h
+  include/JsonBox/JsonParsingError.h
+  include/JsonBox/JsonWritingError.h
+  include/JsonBox/Object.h
+  include/JsonBox/OutputFilter.h
+  include/JsonBox/SolidusEscaper.h
+  include/JsonBox/Value.h
+  include/JsonBox.h
+)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
