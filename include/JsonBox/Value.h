@@ -610,7 +610,7 @@ namespace JsonBox {
 		static const std::string EMPTY_STRING;
 
 		/**
-		 * Default int value returned by getInt() when the value doesn't contain
+		 * Default int value returned by getInteger() when the value doesn't contain
 		 * an integer.
 		 * @see JsonBox::Value::getInt
 		 */
