@@ -36,25 +36,43 @@ set(JSONBOX_HEADERS
   ${CMAKE_CURRENT_BINARY_DIR}/Export.h
 )
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
-
 # build library
 set(CMAKE_DEBUG_POSTFIX "_d")
 add_library(JsonBox ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
 
 generate_export_header(JsonBox EXPORT_FILE_NAME Export.h)
 
+target_include_directories(JsonBox PRIVATE
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_BINARY_DIR}
+)
+target_include_directories(JsonBox SYSTEM INTERFACE
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+)
+
+export(TARGETS JsonBox
+  FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+)
+
 # install
 install(TARGETS JsonBox
   COMPONENT lib
+  EXPORT ${PROJECT_NAME}
   ARCHIVE DESTINATION lib${LIB_SUFFIX}
   LIBRARY DESTINATION lib${LIB_SUFFIX}
   RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
 )
 install(FILES ${JSONBOX_HEADERS}
   COMPONENT dev
   DESTINATION include
 )
+install(EXPORT ${PROJECT_NAME}
+  DESTINATION lib${LIB_SUFFIX}/cmake
+  FILE ${PROJECT_NAME}Config.cmake
+)
+
 
 # examples
 add_executable(example1 "${CMAKE_CURRENT_SOURCE_DIR}/examples/main.cpp")
