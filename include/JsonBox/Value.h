@@ -77,7 +77,7 @@ namespace JsonBox {
 		 * Escapes a character to its unicode equivalent. This function only
 		 * takes characters from '/0' to '/x1f'.
 		 * @param charToEscape Character to escape, must be between '\0' and
-		 * '\x1f'.
+		 * '\\x1f'.
 		 * @return String with the character escaped in the format "\u00xx".
 		 * "xx" being the hexadecimal ASCII code of the character escaped.
 		 */
@@ -573,37 +573,37 @@ namespace JsonBox {
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstStringValue Pointer to set to the string pointer.
+			 * @param newStringValue Pointer to set to the string pointer.
 			 */
 			ValueDataPointer(std::string *newStringValue);
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstIntValue Pointer to set to the int pointer.
+			 * @param newIntValue Pointer to set to the int pointer.
 			 */
 			ValueDataPointer(int *newIntValue);
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstDoubleValue Pointer to set to the double pointer.
+			 * @param newDoubleValue Pointer to set to the double pointer.
 			 */
 			ValueDataPointer(double *newDoubleValue);
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstObjectValue Pointer to set to the object pointer.
+			 * @param newObjectValue Pointer to set to the object pointer.
 			 */
 			ValueDataPointer(Object *newObjectValue);
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstArrayValue Pointer to set to the array pointer.
+			 * @param newArrayValue Pointer to set to the array pointer.
 			 */
 			ValueDataPointer(Array *newArrayValue);
 
 			/**
 			 * Parameterized constructor.
-			 * @param newConstBoolValue Pointer to set to the bool pointer.
+			 * @param newBoolValue Pointer to set to the bool pointer.
 			 */
 			ValueDataPointer(bool *newBoolValue);
 		};
