@@ -9,8 +9,6 @@
 #include "Export.h"
 
 namespace JsonBox {
-	class Value;
-
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
