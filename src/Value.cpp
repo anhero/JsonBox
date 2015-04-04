@@ -11,10 +11,9 @@
 #include <JsonBox/Grammar.h>
 #include <JsonBox/Convert.h>
 #include <JsonBox/OutputFilter.h>
+#include <JsonBox/Indenter.h>
 #include <JsonBox/IndentCanceller.h>
 #include <JsonBox/SolidusEscaper.h>
-#include <JsonBox/Array.h>
-#include <JsonBox/Object.h>
 #include <JsonBox/JsonParsingError.h>
 #include <JsonBox/JsonWritingError.h>
 
@@ -446,16 +445,16 @@ namespace JsonBox {
 		} else {
 			switch (type) {
 			case INTEGER: {
-				std::stringstream ss;
-				ss << *data.intValue;
-				return ss.str();
-			}
+					std::stringstream ss;
+					ss << *data.intValue;
+					return ss.str();
+				}
 
 			case DOUBLE: {
-				std::stringstream ss;
-				ss << *data.doubleValue;
-				return ss.str();
-			}
+					std::stringstream ss;
+					ss << *data.doubleValue;
+					return ss.str();
+				}
 
 			case BOOLEAN:
 				return (*data.boolValue) ? (Literals::TRUE_STRING) : (Literals::FALSE_STRING);
@@ -1144,8 +1143,7 @@ namespace JsonBox {
 			output << v.getInteger();
 			break;
 
-		case Value::DOUBLE:
-			{
+		case Value::DOUBLE: {
 				std::streamsize precisionBackup = output.precision();
 				output.precision(17);
 				output << v.getDouble();
@@ -1171,6 +1169,59 @@ namespace JsonBox {
 
 		default:
 			break;
+		}
+
+		return output;
+	}
+
+	std::ostream &operator<<(std::ostream &output, const Array &a) {
+		if (a.empty()) {
+			output << Structural::BEGIN_ARRAY << Structural::END_ARRAY;
+
+		} else {
+			output << Structural::BEGIN_ARRAY << std::endl;
+			OutputFilter<Indenter> indent(output.rdbuf());
+			output.rdbuf(&indent);
+
+			for (Array::const_iterator i = a.begin(); i != a.end(); ++i) {
+				if (i != a.begin()) {
+					output << Structural::VALUE_SEPARATOR << std::endl;
+				}
+
+				output << *i;
+			}
+
+			output.rdbuf(indent.getDestination());
+
+			output << std::endl << Structural::END_ARRAY;
+		}
+
+		return output;
+	}
+
+	std::ostream &operator<<(std::ostream &output, const Object &o) {
+		// If the object is empty, we simply write "{}".
+		if (o.empty()) {
+			output << Structural::BEGIN_OBJECT << Structural::END_OBJECT;
+
+		} else {
+			output << Structural::BEGIN_OBJECT << std::endl;
+			OutputFilter<Indenter> indent(output.rdbuf());
+			output.rdbuf(&indent);
+
+			// For each item in the object.
+			for (Object::const_iterator i = o.begin(); i != o.end(); ++i) {
+				if (i != o.begin()) {
+					output << Structural::VALUE_SEPARATOR << std::endl;
+				}
+
+				// We print the name of the attribute and its value.
+				output << Structural::BEGIN_END_STRING << Value::escapeMinimumCharacters(i->first) << Structural::BEGIN_END_STRING << Whitespace::SPACE << Structural::NAME_SEPARATOR << Whitespace::SPACE << i->second;
+			}
+
+			output.rdbuf(indent.getDestination());
+
+			output << std::endl << Structural::END_OBJECT;
 		}
 
 		return output;

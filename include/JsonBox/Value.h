@@ -2,17 +2,14 @@
 #define JB_VALUE_H
 
 #include <string>
+#include <map>
+#include <vector>
 #include <iostream>
 
 #include "Export.h"
 
-
 namespace JsonBox {
-	class Array;
-	class Object;
 	class Value;
-
-	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
 
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
@@ -34,6 +31,8 @@ namespace JsonBox {
 		 */
 		friend std::ostream &operator<<(std::ostream &output, const Value &v);
 	public:
+		typedef std::vector<Value> Array;
+		typedef std::map<std::string, Value> Object;
 		/**
 		 * Represents the different types a value can be. A value can only be
 		 * one of these types at a time. The UNKNOWN type is only used
@@ -733,6 +732,23 @@ namespace JsonBox {
 		 */
 		ValueDataPointer data;
 	};
+
+	/**
+	 * Represents an array of values in JSON. It's a STL vector that can be
+	 * output in a stream.
+	 * @see JsonBox::Value
+	 */
+	JSONBOX_EXPORT typedef std::vector<Value> Array;
+	
+	/**
+	 * Represents a JSON object. It's a STL map that can be output in a stream.
+	 * @see JsonBox::Value
+	 */
+	JSONBOX_EXPORT typedef std::map<std::string, Value> Object;
+
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Object &o);
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Array &a);
 }
 
 #endif
