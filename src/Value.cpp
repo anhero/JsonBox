@@ -19,10 +19,47 @@
 
 namespace JsonBox {
 
-	const std::string Value::EMPTY_STRING = std::string();
-	const double Value::EMPTY_DOUBLE = 0.0;
-	const Object Value::EMPTY_OBJECT = Object();
-	const Array Value::EMPTY_ARRAY = Array();
+	/**
+	 * Empty string returned by getString() when the value doesn't contain a
+	 * string.
+	 * @see JsonBox::Value::getString
+	 */
+	static const std::string EMPTY_STRING = std::string();
+	
+	/**
+	 * Default int value returned by getInteger() when the value doesn't contain
+	 * an integer.
+	 * @see JsonBox::Value::getInt
+	 */
+	static const int EMPTY_INT = 0;
+	
+	/**
+	 * Default double value returned by getDouble() when the value doesn't
+	 * contain a double.
+	 * @see JsonBox::Value::getDouble
+	 */
+	static const double EMPTY_DOUBLE = 0.0;
+	
+	/**
+	 * Default empty object value returned by getObject() when the value
+	 * doesn't contain an object.
+	 * @see JsonBox::Value::getObject
+	 */
+	static const Object EMPTY_OBJECT = Object();
+	
+	/**
+	 * Default empty array value returned by getArray() when the value
+	 * doesn't contain an array.
+	 * @see JsonBox::Value::getArray
+	 */
+	static const Array EMPTY_ARRAY = Array();
+	
+	/**
+	 * Default boolean value returned by getBoolean() when the value doesn't
+	 * contain a boolean.
+	 * @see JsonBox::Value::getBoolean
+	 */
+	static const bool EMPTY_BOOL = false;
 
 	std::string Value::escapeMinimumCharacters(const std::string &str) {
 		std::stringstream result;

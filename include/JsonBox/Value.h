@@ -608,48 +608,6 @@ namespace JsonBox {
 		};
 
 		/**
-		 * Empty string returned by getString() when the value doesn't contain a
-		 * string.
-		 * @see JsonBox::Value::getString
-		 */
-		static const std::string EMPTY_STRING;
-
-		/**
-		 * Default int value returned by getInteger() when the value doesn't contain
-		 * an integer.
-		 * @see JsonBox::Value::getInt
-		 */
-		static const int EMPTY_INT = 0;
-
-		/**
-		 * Default double value returned by getDouble() when the value doesn't
-		 * contain a double.
-		 * @see JsonBox::Value::getDouble
-		 */
-		static const double EMPTY_DOUBLE;
-
-		/**
-		 * Default empty object value returned by getObject() when the value
-		 * doesn't contain an object.
-		 * @see JsonBox::Value::getObject
-		 */
-		static const Object EMPTY_OBJECT;
-
-		/**
-		 * Default empty array value returned by getArray() when the value
-		 * doesn't contain an array.
-		 * @see JsonBox::Value::getArray
-		 */
-		static const Array EMPTY_ARRAY;
-
-		/**
-		 * Default boolean value returned by getBoolean() when the value doesn't
-		 * contain a boolean.
-		 * @see JsonBox::Value::getBoolean
-		 */
-		static const bool EMPTY_BOOL = false;
-
-		/**
 		 * Checks if the char given is a hex digit.
 		 * @return True if the char contains an hexadecimal digit (0-9, a-f or
 		 * A-F).
