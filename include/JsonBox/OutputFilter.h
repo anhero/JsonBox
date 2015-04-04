@@ -33,7 +33,8 @@ namespace JsonBox {
 		/**
 		 * Parameterized constructor.
 		 * @param newDestination Pointer to the streambuf destination.
-		 * @param newInserter Inserter to use to filter the output.
+		 * @param newDeleteWhenFinished Used to know if the instance will have
+		 * to delete its destination streambuf or not.
 		 */
 		OutputFilter(std::streambuf *newDestination,
 		             bool newDeleteWhenFinished = false) :
