@@ -222,46 +222,46 @@ namespace JsonBox {
 
 		return *this;
 	}
-	
+
 	Value &Value::operator=(const std::string &src) {
 		this->setString(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(const char *src) {
 		this->setString(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(int src) {
 		this->setInteger(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(double src) {
 		this->setDouble(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(const Object &src) {
 		this->setObject(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(const Array &src) {
 		this->setArray(src);
-		
+
 		return *this;
 	}
-	
+
 	Value &Value::operator=(bool src) {
 		this->setBoolean(src);
-		
+
 		return *this;
 	}
 
@@ -387,7 +387,7 @@ namespace JsonBox {
 			// We make sure the array is big enough.
 			data.arrayValue->resize(index + 1);
 		}
-		
+
 		return (*data.arrayValue)[index];
 	}
 
@@ -432,7 +432,11 @@ namespace JsonBox {
 	}
 
 	const std::string &Value::getString() const {
-		return (type == STRING) ? (*data.stringValue) : (EMPTY_STRING);
+		return tryGetString(EMPTY_STRING);
+	}
+
+	const std::string &Value::tryGetString(const std::string &defaultValue) const {
+		return (type == STRING) ? (*data.stringValue) : (defaultValue);
 	}
 
 	const std::string Value::getToString() const {
@@ -477,7 +481,11 @@ namespace JsonBox {
 	}
 
 	int Value::getInteger() const {
-		return (type == INTEGER) ? (*data.intValue) : ((type == DOUBLE) ? (static_cast<int>(*data.doubleValue)) : (EMPTY_INT));
+		return tryGetInteger(EMPTY_INT);
+	}
+
+	int Value::tryGetInteger(int defaultValue) const {
+		return (type == INTEGER) ? (*data.intValue) : ((type == DOUBLE) ? (static_cast<int>(*data.doubleValue)) : (defaultValue));
 	}
 
 	void Value::setInteger(int newInteger) {
@@ -492,11 +500,19 @@ namespace JsonBox {
 	}
 
 	double Value::getDouble() const {
-		return (type == DOUBLE) ? (*data.doubleValue) : ((type == INTEGER) ? (static_cast<double>(*data.intValue)) : (EMPTY_DOUBLE));
+		return tryGetDouble(EMPTY_DOUBLE);
+	}
+
+	double Value::tryGetDouble(double defaultValue) const {
+		return (type == DOUBLE) ? (*data.doubleValue) : ((type == INTEGER) ? (static_cast<double>(*data.intValue)) : (defaultValue));
 	}
 
 	float Value::getFloat() const {
-		return static_cast<float>(getDouble());
+		return tryGetFloat(static_cast<float>(EMPTY_DOUBLE));
+	}
+
+	float Value::tryGetFloat(float defaultValue) const {
+		return (type == DOUBLE) ? (static_cast<float>(*data.doubleValue)) : ((type == INTEGER) ? (static_cast<float>(*data.intValue)) : (defaultValue));
 	}
 
 	void Value::setDouble(double newDouble) {
@@ -541,6 +557,10 @@ namespace JsonBox {
 	}
 
 	bool Value::getBoolean() const {
+		return tryGetBoolean(EMPTY_BOOL);
+	}
+
+	bool Value::tryGetBoolean(bool defaultValue) const {
 		return (type == BOOLEAN) ? (*data.boolValue) : (EMPTY_BOOL);
 	}
 

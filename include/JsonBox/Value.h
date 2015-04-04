@@ -4,9 +4,15 @@
 #include <string>
 #include <iostream>
 
+#include "Export.h"
+
+
 namespace JsonBox {
 	class Array;
 	class Object;
+	class Value;
+
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
 
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
@@ -18,7 +24,7 @@ namespace JsonBox {
 	 * @see JsonBox::Array
 	 * @see JsonBox::Object
 	 */
-	class Value {
+	class JSONBOX_EXPORT Value {
 		/**
 		 * Output operator overload. Outputs the value as valid JSON. Does not
 		 * do any indentation.
@@ -35,12 +41,12 @@ namespace JsonBox {
 		 * file.
 		 */
 		enum Type {
-		    STRING,
-		    INTEGER,
-		    DOUBLE,
-		    OBJECT,
-		    ARRAY,
-		    BOOLEAN,
+			STRING,
+			INTEGER,
+			DOUBLE,
+			OBJECT,
+			ARRAY,
+			BOOLEAN,
 			NULL_VALUE,
 			UNKNOWN
 		};
@@ -150,56 +156,56 @@ namespace JsonBox {
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const Value &src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src String to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const std::string &src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src String to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const char *src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src Integer to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(int src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src Double to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(double src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src Object to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const Object &src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src Array to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(const Array &src);
-		
+
 		/**
 		 * Assignation operator overload.
 		 * @param src Boolean to copy.
 		 * @return Reference to the modified value.
 		 */
 		Value &operator=(bool src);
-		
+
 		/**
 		 * Checks if the current value is equal to the right hand side value.
 		 * @param rhs Right hand side value to check for equality with.
@@ -216,7 +222,7 @@ namespace JsonBox {
 		 * if not.
 		 */
 		bool operator!=(const Value &rhs) const;
-		
+
 		/**
 		 * Checks if the contents of instance are lexicographically less than
 		 * the contents of the right hand side value.
@@ -225,7 +231,7 @@ namespace JsonBox {
 		 * less than the contents of the right hand side value.
 		 */
 		bool operator <(const Value &rhs) const;
-		
+
 		/**
 		 * Checks if the contents of instance are lexicographically less than or
 		 * equal the contents of the right hand side value.
@@ -234,7 +240,7 @@ namespace JsonBox {
 		 * less than or equal the contents of the right hand side value.
 		 */
 		bool operator <=(const Value &rhs) const;
-		
+
 		/**
 		 * Checks if the contents of instance are lexicographically greater than
 		 * the contents of the right hand side value.
@@ -243,7 +249,7 @@ namespace JsonBox {
 		 * greater than the contents of the right hand side value.
 		 */
 		bool operator >(const Value &rhs) const;
-		
+
 		/**
 		 * Checks if the contents of instance are lexicographically greater than
 		 * or equal the contents of the right hand side value.
@@ -297,14 +303,14 @@ namespace JsonBox {
 		 * @return True if the value contains a string, false if not.
 		 */
 		bool isString() const;
-		
+
 		/**
 		 * Checks if the value can be a string.
 		 * @return True if the value is either a string, an integer, a boolean
 		 * or a null value.
 		 */
 		bool isStringable() const;
-		
+
 		/**
 		 * Checks if the value is an integer.
 		 * @return True if the value contains an integer, false if not.
@@ -316,7 +322,7 @@ namespace JsonBox {
 		 * @return True if the value contains a double, false if not.
 		 */
 		bool isDouble() const;
-		
+
 		/**
 		 * Checks if the value is either an integer or a double.
 		 * @return True if the value contains a double or an integer, false if
@@ -354,7 +360,16 @@ namespace JsonBox {
 		 * contain a string.
 		 */
 		const std::string &getString() const;
-		
+
+		/**
+		 * Tries to get the value's string value.
+		 * @param defaultValue String value to return if the value doesn't
+		 * contain a string.
+		 * @return Value's string value, or defaultValue if the value doesn't
+		 * contain a string.
+		 */
+		const std::string &tryGetString(const std::string &defaultValue) const;
+
 		/**
 		 * Gets the value's string value or converts its numeric, boolean or
 		 * null value to a string.
@@ -378,6 +393,15 @@ namespace JsonBox {
 		int getInteger() const;
 
 		/**
+		 * Tries to get the value's integer value.
+		 * @param defaultValue Integer value to return if the value doesn't
+		 * contain a numeric value.
+		 * @return Value's integer value, or defaultValue if the value doesn't
+		 * contain a numeric value.
+		 */
+		int tryGetInteger(int defaultValue) const;
+
+		/**
 		 * Sets the value as an integer.
 		 * @param newInt New integer value that the Value will contain. The
 		 * value's type is changed if necessary to contain the integer.
@@ -390,13 +414,31 @@ namespace JsonBox {
 		 * numeric value.
 		 */
 		double getDouble() const;
-		
+
+		/**
+		 * Tries to get the value's double value.
+		 * @param defaultValue Double value to return if the value doesn't
+		 * contain a numeric value.
+		 * @return Value's double value, or defaultValue if the value doesn't
+		 * contain a numeric value.
+		 */
+		double tryGetDouble(double defaultValue) const;
+
 		/**
 		 * Gets the value's float value.
 		 * @return Value's float value, or 0.0f if the value doesn't contain a
 		 * numeric value.
 		 */
 		float getFloat() const;
+
+		/**
+		 * Tries to get the value's float value.
+		 * @param defaultValue Float value to return if the value doesn't
+		 * contain a numeric value.
+		 * @return Value's float value, or defaultValue if the value doesn't
+		 * contain a numeric value.
+		 */
+		float tryGetFloat(float defaultValue) const;
 
 		/**
 		 * Sets the value as a double.
@@ -439,6 +481,15 @@ namespace JsonBox {
 		 * a boolean.
 		 */
 		bool getBoolean() const;
+
+		/**
+		 * Tries to get the value's boolean value.
+		 * @param defaultValue Boolean value to return if the value doesn't
+		 * contain a boolean value.
+		 * @return Value's boolean value, or defaultValue if the value doesn't
+		 * contain a boolean.
+		 */
+		bool tryGetBoolean(bool defaultValue) const;
 
 		/**
 		 * Sets the value as a boolean.
@@ -565,7 +616,7 @@ namespace JsonBox {
 		static const std::string EMPTY_STRING;
 
 		/**
-		 * Default int value returned by getInt() when the value doesn't contain
+		 * Default int value returned by getInteger() when the value doesn't contain
 		 * an integer.
 		 * @see JsonBox::Value::getInt
 		 */

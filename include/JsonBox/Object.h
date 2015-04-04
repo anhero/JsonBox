@@ -8,13 +8,15 @@
 #include "Value.h"
 
 namespace JsonBox {
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream& output, const Object& o);
+
 	/**
 	 * Represents a JSON object. It's a map with added methods. So the JSON
 	 * object type can be used the same way as a standard STL map of string and
 	 * Value, but can be more easily output in a stream.
 	 * @see JsonBox::Value
 	 */
-	class Object {
+	class JSONBOX_EXPORT Object {
 	public:
 		typedef std::map<std::string, Value> container;
 		typedef container::key_type key_type;
