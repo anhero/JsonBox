@@ -4,9 +4,15 @@
 #include <string>
 #include <iostream>
 
+#include "Export.h"
+
+
 namespace JsonBox {
 	class Array;
 	class Object;
+	class Value;
+
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
 
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
@@ -18,7 +24,7 @@ namespace JsonBox {
 	 * @see JsonBox::Array
 	 * @see JsonBox::Object
 	 */
-	class Value {
+	class JSONBOX_EXPORT Value {
 		/**
 		 * Output operator overload. Outputs the value as valid JSON. Does not
 		 * do any indentation.
