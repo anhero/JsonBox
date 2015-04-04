@@ -8,12 +8,16 @@
      <key>CFBundleIdentifier</key>
      <string>net.anhero.JsonBox</string>
      <key>CFBundleVersion</key>
-     <string>0.4.3</string>
+     <string>0.6.1</string>
      <key>DocSetFeedName</key>
      <string>JsonBox</string>
      <key>DocSetPublisherIdentifier</key>
      <string>net.anhero.JsonBox.documentation</string>
      <key>DocSetPublisherName</key>
      <string>AnheroInc.</string>
+     <key>DashDocSetFamily</key>
+     <string>doxy</string>
+     <key>DocSetPlatformFamily</key>
+     <string>doxygen</string>
 </dict>
 </plist>

@@ -10,12 +10,66 @@
         <Path>index.htm</Path>
         <Subnodes>
          <Node>
+          <Name>What is JSON?</Name>
+          <Path>index.htm</Path>
+          <Anchor>format_description</Anchor>
+         </Node>
+         <Node>
+          <Name>What is Json Box?</Name>
+          <Path>index.htm</Path>
+          <Anchor>project_description</Anchor>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Namespaces</Name>
+        <Path></Path>
+        <Subnodes>
+         <Node>
           <Name>Namespace List</Name>
           <Path>namespaces.htm</Path>
           <Subnodes>
            <Node>
             <Name>JsonBox</Name>
             <Path>namespace_json_box.htm</Path>
+            <Subnodes>
+             <Node>
+              <Name>Literals</Name>
+              <Path>namespace_json_box_1_1_literals.htm</Path>
+             </Node>
+             <Node>
+              <Name>Numbers</Name>
+              <Path>namespace_json_box_1_1_numbers.htm</Path>
+             </Node>
+             <Node>
+              <Name>Strings</Name>
+              <Path>namespace_json_box_1_1_strings.htm</Path>
+              <Subnodes>
+               <Node>
+                <Name>Json</Name>
+                <Path>namespace_json_box_1_1_strings_1_1_json.htm</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>Escape</Name>
+                  <Path>namespace_json_box_1_1_strings_1_1_json_1_1_escape.htm</Path>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>Std</Name>
+                <Path>namespace_json_box_1_1_strings_1_1_std.htm</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>Structural</Name>
+              <Path>namespace_json_box_1_1_structural.htm</Path>
+             </Node>
+             <Node>
+              <Name>Whitespace</Name>
+              <Path>namespace_json_box_1_1_whitespace.htm</Path>
+             </Node>
+            </Subnodes>
            </Node>
           </Subnodes>
          </Node>
@@ -42,6 +96,10 @@
           </Subnodes>
          </Node>
         </Subnodes>
+       </Node>
+       <Node>
+        <Name>Classes</Name>
+        <Path></Path>
         <Subnodes>
          <Node>
           <Name>Class List</Name>
@@ -52,24 +110,16 @@
             <Path>namespace_json_box.htm</Path>
             <Subnodes>
              <Node>
-              <Name>Literals</Name>
-              <Path>namespace_json_box_1_1_literals.htm</Path>
-             </Node>
-             <Node>
-              <Name>Numbers</Name>
-              <Path>namespace_json_box_1_1_numbers.htm</Path>
-             </Node>
-             <Node>
               <Name>Strings</Name>
               <Path>namespace_json_box_1_1_strings.htm</Path>
-             </Node>
-             <Node>
-              <Name>Structural</Name>
-              <Path>namespace_json_box_1_1_structural.htm</Path>
-             </Node>
-             <Node>
-              <Name>Whitespace</Name>
-              <Path>namespace_json_box_1_1_whitespace.htm</Path>
+              <Subnodes>
+               <Node>
+                <Name>Json</Name>
+                <Path>namespace_json_box_1_1_strings_1_1_json.htm</Path>
+                <Subnodes>
+                </Subnodes>
+               </Node>
+              </Subnodes>
              </Node>
              <Node>
               <Name>Array</Name>
@@ -462,6 +512,38 @@
               </Subnodes>
              </Node>
              <Node>
+              <Name>JsonParsingError</Name>
+              <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+              <Subnodes>
+               <Node>
+                <Name>JsonParsingError</Name>
+                <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+                <Anchor>a5ca297fad0c9b859f5033488be0ea065</Anchor>
+               </Node>
+               <Node>
+                <Name>JsonParsingError</Name>
+                <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+                <Anchor>a07d43febb43440201bd7e8bb4b8a5cdf</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>JsonWritingError</Name>
+              <Path>class_json_box_1_1_json_writing_error.htm</Path>
+              <Subnodes>
+               <Node>
+                <Name>JsonWritingError</Name>
+                <Path>class_json_box_1_1_json_writing_error.htm</Path>
+                <Anchor>aac8de20a2ce2021ad1c4cd695958402a</Anchor>
+               </Node>
+               <Node>
+                <Name>JsonWritingError</Name>
+                <Path>class_json_box_1_1_json_writing_error.htm</Path>
+                <Anchor>a5e9b451d864d3bddd92d74e8b9355c43</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
               <Name>Object</Name>
               <Path>class_json_box_1_1_object.htm</Path>
               <Subnodes>
@@ -792,16 +874,6 @@
                 <Anchor>a8d91227ea71cb143e36928eaf6dcdd8d</Anchor>
                </Node>
                <Node>
-                <Name>setbuf</Name>
-                <Path>class_json_box_1_1_output_filter.htm</Path>
-                <Anchor>acf62e1ad6f33da3f9ef522f8fbdaf5ff</Anchor>
-               </Node>
-               <Node>
-                <Name>sync</Name>
-                <Path>class_json_box_1_1_output_filter.htm</Path>
-                <Anchor>a8d5ee977a741dbb12b0aeee01e3365da</Anchor>
-               </Node>
-               <Node>
                 <Name>underflow</Name>
                 <Path>class_json_box_1_1_output_filter.htm</Path>
                 <Anchor>a6bd41425d7efae42b14da6cf78a7f77f</Anchor>
@@ -1062,9 +1134,14 @@
                 <Anchor>af346625e38b985c821cf74f02946e89b</Anchor>
                </Node>
                <Node>
-                <Name>getInt</Name>
+                <Name>getFloat</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
-                <Anchor>a7a2e79635275d8c8fd7b5954097e8ead</Anchor>
+                <Anchor>acfc134362e3b8d89bc955174b5de4976</Anchor>
+               </Node>
+               <Node>
+                <Name>getInteger</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a46529ee706903bc2910156b8ea0cb60e</Anchor>
                </Node>
                <Node>
                 <Name>getObject</Name>
@@ -1075,6 +1152,11 @@
                 <Name>getString</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
                 <Anchor>a7eaf8513ab726676f4d14384287c224f</Anchor>
+               </Node>
+               <Node>
+                <Name>getToString</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a2188458820452e52d7dc270ab7b976ca</Anchor>
                </Node>
                <Node>
                 <Name>getType</Name>
@@ -1112,6 +1194,11 @@
                 <Anchor>a369a8672426473208a2de1376735ee17</Anchor>
                </Node>
                <Node>
+                <Name>isNumeric</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>ac32ad1f8bae7a1de084573b26555082a</Anchor>
+               </Node>
+               <Node>
                 <Name>isObject</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
                 <Anchor>a6d9f2323f7525e7b934c003bfab53abd</Anchor>
@@ -1120,6 +1207,11 @@
                 <Name>isString</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
                 <Anchor>a991792b8803ccd8741c6f4862f1f523e</Anchor>
+               </Node>
+               <Node>
+                <Name>isStringable</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a44bf60700c8b448f15831c5210d6a767</Anchor>
                </Node>
                <Node>
                 <Name>isWhiteSpace</Name>
@@ -1160,6 +1252,41 @@
                 <Name>operator=</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
                 <Anchor>ad74771c53aa5773c65d85710ad4fbbbd</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a843b4e6a89c3a48e550f520bcbc34d81</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a9d9e9f0bbc6c1a5b9b86556438f0a8ea</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>adb3fecccf18c1d560cc7a1c2912c33f1</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a5aca1ab484483fd97c6532d81fc475ad</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>ad8b33262e484a1c3294b57dd157f042b</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>ad18abc2d7ef95a37291726e48074ac8d</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>af5b7d37b265e44e20f3ce984e0fa45ba</Anchor>
                </Node>
                <Node>
                 <Name>operator==</Name>
@@ -1237,9 +1364,9 @@
                 <Anchor>a348bded518aa84e87ccfa90a1bf0dedf</Anchor>
                </Node>
                <Node>
-                <Name>setInt</Name>
+                <Name>setInteger</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
-                <Anchor>a79b5fbb5d09ccd7b517e1e503fbba497</Anchor>
+                <Anchor>a3a34f2db637d1fc93f02f36aa87eb21e</Anchor>
                </Node>
                <Node>
                 <Name>setNull</Name>
@@ -1255,6 +1382,31 @@
                 <Name>setString</Name>
                 <Path>class_json_box_1_1_value.htm</Path>
                 <Anchor>a83b50b8ff0e6b64d1e6ca58a82628afc</Anchor>
+               </Node>
+               <Node>
+                <Name>tryGetBoolean</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>af37e1ac1affe127b0de84623de636501</Anchor>
+               </Node>
+               <Node>
+                <Name>tryGetDouble</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a49b166054256ee173ee03038638b6e64</Anchor>
+               </Node>
+               <Node>
+                <Name>tryGetFloat</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a52b62daffe7ffc4f12cc5b54901dcbb0</Anchor>
+               </Node>
+               <Node>
+                <Name>tryGetInteger</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>a13f9b3820f953c0fb9b1ecc7b4d86c7b</Anchor>
+               </Node>
+               <Node>
+                <Name>tryGetString</Name>
+                <Path>class_json_box_1_1_value.htm</Path>
+                <Anchor>ab3907b5c6b384dcc1190ed7f762b1766</Anchor>
                </Node>
                <Node>
                 <Name>writeToFile</Name>
@@ -1322,6 +1474,78 @@
           <Path>classes.htm</Path>
          </Node>
          <Node>
+          <Name>Class Hierarchy</Name>
+          <Path>hierarchy.htm</Path>
+          <Subnodes>
+           <Node>
+            <Name>JsonBox::Array</Name>
+            <Path>class_json_box_1_1_array.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::Convert</Name>
+            <Path>class_json_box_1_1_convert.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::Escaper</Name>
+            <Path>class_json_box_1_1_escaper.htm</Path>
+           </Node>
+           <Node>
+            <Name>std::exception</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>std::runtime_error</Name>
+              <Path></Path>
+              <Subnodes>
+               <Node>
+                <Name>JsonBox::JsonParsingError</Name>
+                <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+               </Node>
+               <Node>
+                <Name>JsonBox::JsonWritingError</Name>
+                <Path>class_json_box_1_1_json_writing_error.htm</Path>
+               </Node>
+              </Subnodes>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>JsonBox::IndentCanceller</Name>
+            <Path>class_json_box_1_1_indent_canceller.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::Indenter</Name>
+            <Path>class_json_box_1_1_indenter.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::Object</Name>
+            <Path>class_json_box_1_1_object.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::SolidusEscaper</Name>
+            <Path>class_json_box_1_1_solidus_escaper.htm</Path>
+           </Node>
+           <Node>
+            <Name>streambuf</Name>
+            <Path></Path>
+            <Subnodes>
+             <Node>
+              <Name>JsonBox::OutputFilter&lt; Inserter &gt;</Name>
+              <Path>class_json_box_1_1_output_filter.htm</Path>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
+            <Name>JsonBox::Value</Name>
+            <Path>class_json_box_1_1_value.htm</Path>
+           </Node>
+           <Node>
+            <Name>JsonBox::Value::ValueDataPointer</Name>
+            <Path>union_json_box_1_1_value_1_1_value_data_pointer.htm</Path>
+           </Node>
+          </Subnodes>
+         </Node>
+         <Node>
           <Name>Class Members</Name>
           <Path>functions.htm</Path>
           <Subnodes>
@@ -1335,83 +1559,87 @@
              </Node>
              <Node>
               <Name>b</Name>
-              <Path>functions_0x62.htm</Path>
+              <Path>functions_b.htm</Path>
              </Node>
              <Node>
               <Name>c</Name>
-              <Path>functions_0x63.htm</Path>
+              <Path>functions_c.htm</Path>
              </Node>
              <Node>
               <Name>d</Name>
-              <Path>functions_0x64.htm</Path>
+              <Path>functions_d.htm</Path>
              </Node>
              <Node>
               <Name>e</Name>
-              <Path>functions_0x65.htm</Path>
+              <Path>functions_e.htm</Path>
              </Node>
              <Node>
               <Name>f</Name>
-              <Path>functions_0x66.htm</Path>
+              <Path>functions_f.htm</Path>
              </Node>
              <Node>
               <Name>g</Name>
-              <Path>functions_0x67.htm</Path>
+              <Path>functions_g.htm</Path>
              </Node>
              <Node>
               <Name>i</Name>
-              <Path>functions_0x69.htm</Path>
+              <Path>functions_i.htm</Path>
+             </Node>
+             <Node>
+              <Name>j</Name>
+              <Path>functions_j.htm</Path>
              </Node>
              <Node>
               <Name>k</Name>
-              <Path>functions_0x6b.htm</Path>
+              <Path>functions_k.htm</Path>
              </Node>
              <Node>
               <Name>l</Name>
-              <Path>functions_0x6c.htm</Path>
+              <Path>functions_l.htm</Path>
              </Node>
              <Node>
               <Name>m</Name>
-              <Path>functions_0x6d.htm</Path>
+              <Path>functions_m.htm</Path>
              </Node>
              <Node>
               <Name>n</Name>
-              <Path>functions_0x6e.htm</Path>
+              <Path>functions_n.htm</Path>
              </Node>
              <Node>
               <Name>o</Name>
-              <Path>functions_0x6f.htm</Path>
+              <Path>functions_o.htm</Path>
              </Node>
              <Node>
               <Name>p</Name>
-              <Path>functions_0x70.htm</Path>
+              <Path>functions_p.htm</Path>
              </Node>
              <Node>
               <Name>r</Name>
-              <Path>functions_0x72.htm</Path>
+              <Path>functions_r.htm</Path>
              </Node>
              <Node>
               <Name>s</Name>
-              <Path>functions_0x73.htm</Path>
+              <Path>functions_s.htm</Path>
              </Node>
              <Node>
               <Name>t</Name>
-              <Path>functions_0x74.htm</Path>
+              <Path>functions_t.htm</Path>
              </Node>
              <Node>
               <Name>u</Name>
-              <Path>functions_0x75.htm</Path>
+              <Path>functions_u.htm</Path>
              </Node>
              <Node>
               <Name>v</Name>
-              <Path>functions_0x76.htm</Path>
+              <Path>functions_v.htm</Path>
              </Node>
              <Node>
               <Name>w</Name>
-              <Path>functions_0x77.htm</Path>
+              <Path>functions_w.htm</Path>
              </Node>
              <Node>
               <Name>~</Name>
-              <Path>functions_0x7e.htm</Path>
+              <Path>functions_~.htm</Path>
              </Node>
             </Subnodes>
            </Node>
@@ -1442,6 +1670,10 @@
           </Subnodes>
          </Node>
         </Subnodes>
+       </Node>
+       <Node>
+        <Name>Files</Name>
+        <Path></Path>
         <Subnodes>
          <Node>
           <Name>File List</Name>
@@ -2127,6 +2359,50 @@
                 </Subnodes>
                </Node>
                <Node>
+                <Name>JsonParsingError.h</Name>
+                <Path>_json_parsing_error_8h.htm</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>JsonParsingError</Name>
+                  <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+                  <Subnodes>
+                   <Node>
+                    <Name>JsonParsingError</Name>
+                    <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+                    <Anchor>a5ca297fad0c9b859f5033488be0ea065</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>JsonParsingError</Name>
+                    <Path>class_json_box_1_1_json_parsing_error.htm</Path>
+                    <Anchor>a07d43febb43440201bd7e8bb4b8a5cdf</Anchor>
+                   </Node>
+                  </Subnodes>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>JsonWritingError.h</Name>
+                <Path>_json_writing_error_8h.htm</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>JsonWritingError</Name>
+                  <Path>class_json_box_1_1_json_writing_error.htm</Path>
+                  <Subnodes>
+                   <Node>
+                    <Name>JsonWritingError</Name>
+                    <Path>class_json_box_1_1_json_writing_error.htm</Path>
+                    <Anchor>aac8de20a2ce2021ad1c4cd695958402a</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>JsonWritingError</Name>
+                    <Path>class_json_box_1_1_json_writing_error.htm</Path>
+                    <Anchor>a5e9b451d864d3bddd92d74e8b9355c43</Anchor>
+                   </Node>
+                  </Subnodes>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
                 <Name>Object.h</Name>
                 <Path>_object_8h.htm</Path>
                 <Subnodes>
@@ -2472,16 +2748,6 @@
                     <Anchor>a8d91227ea71cb143e36928eaf6dcdd8d</Anchor>
                    </Node>
                    <Node>
-                    <Name>setbuf</Name>
-                    <Path>class_json_box_1_1_output_filter.htm</Path>
-                    <Anchor>acf62e1ad6f33da3f9ef522f8fbdaf5ff</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>sync</Name>
-                    <Path>class_json_box_1_1_output_filter.htm</Path>
-                    <Anchor>a8d5ee977a741dbb12b0aeee01e3365da</Anchor>
-                   </Node>
-                   <Node>
                     <Name>underflow</Name>
                     <Path>class_json_box_1_1_output_filter.htm</Path>
                     <Anchor>a6bd41425d7efae42b14da6cf78a7f77f</Anchor>
@@ -2754,9 +3020,14 @@
                     <Anchor>af346625e38b985c821cf74f02946e89b</Anchor>
                    </Node>
                    <Node>
-                    <Name>getInt</Name>
+                    <Name>getFloat</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
-                    <Anchor>a7a2e79635275d8c8fd7b5954097e8ead</Anchor>
+                    <Anchor>acfc134362e3b8d89bc955174b5de4976</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>getInteger</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a46529ee706903bc2910156b8ea0cb60e</Anchor>
                    </Node>
                    <Node>
                     <Name>getObject</Name>
@@ -2767,6 +3038,11 @@
                     <Name>getString</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
                     <Anchor>a7eaf8513ab726676f4d14384287c224f</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>getToString</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a2188458820452e52d7dc270ab7b976ca</Anchor>
                    </Node>
                    <Node>
                     <Name>getType</Name>
@@ -2804,6 +3080,11 @@
                     <Anchor>a369a8672426473208a2de1376735ee17</Anchor>
                    </Node>
                    <Node>
+                    <Name>isNumeric</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>ac32ad1f8bae7a1de084573b26555082a</Anchor>
+                   </Node>
+                   <Node>
                     <Name>isObject</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
                     <Anchor>a6d9f2323f7525e7b934c003bfab53abd</Anchor>
@@ -2812,6 +3093,11 @@
                     <Name>isString</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
                     <Anchor>a991792b8803ccd8741c6f4862f1f523e</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>isStringable</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a44bf60700c8b448f15831c5210d6a767</Anchor>
                    </Node>
                    <Node>
                     <Name>isWhiteSpace</Name>
@@ -2852,6 +3138,41 @@
                     <Name>operator=</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
                     <Anchor>ad74771c53aa5773c65d85710ad4fbbbd</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a843b4e6a89c3a48e550f520bcbc34d81</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a9d9e9f0bbc6c1a5b9b86556438f0a8ea</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>adb3fecccf18c1d560cc7a1c2912c33f1</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a5aca1ab484483fd97c6532d81fc475ad</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>ad8b33262e484a1c3294b57dd157f042b</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>ad18abc2d7ef95a37291726e48074ac8d</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>operator=</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>af5b7d37b265e44e20f3ce984e0fa45ba</Anchor>
                    </Node>
                    <Node>
                     <Name>operator==</Name>
@@ -2929,9 +3250,9 @@
                     <Anchor>a348bded518aa84e87ccfa90a1bf0dedf</Anchor>
                    </Node>
                    <Node>
-                    <Name>setInt</Name>
+                    <Name>setInteger</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
-                    <Anchor>a79b5fbb5d09ccd7b517e1e503fbba497</Anchor>
+                    <Anchor>a3a34f2db637d1fc93f02f36aa87eb21e</Anchor>
                    </Node>
                    <Node>
                     <Name>setNull</Name>
@@ -2947,6 +3268,31 @@
                     <Name>setString</Name>
                     <Path>class_json_box_1_1_value.htm</Path>
                     <Anchor>a83b50b8ff0e6b64d1e6ca58a82628afc</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>tryGetBoolean</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>af37e1ac1affe127b0de84623de636501</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>tryGetDouble</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a49b166054256ee173ee03038638b6e64</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>tryGetFloat</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a52b62daffe7ffc4f12cc5b54901dcbb0</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>tryGetInteger</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>a13f9b3820f953c0fb9b1ecc7b4d86c7b</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>tryGetString</Name>
+                    <Path>class_json_box_1_1_value.htm</Path>
+                    <Anchor>ab3907b5c6b384dcc1190ed7f762b1766</Anchor>
                    </Node>
                    <Node>
                     <Name>writeToFile</Name>
@@ -3076,6 +3422,11 @@
                    </Node>
                   </Subnodes>
                  </Node>
+                 <Node>
+                  <Name>operator&lt;&lt;</Name>
+                  <Path>_value_8h.htm</Path>
+                  <Anchor>a8bb8fe9963f06a121b2dc2d6807a1a1e</Anchor>
+                 </Node>
                 </Subnodes>
                </Node>
               </Subnodes>
@@ -3155,6 +3506,14 @@
               <Path>_indenter_8cpp.htm</Path>
              </Node>
              <Node>
+              <Name>JsonParsingError.cpp</Name>
+              <Path>_json_parsing_error_8cpp.htm</Path>
+             </Node>
+             <Node>
+              <Name>JsonWritingError.cpp</Name>
+              <Path>_json_writing_error_8cpp.htm</Path>
+             </Node>
+             <Node>
               <Name>Object.cpp</Name>
               <Path>_object_8cpp.htm</Path>
               <Subnodes>
@@ -3176,7 +3535,7 @@
                <Node>
                 <Name>operator&lt;&lt;</Name>
                 <Path>_value_8cpp.htm</Path>
-                <Anchor>a266f825b8929075caac50261bd8d2f18</Anchor>
+                <Anchor>a8bb8fe9963f06a121b2dc2d6807a1a1e</Anchor>
                </Node>
               </Subnodes>
              </Node>

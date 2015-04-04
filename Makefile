@@ -3,7 +3,7 @@ DOCSET_CONTENTS=$(DOCSET_NAME)/Contents
 DOCSET_RESOURCES=$(DOCSET_CONTENTS)/Resources
 DOCSET_DOCUMENTS=$(DOCSET_RESOURCES)/Documents
 DESTDIR=~/Library/Developer/Shared/Documentation/DocSets
-XCODE_INSTALL=$(shell xcode-select -print-path)
+XCODE_INSTALL="$(shell xcode-select -print-path)"
 
 all: docset
 
@@ -24,6 +24,9 @@ docset:
 	rm -f $(DOCSET_DOCUMENTS)/Makefile
 	rm -f $(DOCSET_RESOURCES)/Nodes.xml
 	rm -f $(DOCSET_RESOURCES)/Tokens.xml
+
+clean:
+	rm -rf $(DOCSET_NAME)
 
 install: docset
 	mkdir -p $(DESTDIR)
