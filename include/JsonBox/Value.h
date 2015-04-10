@@ -531,8 +531,8 @@ namespace JsonBox {
 		 * @param output Output stream to write the value to.
 		 * @param indent Specifies if the output is to have nice indentation or
 		 * not.
-		 * @param escapeAll Specifies if all the JSON escapable characters
-		 * should be escaped or not.
+		 * @param escapeAll Specifies whether or not all the JSON escapable
+		 * characters should be escaped.
 		 * @see JsonBox::Value::operator<<(std::ostream& output, const Value& v)
 		 * @see JsonBox::Value::escapeAllCharacters
 		 * @see JsonBox::Value::escapeMinimumCharacters
