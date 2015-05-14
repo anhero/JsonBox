@@ -1,12 +1,13 @@
 #ifndef JB_CONVERTER_H
 #define JB_CONVERTER_H
 
+#include <vector>
 #include <string>
 #include <stdint.h>
 
 namespace JsonBox {
 	
-	typedef std::basic_string<int32_t> String32;
+	typedef std::vector<int32_t> String32;
 
 	/**
 	 * This class is used to encode/decode/transcode UTF8, 16 and 32.
