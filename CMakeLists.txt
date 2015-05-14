@@ -18,16 +18,6 @@ set(JSONBOX_SOURCES
   src/Convert.cpp
 )
 set(JSONBOX_HEADERS
-  include/JsonBox/Convert.h
-  include/JsonBox/Escaper.h
-  include/JsonBox/Grammar.h
-  include/JsonBox/IndentCanceller.h
-  include/JsonBox/Indenter.h
-  include/JsonBox/JsonParsingError.h
-  include/JsonBox/JsonWritingError.h
-  include/JsonBox/OutputFilter.h
-  include/JsonBox/SolidusEscaper.h
-  include/JsonBox/Value.h
   include/JsonBox.h
   ${CMAKE_CURRENT_BINARY_DIR}/Export.h
 )
@@ -64,6 +54,7 @@ install(FILES ${JSONBOX_HEADERS}
   COMPONENT dev
   DESTINATION include
 )
+install(DIRECTORY include/ DESTINATION include)
 install(EXPORT ${PROJECT_NAME}
   DESTINATION lib${LIB_SUFFIX}/cmake
   FILE ${PROJECT_NAME}Config.cmake
