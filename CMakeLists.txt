@@ -10,17 +10,14 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN TRUE)
 set(JSONBOX_SOURCES
   src/JsonWritingError.cpp
   src/Value.cpp
-  src/Array.cpp
   src/SolidusEscaper.cpp
   src/Escaper.cpp
   src/Indenter.cpp
   src/IndentCanceller.cpp
   src/JsonParsingError.cpp
   src/Convert.cpp
-  src/Object.cpp
 )
 set(JSONBOX_HEADERS
-  include/JsonBox/Array.h
   include/JsonBox/Convert.h
   include/JsonBox/Escaper.h
   include/JsonBox/Grammar.h
@@ -28,12 +25,10 @@ set(JSONBOX_HEADERS
   include/JsonBox/Indenter.h
   include/JsonBox/JsonParsingError.h
   include/JsonBox/JsonWritingError.h
-  include/JsonBox/Object.h
   include/JsonBox/OutputFilter.h
   include/JsonBox/SolidusEscaper.h
   include/JsonBox/Value.h
   include/JsonBox.h
-  ${CMAKE_CURRENT_BINARY_DIR}/Export.h
 )
 
 # build library
@@ -55,6 +50,14 @@ export(TARGETS JsonBox
   FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
 )
 
+# Macro used to install headers while keeping the directory hierarchy.
+MACRO(INSTALL_HEADERS_WITH_DIRECTORY HEADER_LIST)
+  FOREACH(HEADER ${${HEADER_LIST}})
+    STRING(REGEX MATCH "(.*)[/\\]" DIR ${HEADER})
+	INSTALL(FILES ${HEADER} COMPONENT dev DESTINATION ${DIR})
+  ENDFOREACH(HEADER)
+ENDMACRO(INSTALL_HEADERS_WITH_DIRECTORY)
+
 # install
 install(TARGETS JsonBox
   COMPONENT lib
@@ -64,9 +67,10 @@ install(TARGETS JsonBox
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
-install(FILES ${JSONBOX_HEADERS}
+INSTALL_HEADERS_WITH_DIRECTORY(JSONBOX_HEADERS)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Export.h
   COMPONENT dev
-  DESTINATION include
+  DESTINATION include/JsonBox
 )
 install(EXPORT ${PROJECT_NAME}
   DESTINATION lib${LIB_SUFFIX}/cmake

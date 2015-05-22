@@ -2,18 +2,13 @@
 #define JB_VALUE_H
 
 #include <string>
+#include <map>
+#include <vector>
 #include <iostream>
 
 #include "Export.h"
 
-
 namespace JsonBox {
-	class Array;
-	class Object;
-	class Value;
-
-	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
-
 	/**
 	 * Represents a json value. Can be a string, an integer, a floating point
 	 * number, an object, an array, a boolean value or a null value. To put it
@@ -34,6 +29,8 @@ namespace JsonBox {
 		 */
 		friend std::ostream &operator<<(std::ostream &output, const Value &v);
 	public:
+		typedef std::vector<Value> Array;
+		typedef std::map<std::string, Value> Object;
 		/**
 		 * Represents the different types a value can be. A value can only be
 		 * one of these types at a time. The UNKNOWN type is only used
@@ -534,8 +531,8 @@ namespace JsonBox {
 		 * @param output Output stream to write the value to.
 		 * @param indent Specifies if the output is to have nice indentation or
 		 * not.
-		 * @param escapeAll Specifies if all the JSON escapable characters
-		 * should be escaped or not.
+		 * @param escapeAll Specifies whether or not all the JSON escapable
+		 * characters should be escaped.
 		 * @see JsonBox::Value::operator<<(std::ostream& output, const Value& v)
 		 * @see JsonBox::Value::escapeAllCharacters
 		 * @see JsonBox::Value::escapeMinimumCharacters
@@ -607,48 +604,6 @@ namespace JsonBox {
 			 */
 			ValueDataPointer(bool *newBoolValue);
 		};
-
-		/**
-		 * Empty string returned by getString() when the value doesn't contain a
-		 * string.
-		 * @see JsonBox::Value::getString
-		 */
-		static const std::string EMPTY_STRING;
-
-		/**
-		 * Default int value returned by getInteger() when the value doesn't contain
-		 * an integer.
-		 * @see JsonBox::Value::getInt
-		 */
-		static const int EMPTY_INT = 0;
-
-		/**
-		 * Default double value returned by getDouble() when the value doesn't
-		 * contain a double.
-		 * @see JsonBox::Value::getDouble
-		 */
-		static const double EMPTY_DOUBLE;
-
-		/**
-		 * Default empty object value returned by getObject() when the value
-		 * doesn't contain an object.
-		 * @see JsonBox::Value::getObject
-		 */
-		static const Object EMPTY_OBJECT;
-
-		/**
-		 * Default empty array value returned by getArray() when the value
-		 * doesn't contain an array.
-		 * @see JsonBox::Value::getArray
-		 */
-		static const Array EMPTY_ARRAY;
-
-		/**
-		 * Default boolean value returned by getBoolean() when the value doesn't
-		 * contain a boolean.
-		 * @see JsonBox::Value::getBoolean
-		 */
-		static const bool EMPTY_BOOL = false;
 
 		/**
 		 * Checks if the char given is a hex digit.
@@ -733,6 +688,23 @@ namespace JsonBox {
 		 */
 		ValueDataPointer data;
 	};
+
+	/**
+	 * Represents an array of values in JSON. It's a STL vector that can be
+	 * output in a stream.
+	 * @see JsonBox::Value
+	 */
+	JSONBOX_EXPORT typedef std::vector<Value> Array;
+	
+	/**
+	 * Represents a JSON object. It's a STL map that can be output in a stream.
+	 * @see JsonBox::Value
+	 */
+	JSONBOX_EXPORT typedef std::map<std::string, Value> Object;
+
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Value &v);
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Object &o);
+	JSONBOX_EXPORT std::ostream &operator<<(std::ostream &output, const Array &a);
 }
 
 #endif
