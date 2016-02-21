@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 
 project(JsonBox)
 
@@ -6,6 +6,7 @@ include(GenerateExportHeader)
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN TRUE)
+cmake_policy(SET CMP0063 NEW)
 
 set(JSONBOX_SOURCES
   src/JsonWritingError.cpp
@@ -17,6 +18,7 @@ set(JSONBOX_SOURCES
   src/JsonParsingError.cpp
   src/Convert.cpp
 )
+
 set(JSONBOX_HEADERS
   include/JsonBox/Convert.h
   include/JsonBox/Escaper.h
@@ -31,9 +33,25 @@ set(JSONBOX_HEADERS
   include/JsonBox.h
 )
 
+# set options for android
+if(ANDROID_ABI)
+	message("Compiling for Android")
+	set(CMAKE_TOOLCHAIN_FILE "cmake/toolchains/android.toolchain.cmake")
+	set(ANDROID_API_MIN 9)
+	set(ANDROID_NATIVE_API_LEVEL ${ANDROID_API_MIN})
+	set(ANDROID_NDK "$ENV{ANDROID_NDK}")
+	set(CMAKE_INSTALL_PREFIX "${ANDROID_NDK}/sources/JsonBox")
+	set(LIB_SUFFIX "/${ANDROID_ABI}")
+	install(FILES src/Android.mk DESTINATION .)
+endif(ANDROID_ABI)
+
 # build library
 set(CMAKE_DEBUG_POSTFIX "_d")
-add_library(JsonBox ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+if(NOT BUILD_SHARED_LIBS)
+	add_library(JsonBox STATIC ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+else()
+	add_library(JsonBox SHARED ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+endif()
 
 generate_export_header(JsonBox EXPORT_FILE_NAME Export.h)
 
@@ -67,7 +85,9 @@ install(TARGETS JsonBox
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
+
 INSTALL_HEADERS_WITH_DIRECTORY(JSONBOX_HEADERS)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Export.h
   COMPONENT dev
   DESTINATION include/JsonBox
