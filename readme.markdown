@@ -1,5 +1,6 @@
 <!-- -*- markdown -*- -->
 # Json Box
+
 [JSON](http://json.org/) (JavaScript Object Notation) is a lightweight data-interchange format.
 
 Json Box is a C++ library used to read and write JSON with ease and speed.
@@ -19,4 +20,18 @@ Things it does not do:
 The library wasn't designed with multi-threading in mind.
 
 The class reference can be found [here](http://anhero.github.com/JsonBox).
+
+Android
+===
+
+To compile for android it is needed to specify ANDROID_ABI
+
+```
+mkdir build
+cd build && mkdir armeabi
+cd armeabi
+cmake -G"MinGW Makefiles" -DANDROID_ABI=armeabi -DBUILD_SHARED_LIBS=FALSE ../..
+cmake -G"MinGW Makefiles" -DANDROID_ABI=armeabi -DBUILD_SHARED_LIBS=TRUE ../..
+make -j3 && make install
+```
 
