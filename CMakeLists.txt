@@ -35,13 +35,16 @@ set(JSONBOX_HEADERS
 
 # set options for android
 if(ANDROID_ABI)
-	message("Compiling for Android")
-	set(CMAKE_TOOLCHAIN_FILE "cmake/toolchains/android.toolchain.cmake")
+	message("-- Compiling for Android")
 	set(ANDROID_API_MIN 9)
 	set(ANDROID_NATIVE_API_LEVEL ${ANDROID_API_MIN})
 	set(ANDROID_NDK "$ENV{ANDROID_NDK}")
 	set(CMAKE_INSTALL_PREFIX "${ANDROID_NDK}/sources/JsonBox")
+	set(ANDROID_STL "c++_shared")
 	set(LIB_SUFFIX "/${ANDROID_ABI}")
+	if(ANDROID_STL MATCHES "_shared")
+	        add_definitions("-DSTL_LIBRARY=${ANDROID_STL}")
+	endif()
 	install(FILES src/Android.mk DESTINATION .)
 endif(ANDROID_ABI)
 
