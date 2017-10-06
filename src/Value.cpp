@@ -841,17 +841,114 @@ namespace JsonBox {
 		       whiteSpace == Whitespace::HORIZONTAL_TAB ||
 		       whiteSpace == Whitespace::NEW_LINE ||
 		       whiteSpace == Whitespace::CARRIAGE_RETURN;
-	}
+    }
+    
+    static std::string codePointToUTF8(unsigned int cp)
+    {
+        std::string result;
+        
+        // based on description from http://en.wikipedia.org/wiki/UTF-8
+        
+        if (cp <= 0x7f)
+        {
+            result.resize(1);
+            result[0] = static_cast<char>(cp);
+        }
+        else if (cp <= 0x7FF)
+        {
+            result.resize(2);
+            result[1] = static_cast<char>(0x80 | (0x3f & cp));
+            result[0] = static_cast<char>(0xC0 | (0x1f & (cp >> 6)));
+        }
+        else if (cp <= 0xFFFF)
+        {
+            result.resize(3);
+            result[2] = static_cast<char>(0x80 | (0x3f & cp));
+            result[1] = 0x80 | static_cast<char>((0x3f & (cp >> 6)));
+            result[0] = 0xE0 | static_cast<char>((0xf & (cp >> 12)));
+        }
+        else if (cp <= 0x10FFFF)
+        {
+            result.resize(4);
+            result[3] = static_cast<char>(0x80 | (0x3f & cp));
+            result[2] = static_cast<char>(0x80 | (0x3f & (cp >> 6)));
+            result[1] = static_cast<char>(0x80 | (0x3f & (cp >> 12)));
+            result[0] = static_cast<char>(0xF0 | (0x7 & (cp >> 18)));
+        }
+        
+        return result;
+    }
+    
+    static bool decodeUnicodeEscapeSequence( std::istream &input, unsigned int &unicode )
+    {
+        int tmpCounter = 0;
+        unicode = 0;
+        while (tmpCounter < 4 && !input.eof())
+        {
+            char c;
+            input.get(c);
+            unicode *= 16;
+            if ( c >= '0'  &&  c <= '9' )
+                unicode += c - '0';
+            else if ( c >= 'a'  &&  c <= 'f' )
+                unicode += c - 'a' + 10;
+            else if ( c >= 'A'  &&  c <= 'F' )
+                unicode += c - 'A' + 10;
+            else
+            {
+                std::cout << "JsonBox::error: Bad unicode escape sequence in string: hexadecimal digit expected.";
+                return false;
+            }
+            ++tmpCounter;
+        }
+        if(tmpCounter < 4)
+        {
+            std::cout << "JsonBox::error: Bad unicode escape sequence in string.";
+            return false;
+        }
+        return true;
+    }
+    
+    static bool decodeUnicodeCodePoint( std::istream &input, unsigned int &unicode )
+    {
+        if ( !decodeUnicodeEscapeSequence( input, unicode ) )
+            return false;
+        if (unicode >= 0xD800 && unicode <= 0xDBFF)
+        {
+            // surrogate pairs
+            unsigned int surrogatePair;
+            char c1 = '\0', c2 = '\0';
+            bool goodStart = !input.eof() && input.get(c1) && !input.eof() && input.get(c2);
+            if(!goodStart)
+            {
+                std::cout << "JsonBox::error: expecting another \\u token to begin the second half of a unicode surrogate pair";
+                return false;
+            }
+            
+            if (c1 == '\\' && c2 == 'u' && !input.eof())
+            {
+                if (decodeUnicodeEscapeSequence( input, surrogatePair ))
+                {
+                    unicode = 0x10000 + ((unicode & 0x3FF) << 10) + (surrogatePair & 0x3FF);
+                }
+                else
+                    return false;
+            }
+            else
+            {
+                std::cout << "JsonBox::error: expecting another \\u token to begin the second half of a unicode surrogate pair";
+                return false;
+            }
+        }
+        return true;
+    }
 
 	void Value::readString(std::istream &input, std::string &result) {
-		bool noErrors = true, noUnicodeError = true;
-		char currentCharacter, tmpCharacter;
-		std::stringstream constructing;
-		std::string tmpStr(4, ' ');
-		std::stringstream tmpSs;
-		int32_t tmpInt;
-		String32 tmpStr32;
-		unsigned int tmpCounter;
+        bool noErrors = true;
+        char currentCharacter, tmpCharacter;
+        std::stringstream constructing;
+        std::string tmpStr(4, ' ');
+        std::stringstream tmpSs;
 
 		// As long as there aren't any errors and that we haven't reached the
 		// end of the input stream.
@@ -900,39 +997,15 @@ namespace JsonBox {
 							constructing << Strings::Std::TAB;
 							break;
 
-						case Strings::Json::Escape::BEGIN_UNICODE:
-							// TODO: Check for utf16 surrogate pairs.
-							tmpCounter = 0;
-							tmpStr.clear();
-							tmpStr = "    ";
-							noUnicodeError = true;
-
-							while (tmpCounter < 4 && !input.eof()) {
-								input.get(tmpCharacter);
-
-								if (isHexDigit(tmpCharacter)) {
-									tmpStr[tmpCounter] = tmpCharacter;
-
-								} else {
-									// Invalid \u character, skipping it.
-									noUnicodeError = false;
-								}
-
-								++tmpCounter;
-							}
-
-							if (noUnicodeError) {
-								tmpSs.clear();
-								tmpSs.str("");
-								tmpSs << std::hex << tmpStr;
-								tmpSs >> tmpInt;
-								tmpStr32.clear();
-								tmpStr32.push_back(tmpInt);
-								tmpStr = Convert::encodeToUTF8(tmpStr32);
-								constructing << tmpStr;
-							}
-
-							break;
+                        case Strings::Json::Escape::BEGIN_UNICODE:
+                        {
+                            unsigned int unicode;
+                            if ( !decodeUnicodeCodePoint( input, unicode ) )
+                                return;
+                            constructing << codePointToUTF8(unicode);
+                        }
+                            
+                            break;
 
 						default:
 							break;
