@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.7)
 
 project(JsonBox)
 
@@ -34,19 +34,28 @@ set(JSONBOX_HEADERS
 )
 
 # set options for android
-if(ANDROID_ABI)
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
 	message("-- Compiling for Android")
-	set(ANDROID_API_MIN 9)
+	set(ANDROID_API_MIN 14)
 	set(ANDROID_NATIVE_API_LEVEL ${ANDROID_API_MIN})
 	set(ANDROID_NDK "$ENV{ANDROID_NDK}")
-	set(CMAKE_INSTALL_PREFIX "${ANDROID_NDK}/sources/JsonBox")
-	set(ANDROID_STL "c++_shared")
-	set(LIB_SUFFIX "/${ANDROID_ABI}")
-	if(ANDROID_STL MATCHES "_shared")
-	        add_definitions("-DSTL_LIBRARY=${ANDROID_STL}")
-	endif()
+	set(CMAKE_INSTALL_PREFIX "${ANDROID_NDK}/sources/ThirdParty/JsonBox")
+	set(ANDROID_STL_TYPE "c++_shared")
+	
+	# we install libs in a subdirectory named after the ABI (lib/mips/*.so)
+    set(LIB_SUFFIX "/${CMAKE_ANDROID_ARCH_ABI}")
+
+	# pass shared STL configuration (if any)
+    if (CMAKE_ANDROID_STL_TYPE MATCHES "_shared")
+        add_definitions("-DSTL_LIBRARY=${CMAKE_ANDROID_STL_TYPE}")
+        if(NOT CMAKE_ANDROID_STL_TYPE MATCHES "c\\+\\+_shared")
+            message("Android: Using ${CMAKE_ANDROID_STL_TYPE} as STL. Set CMAKE_ANDROID_STL_TYPE to c++_shared, if there are any issues.")
+        endif()
+    else()
+        message(WARNING "Android: You're using a static STL (${CMAKE_ANDROID_STL_TYPE}). Set CMAKE_ANDROID_STL_TYPE to c++_shared, if there are any issues.")
+    endif()
 	install(FILES src/Android.mk DESTINATION .)
-endif(ANDROID_ABI)
+endif(CMAKE_SYSTEM_NAME MATCHES "Android")
 
 # build library
 set(CMAKE_DEBUG_POSTFIX "_d")

@@ -24,14 +24,13 @@ The class reference can be found [here](http://anhero.github.com/JsonBox).
 Android
 ===
 
-To compile for android it is needed to specify ANDROID_ABI and CMAKE_TOOLCHAIN_FILE
+To compile for android:
 
 ```
 mkdir build
 cd build && mkdir armeabi
 cd armeabi
-cmake -DANDROID_ABI=armeabi -DBUILD_SHARED_LIBS=FALSE -DCMAKE_TOOLCHAIN_FILE=../../cmake/toolchains/android.toolchain.cmake ../..
-cmake -DANDROID_ABI=armeabi -DBUILD_SHARED_LIBS=TRUE -DCMAKE_TOOLCHAIN_FILE=../../cmake/toolchains/android.toolchain.cmake ../..
+cmake -DANDROID_ABI=armeabi -DANDROID_API_MIN=14 -DCMAKE_SYSTEM_NAME=Android ../..
 make -j3 && make install
 ```
 
