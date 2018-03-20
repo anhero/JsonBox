@@ -31,6 +31,6 @@ mkdir build
 cd build && mkdir armeabi
 cd armeabi
 cmake -DANDROID_ABI=armeabi -DANDROID_API_MIN=14 -DCMAKE_SYSTEM_NAME=Android ../..
-make -j3 && make install
+make -j3 install
 ```
 
