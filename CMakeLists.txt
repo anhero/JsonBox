@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.7.2...3.14)
 
 project(JsonBox)
 
@@ -6,6 +6,7 @@ include(GenerateExportHeader)
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN TRUE)
+cmake_policy(SET CMP0063 NEW)
 
 set(JSONBOX_SOURCES
   src/JsonWritingError.cpp
@@ -17,6 +18,7 @@ set(JSONBOX_SOURCES
   src/JsonParsingError.cpp
   src/Convert.cpp
 )
+
 set(JSONBOX_HEADERS
   include/JsonBox/Convert.h
   include/JsonBox/Escaper.h
@@ -31,9 +33,38 @@ set(JSONBOX_HEADERS
   include/JsonBox.h
 )
 
+# set options for android
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
+	message("-- Compiling for Android")
+    set(BUILD_SHARED_LIBS TRUE)
+    if (CMAKE_ANDROID_API LESS 14)
+        message(FATAL_ERROR "Android API level (${CMAKE_ANDROID_API}) must be equal or greater than 14.")
+    endif()
+    if(CMAKE_VS_PLATFORM_NAME STREQUAL "Tegra-Android")
+        message(WARNING "CMake might not properly support setting the STL. Make sure to adjust all generated library projects!")
+    endif()
+	set(ANDROID_NDK "$ENV{ANDROID_NDK}")
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_ANDROID_NDK}/sources/third_party/jsonbox)
+    set(DEFAULT_INSTALL_MISC_DIR ${CMAKE_ANDROID_NDK}/sources/third_party/jsonbox)
+    set(LIB_SUFFIX "/${CMAKE_ANDROID_ARCH_ABI}")
+    if(CMAKE_ANDROID_STL_TYPE MATCHES "_shared")
+        add_definitions("-DSTL_LIBRARY=${CMAKE_ANDROID_STL_TYPE}")
+        if(NOT CMAKE_ANDROID_STL_TYPE MATCHES "c\\+\\+_shared")
+            message("Android: Using ${CMAKE_ANDROID_STL_TYPE} as STL. Set CMAKE_ANDROID_STL_TYPE to c++_shared, if there are any issues.")
+        endif()
+    else()
+        message(WARNING "Android: You're using a static STL (${CMAKE_ANDROID_STL_TYPE}). Set CMAKE_ANDROID_STL_TYPE to c++_shared, if there are any issues.")
+    endif()
+	install(FILES src/Android.mk DESTINATION .)
+endif(CMAKE_SYSTEM_NAME MATCHES "Android")
+
 # build library
 set(CMAKE_DEBUG_POSTFIX "_d")
-add_library(JsonBox ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+if(NOT BUILD_SHARED_LIBS)
+	add_library(JsonBox STATIC ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+else()
+	add_library(JsonBox SHARED ${JSONBOX_SOURCES} ${JSONBOX_HEADERS})
+endif()
 
 generate_export_header(JsonBox EXPORT_FILE_NAME Export.h)
 
@@ -67,7 +98,9 @@ install(TARGETS JsonBox
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
+
 INSTALL_HEADERS_WITH_DIRECTORY(JSONBOX_HEADERS)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Export.h
   COMPONENT dev
   DESTINATION include/JsonBox
