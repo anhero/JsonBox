@@ -476,34 +476,39 @@ namespace JsonBox {
 	}
 
 	const std::string Value::getToString() const {
-		if (type == STRING) {
-			return  *data.stringValue;
+	switch (type) {
+		case STRING:
+			return *data.stringValue;
 
-		} else {
-			switch (type) {
-			case INTEGER: {
-					std::stringstream ss;
-					ss << *data.intValue;
-					return ss.str();
-				}
-
-			case DOUBLE: {
-					std::stringstream ss;
-					ss << *data.doubleValue;
-					return ss.str();
-				}
-
-			case BOOLEAN:
-				return (*data.boolValue) ? (Literals::TRUE_STRING) : (Literals::FALSE_STRING);
-
-			case NULL_VALUE:
-				return Literals::NULL_STRING;
-
-			default:
-				return std::string();
+		case INTEGER: {
+				std::stringstream ss;
+				ss << *data.intValue;
+				return ss.str();
 			}
-		}
+
+		case DOUBLE: {
+				std::stringstream ss;
+				ss << *data.doubleValue;
+				return ss.str();
+			}
+
+		case BOOLEAN:
+			return (*data.boolValue) ? (Literals::TRUE_STRING) : (Literals::FALSE_STRING);
+
+		case OBJECT:
+		case ARRAY: {
+				std::stringstream ss;
+				ss << *this;
+				return ss.str();
+			}
+
+		case NULL_VALUE:
+			return Literals::NULL_STRING;
+
+		default:
+			return std::string();
 	}
+}
 
 	void Value::setString(std::string const &newString) {
 		if (type == STRING) {
