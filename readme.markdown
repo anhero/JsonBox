@@ -1,5 +1,6 @@
 <!-- -*- markdown -*- -->
 # Json Box
+
 [JSON](http://json.org/) (JavaScript Object Notation) is a lightweight data-interchange format.
 
 Json Box is a C++ library used to read and write JSON with ease and speed.
@@ -20,3 +21,18 @@ The library wasn't designed with multi-threading in mind.
 
 The class reference can be found [here](http://anhero.github.com/JsonBox).
 
+Android
+===
+
+```
+mkdir build
+cd build && mkdir armeabi-v7a
+cd armeabi-v7a
+cmake -DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_NDK=<android_ndk> \
+        -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_ANDROID_STL_TYPE=c++_static \ 
+        -DCMAKE_BUILD_TYPE=Release -DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang \ 
+        -DCMAKE_INSTALL_PREFIX=<android_ndk>/sources/third_party/JsonBox ../..
+make install
+```
+
+You should replace <android_ndk> with the actual folder.
